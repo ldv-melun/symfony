@@ -1,0 +1,569 @@
+= Symfony Introduction
+Olivier Capuozzo
+v1.0, 2018-01-06: Version asciidoc
+:description: Presentation de Symfony
+:icons: font
+:listing-caption: Listing
+:toc-title: Table des matieres
+:toc:
+:toclevels: 2
+:source-highlighter: coderay
+ifdef::backend-pdf[]
+:source-highlighter: rouge
+:title-logo-image: image:kpu.png[pdfwidth=4.25in,align=center]
+endif::[]
+ifndef::backend-pdf[]
+:imagesdir: images
+endif::[]
+
+== Présentation
+
+ifdef::backend-pdf[]
+image:logo-symfony.png[title="Symfony"]
+endif::[]
+
+ifndef::backend-pdf[]
+image:logo-symfony.svg[title="Symfony"]
+endif::[]
+
+Symfony est une solution créée par la société https://sensiolabs.com[Sensiolabs] qui en assure l'évolution,
+assitée par de  https://symfony.com/contributors[nombreux contributeurs].
+
+[quote, Symfony, Qu'est-ce que Symfony ? par Sensiolabs - a french company]
+____
+Symfony est un ensemble de Composants PHP, un framework pour les Applications Web, une Philosophie, et une Communauté — tous travaillant ensemble, en harmonie.
+____
+
+== Environnement de développement
+
+Modèle d'architecture 3 tiers des applications web (clients, serveur, SBBD)
+
+.Exemple type d'interaction HTTP/web
+[plantuml]
+----
+skinparam {
+shadowing false
+monochrome false
+}
+hide footbox
+title (architecture 3 tiers web)
+
+client --> serveur_http : requête HTTP
+box
+	participant serveur_http
+	participant application
+end box
+
+serveur_http  --> application
+activate application
+application->application
+application --> sgbd : requêtes sql
+application <-- sgbd
+application --> application
+application --> serveur_http
+deactivate application
+serveur_http  --> client : réponse HTTP
+
+----
+
+Les applications symfony se situent sur le tiers "server et applications" (derrière un serveur HTTP).
+
+En environnement de développement, les développeurs PHP disposent du `PHP's internal web server`, un serveur http intégré au langage lui-même,
+ce qui assure un certain contrôle quant à la version de PHP utilisée.
+
+En environnement de production, l'application sera placée derrière un server Web de production, disposant d'une version de PHP conforme aux exigences du framework.
+Les serveurs HTTP de production les plus courants sont `Apache` et `Nginx`.
+Dans ce cas, reférez-vous aux consignes de configurations disponibles sur le site de symfony : https://symfony.com/doc/current/setup/web_server_configuration.html[web server configurations].
+
+
+== Prérequis
+
+=== Concernant le développeur
+
+* Avoir une première expérience avec la programmation orientée objet (POOO)
+* Comprendre les principes de fonctionnement d'une interaction HTTP (protocole sans état, passage de valeurs)
+  et les problématiques et solutions autour de la gestion du suivi de sessions HTTP
+* Une certaine connaissance en interaction applicative avec un SGBD( R ) - (SQL)
+
+=== Concernant le système
+
+Les prérequis système dépendent de la version de symfony que vous comptez utlisée.
+On se réfèrera à https://symfony.com/doc/current/reference/requirements.html[Symfony Requirements], en particulier :
+
+* La version minimale attendue de PHP (dépend de la version de Symfony)
+
+* https://getcomposer.org/[`Composer`] (outils de gestion des dépendances pour des projets PHP, vérifier sa présence sur votre système)
+
+== Création d'une application symfony et vérification des pré-requis
+
+Ce sont des opérations qui s'effectuent en ligne de commande :
+
+.Création d'un squelette d'application
+....
+composer create-project symfony/website-skeleton my-project
+....
+
+Explications :
+[source]
+----
+composer <1>
+    create-project symfony/website-skeleton <2>
+         my-project <3>
+----
+
+<1> appel de la commande `composer` ou `composer.phar` selon le cas
+<2> premier et deuxième arguments pour créer un projet selon un modèle
+<3> le troisième est le nom du projet, et donc du sous-dossier qui sera crée à partir de la racine courante
+
+<<<<
+=== Démarrage du serveur et de l'application
+
+.Activation du mode dev
+....
+ $ cd my-project
+ $ composer require server --dev
+....
+
+Symfony fonctionne par composants, et il y en a un qui vérifie les prérequis, `Symfony Requirements Checker tool`
+
+.Installation du composant de vérification de la configuration système
+....
+$ cd your-project/
+$ composer require requirements-checker
+....
+
+.Demarrage du serveur
+....
+$ cd my-project
+$ php bin/console server:run
+....
+
+
+Une fois ce composant installé, votre application pourra être sollicitée
+par la route http://localhost:8000/public/check.php, dont voici le résultat attendu :
+
+image:symfony-check.png[check-configuration]
+
+Après avoir réglé la situation, pour des questions de sécurité, ne pas oublier de supprimer cette fonctionnalité :
+
+.Désinstallation du composant de vérification de la configuration système
+....
+ cd your-project/
+ composer remove requirements-checker
+....
+
+TIP: Vérifier les prerequis système est une des premières actions à réaliser lors de la phase de déploiement sur un serveur de production !
+
+== Première page
+
+(d'après : https://symfony.com/doc/current/page_creation.html)
+
+Pour une application web, créer une page c'est permettre à un certain public
+d'accéder à une *ressource* (ou service) *web*. Pour cela, plusieurs activités sont concernées:
+
+* permettre à l'application web de répondre à une requête HTTP en définissant  une route (portion terminale d'un URL) pour la ressource en question
+* définir via quelle méthode d'accès HTTP cette ressource sera accessible (GET, POST, PUT, HEAD, ...)
+* concevoir le *contrôleur* associé à la ressource : une méthode d'une classe `Controller`
+* définir la structure de la resource dynamique soit dans le contrôleur, soit via un template de vue (*twig* par exemple)
+
+Si cette requête est de type `GET`, elle correspond à une demande de _resssource distante_.
+Cela peut correspondre à une donnée statique (un fichier placé sur le serveur) ou dynamique (construite pour l'occasion).
+
+Nous nous plaçons dans le cas où l'application répondra par du contenu dynamique `HTML`.
+
+Une application web n'expose jamais directement ses templates de vue de ses ressources dynamiques (pas de lien direct vers un *twig*)
+
+Dans le cadre de symfony, un contôleur central (_front controller_) réceptionne les requêtes HTTP
+et les traduit en appel de *méthodes* d'instance d'une classe *contrôleur* (_controller_)
+
+ifdef::backend-pdf[]
+image:request-flow.png[symfony-flow-schema, 620]
+endif::[]
+
+ifndef::backend-pdf[]
+image:request-flow.png[symfony-flow-schema]
+endif::[]
+
+Comme le montre ce schéma, le développeur doit mettre à disposition du framework des méthodes
+(le schéma montre le nom des méthodes `blogAction`, `contactAction` et `homepageAction`), mais ne donne pas le nom de la classe,
+ou des classes, où elles sont définies.
+
+Avant de concevoir une telle classe, vous devrez ajouter des composants à votre
+application. Le plus souple pour cela est de demander à `composer` de le faire pour vous :
+
+....
+$ cd your-project/
+$ composer require annotations
+....
+
+Il serait également préférable d'installer des plugins à votre IDE : avec PhpStorm,
+aller `File->Settings` puis chercher `plugin symfony` et les installer.
+
+Voici un exemple de classe contrôleur, extrait de la documentation : https://symfony.com/doc/current/page_creation.html[Symfony - page_creation.html]
+
+[source, php]
+----
+<?php
+
+// src/Controller/LuckyController.php  <1>
+
+namespace App\Controller;  <2>
+
+use Symfony\Component\HttpFoundation\Response;  <2>
+use Symfony\Component\Routing\Annotation\Route;
+
+class LuckyController <3>
+{
+  /**
+  * @Route("/lucky/number") <4>
+  */
+  public function number() <5>
+  {
+    $number = mt_rand(0, 100);
+
+    return new Response( <6>
+      '<html><body>Lucky number: '.$number.'</body></html>'
+    );
+  }
+} <7>
+----
+
+<1> un comment à destination du lecteur, afin d'identifier le chemin de sauvegarde
+<2> les librairies dont dépend le code ci-dessous (Classe et annotation)
+<3> une classe normale PHP Objet
+<4> définition de la logique d'appel (extrait terminal URL de l'application)
+<5> une méthode public; Elle sera automatiquement appelée via le _front controller_.
+<6> retourne un instance de `Response` (avec du contenu _HTML_)
+<7> le marqueur de fin de traitement PHP (`?>`) est volontairement absent afin de conserver le sens _librairie_ d'une classe Controller.
+
+Voici un extrait des spécifications de la fonction http://php.net/manual/fr/function.mt-rand.php
+[source, php]
+----
+int mt_rand ( int $min , int $max )
+
+Valeurs de retour
+
+Un entier aléatoire compris entre min (ou 0) et max inclusif, ou FALSE si le paramètre max est inférieur à min.
+----
+
+
+.Activation de la page (demande de la ressource "number")
+....
+http://localhost:8000/lucky/number
+....
+
+=== Rendu par une logique de vue (Modèle MVC)
+
+Concevoir la logique de présentation (HTML and Co) dans un contrôleur n'est pas une bonne pratique.
+
+Fort heureusement Symfony vient avec https://twig.symfony.com/[*Twig*] : un langage
+de vue puissant et plaisant à utiliser.
+
+Twig est proposé en tant que composant, qu'il faut installer :
+
+....
+$ cd your-project/
+$ composer require twig
+....
+
+Il faut ensuite s'assurer `LuckyController` hérite de la classe de base des contrôleurs `Controller`:
+
+.MVC : Les classes contrôleur héritent de Controller
+[source, php]
+----
+
+// src/Controller/LuckyController.php
+
+// ...
++ use Symfony\Bundle\FrameworkBundle\Controller\Controller; <1>
+
+- class LuckyController
++ class LuckyController extends Controller <2>
+{
+    // ...
+}
+----
+<1> déclaration de la dépendance (un import)
+<2> la classe LuckyController hérite de Controller
+
+Et faire en sorte que la méthode contrôleur *délègue* la vue à une page twig :
+
+.MVC : Une classe contrôleur hérite de Controller
+[source, php]
+----
+// src/Controller/LuckyController.php
+
+// ...
+class LuckyController extends Controller
+{
+    /**
+     * @Route("/lucky/number")
+     */
+    public function numberAction()
+    {
+        $number = mt_rand(0, 100);
+
+        return $this->render('lucky/number.html.twig', array( <1>
+            'number' => $number,
+        ));
+    }
+}
+----
+
+<1> appel à la méthode héritée (_render_) en lui passant le nom d'une vue, suivi d'un *tableau associatif*, appelé aussi *dictionnaire*, composé de *couples (nom_variable=>valeur)*.
+Dans notre cas, le tableau n'a qu'un seul élément ('number'=> $number),
+qui sera passé à la vue.
+La vue aura accès à ces valeurs *directement* par le nom des clés définis dans ce dictionnaire.
+
+Les fichiers de vue seront cherchés par symfony, par défaut, dans le dossier *_templates_* à partir de la racine du projet (ce dossier est automatiquement crée lors de l'installation de twig).
+
+
+==== Template de base de l'application
+
+C'est un fichier qui détermnine la structure HTML/CSS générale de votre application.
+La plupart du temps un tel template se base sur un modèle proposé par des frameworks CSS (_bootstrap_, _semantic-ui_, ...). Il est parfois acheté auprès de sociétés spécialisées.
+
+Exemple de template simple, _from scratch_, créé par le composant _twig_ lors de son intégration dans ce projet (symfony > 4)
+
+.localisation : projet/templates/base.html.twig
+[source, html]
+----
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        {% block body %}{% endblock %} <1>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>
+----
+<1> Définition d'un block nommé `body` (ne pas confondre avec `<body>`).
+ Les vues héritant pouvent alors redéfinir ces blocks.
+
+Ce template de base définit 4 blocks : `title`, `stylesheets`, `body` et `javascripts`.
+
+Pour répondre au besoin de notre méthode _numberAction_ de _LuckyController_, nous
+devons créer une nouvelle vue dans le dossier _templates/lucky_, nommée `number.html.twig` (`lucky` est un dossier qu'il faut créer) :
+
+[source, php]
+----
+{# templates/lucky/number.html.twig #} <1>
+{% extends 'base.html.twig' %} <2>
+
+{% block title %}Devine{% endblock %} <3>
+
+{% block body %} <4>
+<h1>Your lucky number is {{ number }}</h1>
+{% endblock %}
+----
+
+<1> un commentaire twig qui vous informe, vous lecteur, de la localisation de ce fichier
+<2> cette vue hérite d'un template qui définit les blocs `title` et `body`
+<3> redéfinition du bloc `title`
+<4> redéfinition du bloc `body`
+
+Vous trouverez la syntaxe twig ici : https://twig.symfony.com/
+
+=== Gestion des données d'entrée par le contrôleur
+
+Conformément à l'architecture applicative, c'est une méthode dite _contrôleur_ qui prend en charge l'exploitation des données transmises par le client (celui qui est à l'origine de la requête HTTP)
+
+TIP: Teminologie : les méthodes associées à des _Routes_ dans une classe _Controller_ sont appelées *_méthodes d'action_*. Par extension, on nomme parfois de telles méthodes des *_contrôleurs_*.
+
+==== Pas de variables super-globales comme GET[], SESSION[], ...
+
+Pour accéder aux données transmises avec la requête HTTP,
+le contrôleur passera par un objet de type _Request_ (de _HttpFoundation_).
+
+C'est par l'intermédiaire de cet objet, que nous pourrons accéder aux données
+de la session utilisateur.
+
+Utilisation d'un objet de la classe `Symfony\Component\HttpFoundation\Request`.
+
+[source, php]
+----
+use Symfony\Component\HttpFoundation\Request; <1>
+
+[...]
+
+public function index(Request $request) <2>
+{
+  // exploiter $request
+}
+
+[...]
+----
+<1> un composant du micro-framework
+<2> en déclarant un paramètre de type Request, on demande à symfony de nous *auto-injecter* un argument de ce type, parfaitement bien initialisé.
+
+
+==== Données implicites
+
+ TODO
+
+==== Données explicites
+
+ce sont celles en provenance soit d'un *formulaire (HTML)* soit comme composante de l'*URL*.
+
+===== via un formulaire
+
+[source, php]
+----
+    // retrieves POST variables respectively
+    $request->request->get('idProuit'); <1>
+
+    // retrieves an instance of UploadedFile identified by foo
+    $request->files->get('foo');
+----
+
+<1> C'est via l'attribut `request`, de l'objet référencé par `$request` (à ne pas confondre) que le contrôleur aura accès aux données passées par `POST`.
+
+
+===== via l'url
+
+
+====== Cas des arguments passés dans l'url
+
+[source, php]
+----
+ // retrieves GET variables respectively
+    $request->query->get('x', 66); <1> <2>
+----
+
+
+<1> C'est via l'attribut `query`, de l'objet référencé par `$request`, que le contrôleur aura accès aux données passées par `GET`.
+ Par exemple, les données transmises en arguments de l'url (`?a=b&x=42`).
+
+<2> La méthode `get` prend en premier argument la *clé* (ici `a` ou `x`), le deuxième étant une *valeur par défaut*.
+
+
+====== Cas de valeurs incluses dans l'url même
+
+
+[source, php]
+----
+ /**
+     * Matches /blog/*
+     *
+     * @Route("/blog/{slug}", name="blog_show")  <1>
+     */
+    public function show($slug) { ... } <2>
+----
+
+<1> La route contient une partie variable, représentée par un paramètre placé en `{  }` (ici _slug_). Exemples d'arguments : `/blog/usecase1` ou `/blog/usecase2`.
+<2> Reprise de la partie variable de l'url comme *paramètre* de la méthode (attention, même nom que le paramètre de route)
+
+Il est dans ce cas très facile de récupérer la valeur en question, car elle est passée automatiquement à la méthode !
+
+Plus d'infos sur l'exploitation des valeurs d'entrée :
+
+* https://symfony.com/doc/current/routing.html
+* https://symfony.com/doc/current/controller.html
+
+
+== Travaux Pratiques - 1 -
+
+. Après avoir installé et configuré votre IDE, atteindre la dernière étape de ce premier tutoriel, à savoir :
+
+image:lucky-number-42.png[lucky number in action, 500]
+
+. Concevoir une application web répondant aux spécifications suivantes :
+
+CAUTION:   L'utilisateur cherche à trouver un nombre retenu par l'application de façon « aléatoire », sur une plage d'amplitude allant de zéro à, disons, 50.
+ Chaque nombre sera représenté par une cellule `td` d'un tableau `html`. Lorsque l'utilisateur soumet une proposition (clique sur une cellule/nombre), l'application répond « valeur trop petite », « valeur trop grande » ou « Trouvé ! ». Durant les tentatives, l'application montre les cellules déjà sélectionnées par l'utilisateur (prévoir une classe CSS dédiée). La partie s'arrête lorsque l'utilisateur a trouvé le bon nombre.
+
+WARNING: L'application ne sauvegardera aucune donnée du jeu (historique utilisateur) sur le serveur (les « données de sessions » seront transmises au client – et donc portées par celui-ci – un exemple de code est donné en annexe).
+
+Étapes à suivre :
+
+.. Traduire le code PHP de l'annexe en un prjet symfony (avec contrôleur index et vue twig)
+.. Faire évoluer l'application afin qu'elle réponde aux attentes (exprimées ci-dessus).
+.. L'utilisateur pourra relancer autant de parties qu'il le souhaite. Comme il se doit, l'application sera capable de gérer plusieurs utilisateurs en même temps.
+
+[start=2]
+. Lorsque que le nombre est trouvé, l'application affiche un des messages suivants :
+  * *« Vous avez de la chance !»* si le nombre d’essai du joueur est inférieur au nombre optimal (à déterminer après avoir étudié le principe de la recherche dichotomique - lien wikipédia ci-dessous).
+  * *« Votre stratégie a été la bonne »* si le nombre d’essai du joueur est égale au nombre optimal.
+  * *« Vous avez débordé de n tentatives »* où _n_ est le nombre de tentatives au-delà du nombre optimal.
+  Pour déterminer le message à présenter, référez-vous aux caractéristiques d'efficacité de la *recherche dichotomique* : https://fr.wikipedia.org/wiki/Dichotomie
+. Optionnel, pour les plus avancés :
+
+ * Présentation des nombres dans une matrice 10 x 10
+ * L'utilisateur peut étendre l'amplitude de la matrice.
+ * Proposer une version qui n’expose pas la valeur à trouver au client (prévoir un  cryptage symétrique du nombre – l’expéditeur est le destinataire).
+
+=== Ressources à prendre en compte
+
+* Génération pseudo-aléatoire d'un nombre : http://php.net/manual/fr/function.mt-rand.php
+* Legacy code en annexe pour commencer.
+
+=== Annexe TP-1 - code legacy
+[source, php]
+----
+<?php
+// exploitation des données reçues (ou attendues) – on attend un couple i=n
+if (isset($_GET['i'])) :
+  $iChoixJoueur = (int) $_GET['i'];
+  // force l'interprétation de la valeur en un entier
+  else :
+    $iChoixJoueur = -1;
+  endif;
+  // ou (même traitement que ci-dessus)
+  // $iChoixJoueur = isset($_GET['i']) ? (int) $_GET['i'] : -1; //opérateur ternaire
+  // on récupère l'historique des tentatives (une chaîne de caractères en fait)
+  if (empty($_GET['histo'])) :
+    $histo = '----------w--------------';
+    // TODO : placer le numéro gagnant (w)iner de façon aléatoire
+  else:
+    $histo = $_GET['histo'];
+  endif;
+  // mise à jour de l'historique : prise en compte du choix utilisateur
+  if ($iChoixJoueur >= 0 && $iChoixJoueur < strlen($histo)) :
+    $histo[$iChoixJoueur] = 'j';
+  endif;
+ ?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset='utf-8' />
+  <title>À la recherche du nombre</title>
+  <style type="text/css">
+  .normal {
+    border: 1px solid black;
+  }
+  .dejajoue {
+    border: 1px solid black;
+    background-color: lightgreen;
+  }
+  </style>
+</head>
+<body>
+  <h2>à la recherche du nombre</h2>
+  <table>
+    <tbody>
+      <tr>
+        <?php
+          // mode debug : var_dump($histo);
+          // TODO : il faudrait mieux appliquer la classe "dejajoue"
+          //        à toutes les cellules déjà jouées
+          for ($i=0; $i < strlen($histo); $i++) : // strlen donne le nb de caractères
+            if ($i == $iChoixJoueur) : ?>
+              <td class = "dejajoue">
+            <?php else : ?>
+              <td class = "normal">
+            <?php endif; ?>
+              <a href="?i=<?php echo $i ?>&histo=<?php echo $histo ?>">
+                <?php echo $i; ?>
+              </a>
+            </td>
+          <?php endfor; ?>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+  </html>
+----
