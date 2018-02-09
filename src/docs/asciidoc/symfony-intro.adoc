@@ -34,11 +34,18 @@ ____
 Symfony est un ensemble de Composants PHP, un framework pour les Applications Web, une Philosophie, et une Communauté — tous travaillant ensemble, en harmonie.
 ____
 
+Cette introduction se base sur les ressources documentaires de Symfony (version 4), afin d'en faciliter le premier accès à des étudiants
+développeurs ayant eu un premier contact avec le développement web.
+
+Pour réaliser les travaux pratique, vous aurez besoins d'aller plus en profondeur sur la connaissances des composants.
+La documentation Symfony est accessible ici : https://symfony.com/doc/current/index.html
+
+
 == Environnement de développement
 
-Modèle d'architecture 3 tiers des applications web (clients, serveur, SBBD)
+Le modèle d'architecture des applications web est de type 3 tiers (clients, serveur, SBBD)
 
-.Exemple type d'interaction HTTP/web
+.Exemple type d'interactions entre tiers dans le cadre d'un requête HTTP
 [plantuml]
 ----
 skinparam {
@@ -69,7 +76,7 @@ serveur_http  --> client : réponse HTTP
 Les applications symfony se situent sur le tiers "server et applications" (derrière un serveur HTTP).
 
 En environnement de développement, les développeurs PHP disposent du `PHP's internal web server`, un serveur http intégré au langage lui-même,
-ce qui assure un certain contrôle quant à la version de PHP utilisée.
+ce qui assure un certain contrôle quant à la version de PHP utilisée lors de la phase de développement.
 
 En environnement de production, l'application sera placée derrière un server Web de production, disposant d'une version de PHP conforme aux exigences du framework.
 Les serveurs HTTP de production les plus courants sont `Apache` et `Nginx`.
@@ -80,14 +87,14 @@ Dans ce cas, reférez-vous aux consignes de configurations disponibles sur le si
 
 === Concernant le développeur
 
-* Avoir une première expérience avec la programmation orientée objet (POOO)
+* Avoir une première expérience avec la programmation orientée objet (POO)
 * Comprendre les principes de fonctionnement d'une interaction HTTP (protocole sans état, passage de valeurs)
   et les problématiques et solutions autour de la gestion du suivi de sessions HTTP
 * Une certaine connaissance en interaction applicative avec un SGBD( R ) - (SQL)
 
 === Concernant le système
 
-Les prérequis système dépendent de la version de symfony que vous comptez utlisée.
+Les prérequis système dépendent de la version de symfony que vous comptez utliser.
 On se réfèrera à https://symfony.com/doc/current/reference/requirements.html[Symfony Requirements], en particulier :
 
 * La version minimale attendue de PHP (dépend de la version de Symfony)
@@ -113,14 +120,15 @@ composer <1>
 
 <1> appel de la commande `composer` ou `composer.phar` selon le cas
 <2> premier et deuxième arguments pour créer un projet selon un modèle
-<3> le troisième est le nom du projet, et donc du sous-dossier qui sera crée à partir de la racine courante
+<3> le troisième est le nom du projet, et donc du *sous-dossier* qui sera *créé*
+à partir de la racine courante (il est donc important de se placer dans un dossier de travail avant de lancer une telle commande)
 
-<<<<
-=== Démarrage du serveur et de l'application
+<<<
+== Démarrage du serveur et de l'application
 
 .Activation du mode dev
 ....
- $ cd my-project
+ $ cd your-project
  $ composer require server --dev
 ....
 
@@ -134,10 +142,9 @@ $ composer require requirements-checker
 
 .Demarrage du serveur
 ....
-$ cd my-project
+$ cd your-project
 $ php bin/console server:run
 ....
-
 
 Une fois ce composant installé, votre application pourra être sollicitée
 par la route http://localhost:8000/public/check.php, dont voici le résultat attendu :
@@ -171,7 +178,7 @@ Cela peut correspondre à une donnée statique (un fichier placé sur le serveur
 
 Nous nous plaçons dans le cas où l'application répondra par du contenu dynamique `HTML`.
 
-Une application web n'expose jamais directement ses templates de vue de ses ressources dynamiques (pas de lien direct vers un *twig*)
+Une application web n'expose jamais directement ses templates de vue de ses ressources dynamiques (pas de lien direct vers un script de vue)
 
 Dans le cadre de symfony, un contôleur central (_front controller_) réceptionne les requêtes HTTP
 et les traduit en appel de *méthodes* d'instance d'une classe *contrôleur* (_controller_)
@@ -368,6 +375,7 @@ devons créer une nouvelle vue dans le dossier _templates/lucky_, nommée `numbe
 
 Vous trouverez la syntaxe twig ici : https://twig.symfony.com/
 
+<<<
 === Gestion des données d'entrée par le contrôleur
 
 Conformément à l'architecture applicative, c'est une méthode dite _contrôleur_ qui prend en charge l'exploitation des données transmises par le client (celui qui est à l'origine de la requête HTTP)
@@ -443,7 +451,6 @@ ce sont celles en provenance soit d'un *formulaire (HTML)* soit comme composante
 
 ====== Cas de valeurs incluses dans l'url même
 
-
 [source, php]
 ----
  /**
@@ -465,6 +472,7 @@ Plus d'infos sur l'exploitation des valeurs d'entrée :
 * https://symfony.com/doc/current/controller.html
 
 
+<<<
 == Travaux Pratiques - 1 -
 
 . Après avoir installé et configuré votre IDE, atteindre la dernière étape de ce premier tutoriel, à savoir :
@@ -489,7 +497,10 @@ WARNING: L'application ne sauvegardera aucune donnée du jeu (historique utilisa
   * *« Vous avez de la chance !»* si le nombre d’essai du joueur est inférieur au nombre optimal (à déterminer après avoir étudié le principe de la recherche dichotomique - lien wikipédia ci-dessous).
   * *« Votre stratégie a été la bonne »* si le nombre d’essai du joueur est égale au nombre optimal.
   * *« Vous avez débordé de n tentatives »* où _n_ est le nombre de tentatives au-delà du nombre optimal.
-  Pour déterminer le message à présenter, référez-vous aux caractéristiques d'efficacité de la *recherche dichotomique* : https://fr.wikipedia.org/wiki/Dichotomie
+
+Pour déterminer le message à présenter, référez-vous aux caractéristiques d'efficacité de la *recherche dichotomique* : https://fr.wikipedia.org/wiki/Dichotomie
+
+[start=3]
 . Optionnel, pour les plus avancés :
 
  * Présentation des nombres dans une matrice 10 x 10
@@ -501,7 +512,7 @@ WARNING: L'application ne sauvegardera aucune donnée du jeu (historique utilisa
 * Génération pseudo-aléatoire d'un nombre : http://php.net/manual/fr/function.mt-rand.php
 * Legacy code en annexe pour commencer.
 
-=== Annexe TP-1 - code legacy
+=== Annexe TP-1 - code legacy (prototype)
 [source, php]
 ----
 <?php
@@ -567,3 +578,4 @@ if (isset($_GET['i'])) :
   </body>
   </html>
 ----
+
