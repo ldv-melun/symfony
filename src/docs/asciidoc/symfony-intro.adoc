@@ -37,7 +37,7 @@ ____
 Cette introduction se base sur les ressources documentaires de Symfony (version 4), afin d'en faciliter le premier accès à des étudiants
 développeurs ayant eu un premier contact avec le développement web.
 
-Pour réaliser les travaux pratique, vous aurez besoins d'aller plus en profondeur sur la connaissances des composants.
+Pour réaliser les travaux pratiques, vous aurez besoin d'aller plus en profondeur sur la connaissance des composants.
 La documentation Symfony est accessible ici : https://symfony.com/doc/current/index.html
 
 
