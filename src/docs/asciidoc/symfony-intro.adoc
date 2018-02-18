@@ -45,7 +45,7 @@ La documentation Symfony est accessible ici : https://symfony.com/doc/current/in
 
 Le modèle d'architecture des applications web est de type 3 tiers (clients, serveur, SBBD)
 
-.Exemple type d'interactions entre tiers dans le cadre d'un requête HTTP
+.Interaction type entre tiers d'une application web
 [plantuml]
 ----
 skinparam {
