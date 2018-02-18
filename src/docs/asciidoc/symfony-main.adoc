@@ -1,0 +1,55 @@
+= Symfony Introduction
+Olivier Capuozzo; Gilles Chamillard
+v1.0, 2018-01-06: Version asciidoc
+:description: Presentation de Symfony
+:icons: font
+:listing-caption: Listing
+:toc-title: Table des matieres
+:toc:
+:toclevels: 2
+:source-highlighter: coderay
+ifdef::backend-pdf[]
+:source-highlighter: rouge
+:title-logo-image: image:kpu.png[pdfwidth=4.25in,align=center]
+endif::[]
+ifndef::backend-pdf[]
+:imagesdir: images
+endif::[]
+
+== Présentation
+
+ifdef::backend-pdf[]
+image:logo-symfony.png[title="Symfony"]
+endif::[]
+
+ifndef::backend-pdf[]
+image:logo-symfony.svg[title="Symfony"]
+endif::[]
+
+Symfony est une solution créée par la société https://sensiolabs.com[Sensiolabs] qui en assure l'évolution,
+assitée par de  https://symfony.com/contributors[nombreux contributeurs].
+
+[quote, Symfony, Qu'est-ce que Symfony ? par Sensiolabs - a french company]
+____
+Symfony est un ensemble de Composants PHP, un framework pour les Applications Web, une Philosophie, et une Communauté — tous travaillant ensemble, en harmonie.
+____
+
+Cette introduction se base sur les ressources documentaires de Symfony (version 4), afin d'en faciliter le premier accès à des étudiants
+développeurs ayant eu un premier contact avec le développement web.
+
+Pour réaliser les travaux pratiques, vous aurez besoin d'aller plus en profondeur sur la connaissance des composants.
+La documentation Symfony est accessible ici : https://symfony.com/doc/current/index.html
+
+
+// include
+include::_symfony-chap01-installation-test.adoc[leveloffset=+1]
+
+// include
+include::_symfony-chap02-premiere-page.adoc[leveloffset=+1]
+
+// inclusion
+include::_symfony-chap03-data-input.adoc[leveloffset=+1]
+
+// inclusion
+include::_symfony-chap04-tp-1.adoc[leveloffset=+1]
+

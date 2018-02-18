@@ -1,0 +1,94 @@
+= Gestion des données d'entrée
+ifndef::backend-pdf[]
+:imagesdir: images
+endif::[]
+
+Conformément à l'architecture applicative, c'est une méthode dite _contrôleur_ qui prend en charge l'exploitation des données transmises par le client (celui qui est à l'origine de la requête HTTP)
+
+TIP: Teminologie : les méthodes associées à des _Routes_ dans une classe _Controller_ sont appelées *_méthodes d'action_*. Par extension, on nomme parfois de telles méthodes des *_contrôleurs_*.
+
+== Pas de variables super-globales comme GET[], SESSION[], ...
+
+Pour accéder aux données transmises avec la requête HTTP,
+le contrôleur passera par un objet de type _Request_ (de _HttpFoundation_).
+
+C'est par l'intermédiaire de cet objet, que nous pourrons accéder aux données
+de la session utilisateur.
+
+Utilisation d'un objet de la classe `Symfony\Component\HttpFoundation\Request`.
+
+[source, php]
+----
+use Symfony\Component\HttpFoundation\Request; <1>
+
+[...]
+
+public function index(Request $request) <2>
+{
+  // exploiter $request
+}
+
+[...]
+----
+<1> un composant du micro-framework
+<2> en déclarant un paramètre de type Request, on demande à symfony de nous *auto-injecter* un argument de ce type, parfaitement bien initialisé.
+
+
+== Données implicites
+
+ TODO
+
+== Données explicites
+
+ce sont celles en provenance soit d'un *formulaire (HTML)* soit comme composantes https://en.wikipedia.org/wiki/Query_string[QueryString] de l'*URL*.
+
+=== via un formulaire
+
+[source, php]
+----
+    // retrieves POST variables respectively
+    $request->request->get('idProuit'); <1>
+
+    // retrieves an instance of UploadedFile identified by foo
+    $request->files->get('foo');
+----
+
+<1> C'est via l'attribut `request`, de l'objet référencé par `$request` (à ne pas confondre) que le contrôleur aura accès aux données passées par `POST`.
+
+=== Cas des arguments passés dans l'url
+
+[source, php]
+----
+ // retrieves GET variables respectively
+    $request->query->get('x', 66); <1> <2>
+----
+
+
+<1> C'est via l'attribut `query`, de l'objet référencé par `$request`, que le contrôleur aura accès aux données passées par `GET`.
+ Par exemple, les données transmises en arguments de l'url (`?a=b&x=42`).
+
+<2> La méthode `get` prend en premier argument la *clé* (ici `a` ou `x`), le deuxième étant une *valeur par défaut*.
+
+
+=== Cas de valeurs incluses dans l'url même
+
+[source, php]
+----
+ /**
+     * Matches /blog/*
+     *
+     * @Route("/blog/{slug}", name="blog_show")  <1>
+     */
+    public function show($slug) { ... } <2>
+----
+
+<1> La route contient une partie variable, représentée par un paramètre placé en `{  }` (ici _slug_). Exemples d'arguments : `/blog/usecase1` ou `/blog/usecase2`.
+<2> Reprise de la partie variable de l'url comme *paramètre* de la méthode (attention, même nom que le paramètre de route)
+
+Il est dans ce cas très facile de récupérer la valeur en question, car elle est passée automatiquement à la méthode !
+
+Plus d'infos sur l'exploitation des valeurs d'entrée :
+
+* https://symfony.com/doc/current/routing.html
+* https://symfony.com/doc/current/controller.html
+

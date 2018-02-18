@@ -1,0 +1,122 @@
+= Modèle d'architecture applicative
+ifndef::backend-pdf[]
+:imagesdir: images
+endif::[]
+
+Le modèle d'architecture des applications web est de type 3 tiers (clients, serveur, SBBD)
+
+.Interaction type entre tiers d'une application web
+[plantuml]
+----
+skinparam {
+shadowing false
+monochrome false
+}
+hide footbox
+title (architecture 3 tiers web)
+
+client --> serveur_http : requête HTTP
+box
+	participant serveur_http
+	participant application
+end box
+
+serveur_http  --> application
+activate application
+application->application
+application --> sgbd : requêtes sql
+application <-- sgbd
+application --> application
+application --> serveur_http
+deactivate application
+serveur_http  --> client : réponse HTTP
+
+----
+
+Les applications symfony se situent sur le tiers "server et applications" (derrière un serveur HTTP).
+
+En environnement de développement, les développeurs PHP disposent du `PHP's internal web server`, un serveur http intégré au langage lui-même,
+ce qui assure un certain contrôle quant à la version de PHP utilisée lors de la phase de développement.
+
+En environnement de production, l'application sera placée derrière un server Web de production, disposant d'une version de PHP conforme aux exigences du framework.
+Les serveurs HTTP de production les plus courants sont `Apache` et `Nginx`.
+Dans ce cas, reférez-vous aux consignes de configurations disponibles sur le site de symfony : https://symfony.com/doc/current/setup/web_server_configuration.html[web server configurations].
+
+
+== Prérequis
+
+=== Concernant le développeur
+
+* Avoir une première expérience avec la programmation orientée objet (POO)
+* Comprendre les principes de fonctionnement d'une interaction HTTP (protocole sans état, passage de valeurs)
+  et les problématiques et solutions autour de la gestion du suivi de sessions HTTP
+* Une certaine connaissance en interaction applicative avec un SGBD( R ) - (SQL)
+
+=== Concernant le système
+
+Les prérequis système dépendent de la version de symfony que vous comptez utliser.
+On se réfèrera à https://symfony.com/doc/current/reference/requirements.html[Symfony Requirements], en particulier :
+
+* La version minimale attendue de PHP (dépend de la version de Symfony)
+
+* https://getcomposer.org/[`Composer`] (outils de gestion des dépendances pour des projets PHP, vérifier sa présence sur votre système)
+
+== Création d'une application symfony et vérification des pré-requis
+
+Ce sont des opérations qui s'effectuent en ligne de commande :
+
+.Création d'un squelette d'application
+....
+composer create-project symfony/website-skeleton my-project
+....
+
+Explications :
+[source]
+----
+composer <1>
+    create-project symfony/website-skeleton <2>
+         my-project <3>
+----
+
+<1> appel de la commande `composer` ou `composer.phar` selon le cas
+<2> premier et deuxième arguments pour créer un projet selon un modèle
+<3> le troisième est le nom du projet, et donc du *sous-dossier* qui sera *créé*
+à partir de la racine courante (il est donc important de se placer dans un dossier de travail avant de lancer une telle commande)
+
+
+== Démarrage du serveur et de l'application
+
+.Activation du mode dev
+....
+ $ cd your-project
+ $ composer require server --dev
+....
+
+Symfony fonctionne par composants, et il y en a un qui vérifie les prérequis, `Symfony Requirements Checker tool`
+
+.Installation du composant de vérification de la configuration système
+....
+$ cd your-project/
+$ composer require requirements-checker
+....
+
+.Demarrage du serveur
+....
+$ cd your-project
+$ php bin/console server:run
+....
+
+Une fois ce composant installé, votre application pourra être sollicitée
+par la route http://localhost:8000/public/check.php, dont voici le résultat attendu :
+
+image:symfony-check.png[check-configuration]
+
+Après avoir réglé la situation, pour des questions de sécurité, ne pas oublier de supprimer cette fonctionnalité :
+
+.Désinstallation du composant de vérification de la configuration système
+....
+ cd your-project/
+ composer remove requirements-checker
+....
+
+TIP: Vérifier les prerequis système est une des premières actions à réaliser lors de la phase de déploiement sur un serveur de production !
