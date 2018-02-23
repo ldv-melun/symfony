@@ -24,7 +24,7 @@ WARNING: L'application ne sauvegardera aucune donnée du jeu (historique utilisa
 
 Étapes à suivre :
 
-.. Traduire le code PHP de l'annexe en un prjet symfony (avec contrôleur index et vue twig)
+.. Traduire le code PHP de l'annexe en un projet symfony (avec contrôleur index et vue twig)
 .. Faire évoluer l'application afin qu'elle réponde aux attentes (exprimées ci-dessus).
 .. Présentation des nombres dans une matrice 10 x 10
 .. L'utilisateur pourra relancer autant de parties qu'il le souhaite. Comme il se doit, l'application sera capable de gérer plusieurs utilisateurs en même temps.
