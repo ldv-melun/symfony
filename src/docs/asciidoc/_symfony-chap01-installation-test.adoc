@@ -107,7 +107,7 @@ $ php bin/console server:run
 ....
 
 Une fois ce composant installé, votre application pourra être sollicitée
-par la route http://localhost:8000/public/check.php, dont voici le résultat attendu :
+par la route http://localhost:8000/check.php, dont voici le résultat attendu :
 
 image:symfony-check.png[check-configuration]
 
