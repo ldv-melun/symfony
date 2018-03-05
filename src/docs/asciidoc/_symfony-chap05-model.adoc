@@ -1,0 +1,88 @@
+= Introduction au Model
+ifndef::backend-pdf[]
+:imagesdir: images
+endif::[]
+
+== Éléments d'architecture
+
+Nous avons vu comment associer des _routes_ à des _contrôleurs_ (méthodes d'action d'une classe Controller).
+
+Nous allons voir comment le contrôleur peut s'appuyer sur des *objets métier* pour *implémenter une logique de cas d'utilisation*.
+
+TIP: Il est courant de faire porter la responsabilité d'un cas d'utilisation à une classe contrôleur.
+
+Il existe 2 sortes d'objets métier : `Entity` et `EntityRepository`.
+
+* `Entity` : Représente une classe métier pour le domaine étudié (`Client`, `Contrat`, ...).
+* `EntityRepository` : Responsable de la communication avec les système de persistance, notamment en lien avec l' `ORM`.
+
+Le contrôleur dépend de `Entity` et `EntityRepository`, `Entity` ne dépend pas d'un ORM, `EntityRepository` si.
+
+.Architecture en couches
+image:schema-interactions-couches.png[Interactions vue en couches]
+
+
+== Contexte support
+
+Nous nous plaçons dans le cas d'une application exploitant des données stockées
+par un système de gestion de bases de données relationnel (SGBDR).
+
+Schéma relationnel de la base de données utilisé.
+« world » est une base de données statistiques géo-politiques sur le monde datant de 2006,
+d'après link:http://www.stat.fi/tup/maanum/index_en.html[Official Statistics of Finland].
+
+.Schéma Relationnel structurel de la base de données World
+
+image:SR-World.png[SR-World.png]
+
+
+Les données seront exploitées, par la logique applicative, sous forme de _Classe_, plus précisément :
+
+* Classe <--> Table
+* Objet <--> Ligne
+
+Cette façon de faire permet de mettre le _domaine métier_ *au coeur de la logique de l'application*.
+
+
+Voici une analyse du modèle (Classes "métier", ou "Entity")
+
+.Diagramme d'analyse UML (les entités du domaine)
+[plantuml, diagram-classes, png]
+....
+class Ville {
+  Name
+}
+
+class Pays {
+  Name
+}
+
+class Langue {
+  Name
+}
+
+Ville "*" -left-- "1" Pays : "                               "
+Pays "*" --- "capitale 0..1" Ville : "                     "
+
+Pays "*" -- "*" Langue
+(Pays, Langue) .. PaysLangue
+
+class PaysLangue {
+  officielle
+  percentage
+}
+
+hide circle
+hide method
+....
+
+
+TIP: Les données de la base seront exploitées par l'intermédiaire
+d'objets (instances de classes métier)
+
+Pour aider le travail de l'ORM Doctrine (_Object Relational Mapping_), la défintion des entités devra
+intégrer des directives de mapping sous forme d'*annotations*.
+
+== Mappings et annotations
+
+_begin soon_
