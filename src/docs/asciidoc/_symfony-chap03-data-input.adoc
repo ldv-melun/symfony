@@ -7,7 +7,7 @@ Conformément à l'architecture applicative, c'est une méthode dite _contrôleu
 
 TIP: Teminologie : les méthodes associées à des _Routes_ dans une classe _Controller_ sont appelées *_méthodes d'action_*. Par extension, on nomme parfois de telles méthodes des *_contrôleurs_*.
 
-== Pas de variables super-globales comme GET[], SESSION[], ...
+== Auto-injection de l'objet Request
 
 Pour accéder aux données transmises avec la requête HTTP,
 le contrôleur passera par un objet de type _Request_ (de _HttpFoundation_).
@@ -33,10 +33,28 @@ public function index(Request $request) <2>
 <1> un composant du micro-framework
 <2> en déclarant un paramètre de type Request, on demande à symfony de nous *auto-injecter* un argument de ce type, parfaitement bien initialisé.
 
+TIP:  Attention, ne pas faire usage de variables super-globales comme GET[], SESSION[], ...
+
 
 == Données implicites
 
- TODO
+Ce sont les données transmises par le client, et le serveur,
+ dans la partie entête HTTP. Ces données sont accessibles *via* l'objet `Request`
+ qui dispose de méthodes bient pratiques pour interroger ces données.
+
+
+*  getLanguages()
+Returns the list of accepted languages ordered by descending quality.
+
+*  getCharsets()
+Returns the list of accepted charsets ordered by descending quality.
+
+*  bool isXmlHttpRequest()
+Returns true if the request is a XMLHttpRequest.
+
+* ...
+
+voir http://api.symfony.com/4.0/Symfony/Component/HttpFoundation/Request.html[API Request]
 
 == Données explicites
 
@@ -90,5 +108,8 @@ Il est dans ce cas très facile de récupérer la valeur en question, car elle e
 Plus d'infos sur l'exploitation des valeurs d'entrée :
 
 * https://symfony.com/doc/current/routing.html
+
+avec des exemples de redirection :
+
 * https://symfony.com/doc/current/controller.html
 

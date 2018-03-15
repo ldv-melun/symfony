@@ -1,5 +1,5 @@
 = Symfony Introduction
-Olivier Capuozzo; Gilles Chamillard
+Olivier Capuozzo
 v1.0, 2018-01-06: Version asciidoc
 :description: Presentation de Symfony
 :icons: font
@@ -40,13 +40,13 @@ développeurs ayant eu un premier contact avec le développement web.
 Pour réaliser les travaux pratiques, vous aurez besoin d'aller plus en profondeur sur la connaissance des composants.
 La documentation Symfony est accessible ici : https://symfony.com/doc/current/index.html
 
-include::_symfony-chap01-installation-test.adoc[leveloffset=+1]
+//include::_symfony-chap01-installation-test.adoc[leveloffset=+1]
 
-include::_symfony-chap02-premiere-page.adoc[leveloffset=+1]
+//include::_symfony-chap02-premiere-page.adoc[leveloffset=+1]
 
 
-include::_symfony-chap03-data-input.adoc[leveloffset=+1]
-
-include::_symfony-chap04-tp-1.adoc[leveloffset=+1]
+//include::_symfony-chap03-data-input.adoc[leveloffset=+1]
+//<<<
+//include::_symfony-chap04-tp-1.adoc[leveloffset=+1]
 
 include::_symfony-chap05-model.adoc[leveloffset=+1]

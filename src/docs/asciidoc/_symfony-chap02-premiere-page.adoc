@@ -10,7 +10,8 @@ d'accéder à une *ressource* (ou service) *web*. Pour cela, plusieurs activité
 
 * permettre à l'application web de répondre à une requête HTTP en définissant  une route (portion terminale d'un URL) pour la ressource en question
 * définir via quelle méthode d'accès HTTP cette ressource sera accessible (GET, POST, PUT, HEAD, ...)
-* concevoir le *contrôleur* associé à la ressource : une méthode d'une classe `Controller`
+* concevoir le *contrô
+leur* associé à la ressource : une méthode d'une classe `Controller`
 * définir la structure de la resource dynamique soit dans le contrôleur, soit via un template de vue (*twig* par exemple)
 
 Si cette requête est de type `GET`, elle correspond à une demande de _resssource distante_.
@@ -34,7 +35,7 @@ endif::[]
 Comme le montre ce schéma, le développeur doit mettre à disposition du framework des méthodes.
 
 WARNING: Attention, le schéma ne montre que les méthodes (`blogAction`, `contactAction` et `homepageAction`),
-         mais ne donne pas le nom de la (ou des) classes où elles sont définies.
+         mais ne donne pas le nom de la (ou des) classes où elles sont définies (source symfony.com).
 
 La liaison méthode <--> URL peut se réaliser soit par un _fichier de configuration_, soit via des *_annotations_* dans le code.
 Nous choisirons cette dernière option, bien pratique, mais avant de concevoir une telle classe, vous devrez ajouter des composants à votre

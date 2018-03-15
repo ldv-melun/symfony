@@ -19,22 +19,50 @@ Il existe 2 sortes d'objets métier : `Entity` et `EntityRepository`.
 Le contrôleur dépend de `Entity` et `EntityRepository`, `Entity` ne dépend pas d'un ORM, `EntityRepository` si.
 
 .Architecture en couches
-image:schema-interactions-couches.png[Interactions vue en couches]
+image:schema-interactions-couches.png[Interactions vue en couches, 600]
 
+== Premiers pas avec le model
 
-== Contexte support
+=== Guide
+
+Faire le lien entre un objet (instance d'une classe Entity) et une ligne d'une table d'une base de données
+est une opération complexe (synchronisation, mise en cache, cohérence de type, ...).
+
+Les *ORM* (_object-relational mapping_) sont des logiciels qui effectuent le lien entre objet métier et ligne
+de table d'une base de données. Par défaut, symfony utilise la solution link:http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/[doctrine].
+
+=== Tutoriel doctrine de symfony
+
+Doctrine peut être mise en oeuvre sans Symfony, mais nous vous invitons néanmoins à
+étudier ce tutoriel d'introduction avec Symfony, car ce dernier en simplifie l'accès.
+
+Ce tutoriel vous montre comment lier une classe métier à un table d'une base de données, et donc une instance (un objet) à une ligne,
+et les opérations CRUD associées.
+
+Tutoriel à suivre : link:https://symfony.com/doc/current/doctrine.html[Introduction à Doctrine avec Symfony].
+
+Au menu :
+
+* Entity et Table liée
+* Liaison Attribut - Colonne (_field_ - _column_)
+* Migration modèle objet <--> schéma de la base de données
+* Opérations CRUD
+
+=> temps moyen 2h, avec configuration et code.
+
+<<<
+== Liaison entre Entités - Contexte support
 
 Nous nous plaçons dans le cas d'une application exploitant des données stockées
 par un système de gestion de bases de données relationnel (SGBDR).
 
-Schéma relationnel de la base de données utilisé.
+Voici le schéma relationnel de la base de données utilisé.
 « world » est une base de données statistiques géo-politiques sur le monde datant de 2006,
 d'après link:http://www.stat.fi/tup/maanum/index_en.html[Official Statistics of Finland].
 
-.Schéma Relationnel structurel de la base de données World
+.Schéma Relationnel de la base de données World
 
-image:SR-World.png[SR-World.png]
-
+image:SR-World.png[SR-World.png, 400]
 
 Les données seront exploitées, par la logique applicative, sous forme de _Classe_, plus précisément :
 
@@ -42,9 +70,7 @@ Les données seront exploitées, par la logique applicative, sous forme de _Clas
 * Objet <--> Ligne
 
 Cette façon de faire permet de mettre le _domaine métier_ *au coeur de la logique de l'application*.
-
-
-Voici une analyse du modèle (Classes "métier", ou "Entity")
+Voici une analyse du modèle : les classes "métier" ("entity")
 
 .Diagramme d'analyse UML (les entités du domaine)
 [plantuml, diagram-classes, png]
@@ -80,9 +106,565 @@ hide method
 TIP: Les données de la base seront exploitées par l'intermédiaire
 d'objets (instances de classes métier)
 
-Pour aider le travail de l'ORM Doctrine (_Object Relational Mapping_), la défintion des entités devra
-intégrer des directives de mapping sous forme d'*annotations*.
+Pour aider le travail de l'ORM Doctrine (_Object Relational Mapping_), la défintion des entités intégre des directives de mapping sous forme d'*annotations*.
 
 == Mappings et annotations
 
-_begin soon_
+Dans ce qui suit, afin de bien distinguer ce qui de l'ordre du
+modèle de persistance (tables du schéma relationnel) et
+du modèle métier (les classes entité), nous nommerons les éléments
+du modèle métier en *langue française*.
+
+Ainsi la classe entité qui mappe la table `Country` s'appellera `Pays`, `Language` → `Langue`,
+ `CountryLanguage` → `PaysLangue`, `City` → `Ville`.
+
+=== ManyToOne
+
+Exemple du *point de vue de la table `City`* :
+
+* Une ville est située dans un et un seul pays (One = 1..1)
+* Plusieurs villes peuvent être reliées au même pays (Many = 0..*)_
+
+==== Côté Schéma Relationnel
+
+La relation, partant de `City`, est *ManyToOne* (symbole UML de plusieurs vers un):
+
+image:many-to-one-sr.png[many-to-one-sr]
+
+
+==== Côté classe métier (classe Entity)
+
+* Les identifiants ne sont pas montrés
+* Les liaisons sont représentées par des associations (rappel : une association est l'expression d'un lien en objets)
+* les rôles sont précisés (optionnel si trivial comme ici)
+
+image:many-to-one-metier.png[many-to-one-metier]
+
+TIP: L'attribut `$pays` est de type `Pays` (et non integer !) car il est
+une référence potentielle à un objet `Pays`.
+La notion de lien-bidirectionnel est vue dans le paragraphe suivant.
+
+=== OneToMany
+Exemple du *point de vue de la table `Country`*  :
+
+* Un `Pays` est référençable par plusieurs instances de `Ville`  (Many = 0..*)
+* Un `Pays` a l'exclusivité des villes qui le référencent (One = 1..1)
+
+==== Côté Schéma Relationnel
+La relation, partant de `Country`, est *OneToMany* (de un vers plusieurs)
+
+image:one-to-many-sr.png[one-to-many-sr]
+
+==== Côté modèle métier
+image:one-to-many-metier.png[one-to-many-metier, 550]
+
+* L'attribut d'instance `$villes` est de type `collection de Ville`
+* La valeur de `mappedBy` est l'attribut d'instance responsable de la liaison `One` du côté opposé (c'est grâce à lui que l'ensemble
+des villes de l'instance courante de `Pays` pourra être constitué)
+* Côté `Ville`, en renseignant la valeur de `inversedBy` on précise que c'est `Ville`
+ qui est responsable (owner = lien actif) de la cohérence bidirectionnelle (sur ce sujet, voir  plus bas, chapitre lien-bidirectionnel)
+
+TIP: L'usage de *mappedBy* et *inversedBy* signifie qu'il s'agit du *même lien* entre objet, donc de la *même* association dans le modèle d'analyse métier UML.
+
+=== OneToOne
+
+* Un pays a au plus une capitale (une Ville)
+* Seules certaines villes sont capitales d'un pays.
+
+==== Côté Schéma Relationnel
+
+* La relation entre `Country` et `City`, est *OneToOne*
+image:one-to-one-sr.png[one-to-one-sr]
+
+==== Côté modèle métier
+
+* C'est le `Pays` qui connaît sa *capitale*, le lien inverse serait trop souvent non valorisé, nous appliquons un lien *uni-directionnel*.
+
+image:one-to-one-metier.png[one-to-one-metier]
+
+Remarque 1 : le *rôle* d'une instance de Ville dans cette association est d'être une *capitale*. Ce rôle n'étant pas trivial (ne peut être deviné à la lecture du diagramme), nous le précisons. Le nommage de l'attribut d'instance de Ville dans pays est alors tout trouvé.
+
+Remarque 2: le lien uni-directionnel spécifie le sens de la navigation possible (de `Pays` vers `Ville`)
+
+=== ManyToOne-OneToMany : Lien bidirectionnel
+
+Lorsque l'on traite une association navigable dans les 2 sens (lien bidirectionnel), il faut assurer sa cohérence après le chargement des objets. Exemple :
+Si une ville nouvellement créée se déclare appartenir à un pays,
+ce dernier devra alors l'avoir dans sa liste de ses villes, et inversement !.
+Par convention, c'est l'objet qui est au plus prêt du lien *One* qui se charge de la cohérence.
+Dans notre exemple ce sera `Ville`.
+
+[source, php]
+----
+ /**
+  * Ville
+  *
+  * @ORM\Table(name="City")
+  * @ORM\Entity(repositoryClass="Acme\DemoBundle\Entity\VilleRepository")
+  */
+ class Ville
+ {
+
+ . . .
+
+     /**
+      * Set pays
+      *
+      * @param \Acme\DemoBundle\Entity\Pays $pays
+      * @return Ville
+      */
+     public function setPays(\Acme\DemoBundle\Entity\Pays $pays = null)
+     {
+       if ($this->pays) {
+          $this->$pays->removeVille($this);
+        }
+        $this->pays = $pays;
+        $pays->addVille($this);
+        return $this;
+     }
+
+----
+
+TIP: Attention : Il ne faut pas abuser des liens bidirectionnels ! Car comme vous l'avez constaté, les objets du domaine sont plus délicats à programmer. Parmi les premiers Best Practices de Doctrine, on peut lire :
+     	Il est important de limiter les relations autant que possible. Cela signifie:
+     Imposer un sens de parcours (éviter associations bidirectionnelles si possible)
+
+TIP: Cette limitation n'est vraie pour tout les ORMs (_hibernate_ par exemple)
+
+Éliminer les associations non essentielles offre plusieurs avantages:
+
+* Couplage réduit dans votre modèle de domaine
+* Code plus simple dans votre modèle de domaine (pas besoin de maintenir la bi-directionnalité correctement)
+* Moins de travail pour L’ORM (Doctrine)
+
+Voir plus loin : http://docs.doctrine-project.org/en/latest/reference/best-practices.html
+
+=== Association bidirectionnelle : Owner side and Inverse side
+
+Libre traduction de : http://docs.doctrine-project.org/en/2.0.x/reference/association-mapping.html
+
+Lorsque l'on utilise une relation bidirectionnelle, il est important de bien comprendre le concept de owner (propriétaire) et d'inverse.
+
+Une relation bidirectionnelle dans le modèle objet est implémentée par 2 références, qui représentent la même association, mais peuvent techniquement changer indépendamment l'une de l'autre et le développeur doit s'assurer que la cohérence métier est maintenue lors de manipulation de ces références.
+
+Techniquement, Doctrine a besoin de savoir laquelle de ces 2 références mémoire (les instance qu'elles pointent) doit être persistée et laquelle non. C'est pourquoi le concept de owning/inverse est principalement utilisé. Tout changement de valeur côté inverse sera ignoré (pas d'impact dans la base de donnée).
+
+Les règles générales suivantes s'appliquent :
+
+* Une relation bidirectionnelle a deux extrémités : le côté propriétaire (owner - partie active de la relation) et le côté inverse (inverse).
+* Le côté *propriétaire* d'une relation détermine les opérations de mises à jour dans la base de données.
+* Le côté *propriétaire* d'une relation bidirectionnelle doit référencer le *côté inverse* par l'usage de l'attribut *inversedBy* lors de la déclaration du mapping OneToOne, ManyToOne, ou ManyToMany. L'attribut inversedBy désigne le champ (l'attribut d'instance) de l'entité inverse de la relation.
+* Le côté inverse d'une relation bidirectionnelle doit référencer son *côté propriétaire* par l'usage de l'attribut *mappedBy* lors de la déclaration du mapping OneToOne, OneToMany, ou ManyToMany. L'attribut mappedBy désigne le champ (l'attribut d'instance) de l'entité propriétaire de la relation.
+* Le côté many de la relation bidirectionnelle OneToMany/ManyToOne doit être le côté propriétaire.
+* Une relation unidirectionnelle a seulement un côté propriétaire.
+* Concernant la relation bidirectionnelle OneToOne, le propriétaire correspond au côté qui mappe la table disposant de la clé étrangère en question (@JoinColumn(s)).
+* Concernant la relation bidirectionnelle ManyToMany chacune des extrémités peut être le propriétaire : Le propriétaire est déterminé
+par le fait qu'il définit la jointure - @JoinTable *ou* s'il ne fait pas usage de l'attribut mappedBy.
+
+TIP: Les concepts de _propriétaire/inverse_ *ne sont pas* des concepts métier, mais techniques (la relation propriétaire—inverse n'a pas de sens métier).
+
+=== ManyToMany - porteuse de propriétés
+
+* Pour un pays donné, plusieurs langues sont parlées (dont une est officielle)
+* Une langue est parlée dans plusieurs pays.
+
+==== Côté Schéma Relationnel
+
+`CountryLanguage` est une _table de liaison_.
+
+image:many-to-many-sr-porteuse.png[many-to-many-sr-porteuse]
+
+==== Côté modèle metier
+
+Nous avons 3 classes. Deux options s'offre à nous, qui dépend de l'approche
+Primauté du Schéma Relationnel sur le modèle objet
+Primauté de l'Objet sur le Schéma Relationnel.
+
+Dans le premier cas nous avons la solution suivante :
+
+image:many-to-many-metier-porteuse-1.png[many-to-many-metier-porteuse-1]
+
+En UML, une classe-association peut aussi être représentée comme une
+classe ordinaire reliée à une association *ManyToMany* porteuse d'attributs, comme ici :
+
+image:many-to-many-metier-porteuse-2.png[many-to-many-metier-porteuse-2]
+
+Exemple d'opération CREATE (d'ajout d'une langue non officielle à un pays) :
+
+[source, php]
+----
+// pour initialiser une classe association, on reconstitue les
+     // élements de sa clé : ici un objet Langue et un objet Pays.
+     $lePays = $this->getDoctrine()
+    	->getRepository('AcmeDemoBundle:Pays')
+    	->findOneByName('France');
+
+    	$laLangue = $this->getDoctrine()
+    	->getRepository('AcmeDemoBundle:Langue')
+    	->findOneByName('Danish');
+
+
+    	if (!$lePays || !$laLangue)
+    		throw $this->createNotFoundException(
+    				'Pb de récupération d\'instance'
+    		);
+
+     // création de l'instance de la classe association
+    	$pl = new PaysLangue();
+    	$pl->setLangue($laLangue);
+    	$pl->setPays($lePays);
+
+     // puis initialisation de ses attributs portés
+    	$pl->setOfficiel(false);
+
+     // et sauvegarder le tout
+    	$em = $this->getDoctrine()->getManager();
+    	$em->persist($pl);
+    	$em->flush();
+----
+
+Exemple d'opération RETREIVE (observez la différence d'expression de la clé) :
+
+[source, php]
+----
+$pl = $this->getDoctrine()
+      ->getRepository('AcmeDemoBundle:PaysLangue')
+      ->find(array(
+          "pays"  => $lePays->getId(),
+          "langue"=> $laLangue->getId()));
+----
+
+L'exploitation en consultation (`RETREIVE`) de données de type `ManyToMany` amène naturellement à recueillir une collections d'objets (un ensemble de lignes d'un point de vue relationnel).
+
+Par exemple, nous souhaitons connaître l'ensemble des langues parlées (enfin référencées) pour un pays donné.
+
+Nous pouvons définir une méthode dans `PaysRepository`. qui retourne les langues en question (des instances de PaysLangue pour avoir les propriétés portées). Voici un exemple de service attendu :
+[source, php]
+----
+	$lesLangues = $this->getDoctrine()
+	    ->getRepository('AcmeDemoBundle:Pays')
+	    ->findAllLangues($lePays->getId());
+----
+
+Un exemple d'implémentation de `findAllLangues` !
+
+[source, php]
+----
+// on demande aussi de remonter le pays et la langue
+// (à cause du lazy loading)
+public function findAllLangues($idPays){
+   $em = $this->getEntityManager();
+   $q = $em->createQuery(
+      "SELECT pl, p, lg FROM AcmeDemoBundle:PaysLangue pl "
+	   .  " JOIN pl.pays p"
+	   .  " JOIN pl.langue lg"
+	   .  " WHERE p.id = :idp");
+   $q->setParameter("idp", $idPays);
+   return $q->getResult();
+}
+----
+
+Dans un contrôleur :
+[source, php]
+----
+ $lesLangues = $this->getDoctrine()
+    	->getRepository('AcmeDemoBundle:Pays')
+    	->findAllLangues($lePays->getId());
+
+ // puis passage des valeurs à la vue
+ return render(..., array('lePays' => $lePays,
+                'formulaire' => $form->createView(),
+    		    'lesLangues' => $lesLangues);
+----
+
+Dans la vue
+
+
+[source, html]
+----
+ <hr> <h4>Les principales langues</h4>
+ <ul>
+   {% for lg in lesLangues %}
+     <li> {{ lg.langue.name }} </li>
+   {% endfor %}
+</ul>
+
+----
+
+=== Alternative à la classe association
+
+Une alternative à la classe association est de la considérer comme une classe ordinaire (liée à une table ordinaire), avec un id propre, et relayer la contrainte de clé composite à la couche applicative.
+
+On peut cependant demander au système de persistance de prendre en compte la contrainte d'unicité (rôle d'une table de liaison) en déclarant cette contrainte sur la clé composite candidate (usage de `UniqueConstraint` ci dessous):
+
+image:classe-association-no.png[classe-association-no]
+
+Exemple de génération du schéma physique, cible MySQL :
+
+[source, sql]
+----
+CREATE TABLE `CountryLanguage` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `IsOfficial` tinyint(1) NOT NULL,
+  `idCountry` int(11) NOT NULL,
+  `idLanguage` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `review_unique_by_pays_lang` (`idCountry`,`idLanguage`),
+  KEY `IDX_186C946D43CAA294` (`idCountry`),
+  KEY `IDX_186C946D87785BEE` (`idLanguage`),
+  CONSTRAINT `FK_186C946D43CAA294`
+      FOREIGN KEY (`idCountry`) REFERENCES `Country` (`id`),
+  CONSTRAINT `FK_186C946D87785BEE`
+      FOREIGN KEY (`idLanguage`) REFERENCES `Language` (`id`)
+)
+----
+
+
+Autre exemple (http://doctrine-orm.readthedocs.org/en/latest/reference/annotations-reference.html)
+
+[source, php]
+----
+/**
+ * Vote : when a user vote for a question
+ *
+ * @ORM\Table(name="vote",
+  uniqueConstraints={@UniqueConstraint(name="only_one_vote",
+  columns={"id_user", "id_question"})}),
+   indexes={@Index(name="question_idx", columns={"id_question"})})
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\VoteRepository")
+ * @UniqueEntity(fields={"user", "question"},message="vote.userquestion")
+ */
+class Vote {
+
+  /**
+   * @var integer
+   *
+   * @ORM\Column(name="id", type="integer")
+   * @ORM\Id
+   * @ORM\GeneratedValue(strategy="AUTO")
+   */
+  private $id;
+
+  /**
+   * question
+   * @ORM\ManyToOne(targetEntity="Question")
+   * @ORM\JoinColumn(name="id_question", referencedColumnName="id")
+   */
+  private $question;
+
+  /**
+   * user
+   * @ORM\ManyToOne(targetEntity="User")
+   * @ORM\JoinColumn(name="id_user", referencedColumnName="id")
+   */
+  private $user;
+
+  /**
+   * @var int
+   *
+   * @ORM\Column(name="value", type="integer")
+   */
+  private $value;
+----
+
+Voici le schéma créé :
+
+[source, sql]
+----
+CREATE TABLE `vote` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_question` int(11) DEFAULT NULL,
+  `id_user` int(11) DEFAULT NULL,
+  `value` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `only_one_vote` (`id_user`,`id_question`),
+  KEY `IDX_5A108564E62CA5DB` (`id_question`),
+
+  KEY `IDX_5A1085646B3CA4B` (`id_user`),
+  CONSTRAINT `FK_5A1085646B3CA4B` FOREIGN KEY (`id_user`) REFERENCES `fos_user` (`id`),
+  CONSTRAINT `FK_5A108564E62CA5DB` FOREIGN KEY (`id_question`) REFERENCES `question` (`id`)
+)
+----
+
+== Exploitation du modèle métier
+
+=== Méthodes find* – Requêtes assistées
+Nous avons utilisé la méthode *find*, et quelques unes de ses variantes.
+Cette méthode est définie dans la classe mère des repository : `EntityRepository`.
+En effet, nos classes `Repository` *héritent* de cette classe technique. Exemple :
+
+[source, php]
+----
+class PaysRepository extends EntityRepository
+----
+
+Voici une vue partielle sur l'API de `EntityRepository` : link:https://github.com/doctrine/doctrine2/blob/master/lib/Doctrine/ORM/EntityRepository.php[extrait API]
+image:api-repository.png[api-repository, 600]
+
+Voici des exemple de ces méthodes :
+[source, php]
+----
+$repository=$this->getDoctrine()->getRepository('AcmeDemoBundle:Pays');
+
+// récupère tous les pays
+$lesPays = $repository->findAll();
+
+// récupère tous les pays ayant obtenu l'indépendance en 1960
+$lesPays = $repository->findBy(array('indepYear'=> 1960));
+
+// récupère tous les pays (premier critère vide = prendre tout)
+// trié sur l'attribut continent (attention, pas la colonne!)
+$lesPays = $repository->findBy(array(), array('continent' => 'ASC' ));
+----
+
+Pour des requêtes simples, basées sur des valeurs d'attributs (point de vue objet) – en référence à des valeurs de colonnes (du point de vue de la table)  –  le développeur a la  possibilité d'utiliser des méthodes dites *magiques* (_magic finders_).
+
+Ce mécanisme *s'appuie sur des conventions de nommage* de méthodes
+(sous la responsabilité du développeur) et sur la méthode *__call* de la
+classe mère `Repository` qui transforme des appels de « méthodes magiques » en un
+appel classique (nommant la bonne colonne). Les méthodes doivent commencer par *findBy* ou *findOneBy*,
+on voit ici le traitement de cette convention :
+
+image:method_magic.png[method_magic mecanisme]
+
+TIP: *findBy*  retourne un tableau (éventuellement vide)
+
+TIP: *findOneBy*  retourne une référence à un objet (éventuellement null)
+
+Ainsi, pour retrouver tous les pays ayant obtenu l'indépendance en 1960,
+nous pouvons simplifier l'appel comme ceci :
+
+Exemple d'une méthode magique :
+[source, php]
+----
+// récupère tous les pays ayant obtenu l'indépendance en 1960
+$lesPays = $paysRepository->findByIndepYear(1960);
+----
+* par du principe que la classe `Pays` a un attribut privé nommé `indepYear`, ou plus exactement une méthode nommée `getIndepYear`.
+
+Exemple d'une erreur de nommage :
+[source, php]
+----
+// récupère tous les pays ayant obtenu l'indépendance en 1960
+$lesPays = $paysRepository->findByAnneeIndep(1960);
+
+----
+qui déclenche une erreur !
+
+image:method_magic-error.png[method_magic-error, 600]
+
+Ce qui est parfaitement normal, si l'attribut `anneeIndep` n'est pas un attribut de l'entité `Pays`.
+
+Exemple d'utilisation de _findOneBy_ :
+[source, php]
+----
+// récupère un pays par son nom
+ $pays = $paysRepository->findOneByName('Utopie');
+ if ($pays)
+  // on peut toujours rêver...
+----
+
+=== Méthodes createNativeQuery – Requêtes natives
+Il peut arriver, et c'est souvent le cas lorsque l'on reprend un existant, de vouloir réutiliser des requêtes SQL présentes dans l'existant (cas de requêtes optimisées,  de requêtes complexes).
+
+Pour cela nous utilisons la méthode _createNativeQuery_ qui prend en argument la requête SQL classique et une référence à un objet de type `ResultSetMapping`. Cette dernière classe aide Doctrine à mapper les colonnes sur les bons attributs d'une classe result.
+
+Exemple : Nous disposons d'une requête SQL qui nous retourne l'id et le nom de la langue officiel du pays d'id=73 :
+
+[source, sql]
+----
+mysql> SELECT Language.id, Language.name FROM Language,CountryLanguage,Country WHERE Country.id = CountryLanguage.idCountry AND Language.id = CountryLanguage.idLanguage AND idCountry =73 AND CountryLanguage.Isofficial ='T';
++----+--------+
+| id | name   |
++----+--------+
+| 23 | French |
++----+--------+
+1 row in set (0.00 sec)
+----
+
+Nous souhaitons réutiliser telle quelle cette requête
+(celle que nous présentons pourrait être réalisée simplement en DQL – TODO à prouver !)
+
+Voici une version possible (paramétrée sur l'id du pays) :
+
+
+[source, php]
+----
+
+class PaysLangueRepository extends EntityRepository{
+
+  public function findLangueOfficielle($idPays) {
+	$rsm = new ResultSetMapping;
+	$rsm->addScalarResult('id', 'id');
+	$rsm->addScalarResult('name', 'name');
+	$query = $this->getEntityManager()->createNativeQuery(
+  	    "SELECT Language.id,Language.name
+          FROM Language,CountryLanguage,Country
+          WHERE Country.id = CountryLanguage.idCountry
+          AND Language.id = CountryLanguage.idLanguage
+          AND idCountry = ?
+          AND CountryLanguage.Isofficial ='T'
+	    ORDER BY CountryLanguage.Percentage DESC"
+	    ,$rsm);
+	$query->setParameter(1, $idPays);
+	$langues = $query->getResult();
+	return $langues[0]; // prend la première langue...
+   }
+}
+----
+
+Cette façon de faire s'appuie sur la méthode _addScalarResult_ de l'objet `ResultSetMapping`.
+La classe instanciée sera de type php objet : `stdclass`
+
+API :  addScalarResult
+
+[source, php]
+----
+Doctrine\ORM\Query\ResultSetMapping::addScalarResult(string $columnName, string $alias, string $type)
+	Adds a scalar result mapping.
+Parameters:
+ * string $columnName The name of the column in the SQL result set.
+ * string $alias The result alias with which the scalar result should
+	be placed in the result structure.
+ * string $type The column type
+----
+
+Une autre façon de faire est de mapper directement sur une entité métier de l'application :
+Voici une version possible qui retournera une instance de `Langue`:
+
+[source, php]
+----
+class PaysLangueRepository extends EntityRepository{
+
+  public function findLangueOfficielle($idPays) {
+	$rsm = new ResultSetMapping;
+	$rsm->addEntityResult('AcmeDemoBundle:Langue', 'lg');
+	$rsm->addFieldResult('lg', 'id', 'id');
+ 	$rsm->addFieldResult('lg', 'name', 'name');
+	$query = $this->getEntityManager()->createNativeQuery(
+  	    "SELECT Language.id,Language.name
+          FROM Language,CountryLanguage,Country
+          WHERE Country.id = CountryLanguage.idCountry
+          AND Language.id = CountryLanguage.idLanguage
+          AND idCountry = ?
+          AND CountryLanguage.Isofficial ='T'
+	    ORDER BY CountryLanguage.Percentage DESC"
+	    ,$rsm);
+	$query->setParameter(1, $idPays);
+	$langues = $query->getResult();
+	return $langues[0]; // prend la première langue...
+   }
+}
+----
+
+API :  addFieldResult
+[source, php]
+----
+Doctrine\ORM\Query\ResultSetMapping::addFieldResult(string $alias, string $columnName, string $fieldName, string $declaringClass)
+Adds a field to the result that belongs to an entity or joined entity.
+Parameters:
+* string $alias The alias of the root entity or joined entity to which the field belongs.
+* string $columnName The name of the column in the SQL result set.
+* string $fieldName The name of the field on the declaring class.
+----
+
