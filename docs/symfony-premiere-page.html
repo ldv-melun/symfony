@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.4">
+<title>Première page : notion de Vue/Contrôleur</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./coderay-asciidoctor.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>Première page : notion de Vue/Contrôleur</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#rendu-par-une-logique-de-vue-archtecture-mvc">Rendu par une logique de vue (archtecture MVC)</a></li>
+<li><a href="#template-de-base-de-l-application">Template de base de l&#8217;application</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>(d&#8217;après : <a href="https://symfony.com/doc/current/page_creation.html" class="bare">https://symfony.com/doc/current/page_creation.html</a>)</p>
+</div>
+<div class="paragraph">
+<p>Pour une application web, créer une page c&#8217;est permettre à un certain public
+d&#8217;accéder à une <strong>ressource</strong> (ou service) <strong>web</strong>. Pour cela, plusieurs activités sont concernées:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>permettre à l&#8217;application web de répondre à une requête HTTP en définissant  une route (portion terminale d&#8217;un URL) pour la ressource en question</p>
+</li>
+<li>
+<p>définir via quelle méthode d&#8217;accès HTTP cette ressource sera accessible (GET, POST, PUT, HEAD, &#8230;&#8203;)</p>
+</li>
+<li>
+<p>concevoir le <strong>contrôleur</strong> associé à la ressource : une méthode d&#8217;une classe <code>Controller</code></p>
+</li>
+<li>
+<p>définir la structure de la resource dynamique soit dans le contrôleur, soit via un template de vue (<strong>twig</strong> par exemple)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Si cette requête est de type <code>GET</code>, elle correspond à une demande de <em>resssource distante</em>.
+Cela peut correspondre à une donnée statique (un fichier placé sur le serveur) ou dynamique (construite pour l&#8217;occasion).</p>
+</div>
+<div class="paragraph">
+<p>Nous nous plaçons dans le cas où l&#8217;application répondra par du contenu dynamique <code>HTML</code>.</p>
+</div>
+<div class="paragraph">
+<p>Une application web n&#8217;expose jamais directement ses templates de vue de ses ressources dynamiques (pas de lien direct vers un script de vue)</p>
+</div>
+<div class="paragraph">
+<p>Dans le cadre de symfony, un contôleur central (<em>front controller</em>) réceptionne les requêtes HTTP
+et les traduit en appel de <strong>méthodes</strong> d&#8217;instance d&#8217;une classe <strong>contrôleur</strong> (<em>controller</em>)</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/request-flow.png" alt="symfony-flow-schema"></span></p>
+</div>
+<div class="paragraph">
+<p>Comme le montre ce schéma, le développeur doit mettre à disposition du framework des méthodes.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Attention, le schéma ne montre que les méthodes (<code>blogAction</code>, <code>contactAction</code> et <code>homepageAction</code>),
+         mais ne donne pas le nom de la (ou des) classes où elles sont définies.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>La liaison méthode &#8592;&#8594; URL peut se réaliser soit par un <em>fichier de configuration</em>, soit via des <strong><em>annotations</em></strong> dans le code.
+Nous choisirons cette dernière option, bien pratique, mais avant de concevoir une telle classe, vous devrez ajouter des composants à votre
+application. Le plus souple pour cela est de demander à <code>composer</code> de le faire pour vous :</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ cd your-project/
+$ composer require annotations</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Il serait également préférable d&#8217;installer des plugins à votre IDE : avec PhpStorm,
+aller <code>File&#8594;Settings</code> puis chercher <code>plugin symfony</code> et les installer.</p>
+</div>
+<div class="paragraph">
+<p>Voici un exemple de classe contrôleur, extrait de la documentation : <a href="https://symfony.com/doc/current/page_creation.html">Symfony - page_creation.html</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="inline-delimiter">&lt;?php</span>
+
+<span class="comment">// src/Controller/LuckyController.php  </span><i class="conum" data-value="1"></i><b>(1)</b>
+
+<span class="keyword">namespace</span> <span class="constant">App</span>\<span class="constant">Controller</span>;  <i class="conum" data-value="2"></i><b>(2)</b>
+
+<span class="keyword">use</span> <span class="constant">Symfony</span>\<span class="constant">Component</span>\<span class="constant">HttpFoundation</span>\<span class="constant">Response</span>;  <i class="conum" data-value="2"></i><b>(2)</b>
+<span class="keyword">use</span> <span class="constant">Symfony</span>\<span class="constant">Component</span>\<span class="constant">Routing</span>\<span class="constant">Annotation</span>\<span class="constant">Route</span>;
+
+<span class="keyword">class</span> <span class="class">LuckyController</span> <i class="conum" data-value="3"></i><b>(3)</b>
+{
+  <span class="comment">/**
+  * @Route(&quot;/lucky/number&quot;) <i class="conum" data-value="4"></i><b>(4)</b>
+  */</span>
+  <span class="keyword">public</span> <span class="keyword">function</span> <span class="function">number</span>() <i class="conum" data-value="5"></i><b>(5)</b>
+  {
+    <span class="local-variable">$number</span> = mt_rand(<span class="integer">0</span>, <span class="integer">100</span>);
+
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="constant">Response</span>( <i class="conum" data-value="6"></i><b>(6)</b>
+      <span class="string"><span class="delimiter">'</span><span class="content">&lt;html&gt;&lt;body&gt;Lucky number: </span><span class="delimiter">'</span></span>.<span class="local-variable">$number</span>.<span class="string"><span class="delimiter">'</span><span class="content">&lt;/body&gt;&lt;/html&gt;</span><span class="delimiter">'</span></span>
+    );
+  }
+} <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>un comment à destination du lecteur, afin d&#8217;identifier le chemin de sauvegarde</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>les librairies dont dépend le code ci-dessous (Classe et annotation)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>une classe normale PHP Objet</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>définition de la logique d&#8217;appel (extrait terminal URL de l&#8217;application)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>une méthode public; Elle sera automatiquement appelée via le <em>front controller</em>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>retourne un instance de <code>Response</code> (avec du contenu <em>HTML</em>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>le marqueur de fin de traitement PHP (<code>?&gt;</code>) est volontairement absent afin de conserver le sens <em>librairie</em> d&#8217;une classe Controller.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Voici un extrait des spécifications de la fonction <a href="http://php.net/manual/fr/function.mt-rand.php" class="bare">http://php.net/manual/fr/function.mt-rand.php</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="predefined-type">int</span> mt_rand ( <span class="predefined-type">int</span> <span class="local-variable">$min</span> , <span class="predefined-type">int</span> <span class="local-variable">$max</span> )
+
+<span class="constant">Valeurs</span> de retour
+
+<span class="constant">Un</span> entier aléatoire compris entre <span class="predefined">min</span> (ou <span class="integer">0</span>) et <span class="predefined">max</span> inclusif, ou <span class="predefined-constant">FALSE</span> si le paramètre <span class="predefined">max</span> est inférieur à <span class="predefined">min</span>.</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">Activation de la page (demande de la ressource "number")</div>
+<div class="content">
+<pre>http://localhost:8000/lucky/number</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="rendu-par-une-logique-de-vue-archtecture-mvc"><a class="anchor" href="#rendu-par-une-logique-de-vue-archtecture-mvc"></a>Rendu par une logique de vue (archtecture MVC)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Concevoir la logique de présentation (HTML and Co) dans un contrôleur n&#8217;est pas une bonne pratique.</p>
+</div>
+<div class="paragraph">
+<p>Fort heureusement Symfony vient avec <a href="https://twig.symfony.com/"><strong>Twig</strong></a> : un langage
+de vue puissant et plaisant à utiliser.</p>
+</div>
+<div class="paragraph">
+<p>Twig est proposé en tant que composant, qu&#8217;il faut installer :</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ cd your-project/
+$ composer require twig</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Il faut ensuite s&#8217;assurer <code>LuckyController</code> hérite de la classe de base des contrôleurs <code>Controller</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">MVC : Les classes contrôleur héritent de Controller</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="comment">// src/Controller/LuckyController.php</span>
+
+<span class="comment">// ...</span>
++ <span class="keyword">use</span> <span class="constant">Symfony</span>\<span class="constant">Bundle</span>\<span class="constant">FrameworkBundle</span>\<span class="constant">Controller</span>\<span class="constant">Controller</span>; <i class="conum" data-value="1"></i><b>(1)</b>
+
+- <span class="keyword">class</span> <span class="class">LuckyController</span>
++ <span class="keyword">class</span> <span class="class">LuckyController</span> <span class="keyword">extends</span> <span class="constant">Controller</span> <i class="conum" data-value="2"></i><b>(2)</b>
+{
+    <span class="comment">// ...</span>
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>déclaration de la dépendance (un import)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>la classe LuckyController hérite de Controller</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Et faire en sorte que la méthode contrôleur <strong>délègue</strong> la vue à une page twig :</p>
+</div>
+<div class="listingblock">
+<div class="title">MVC : Une classe contrôleur hérite de Controller</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="comment">// src/Controller/LuckyController.php</span>
+
+<span class="comment">// ...</span>
+<span class="keyword">class</span> <span class="class">LuckyController</span> <span class="keyword">extends</span> <span class="constant">Controller</span>
+{
+    <span class="comment">/**
+     * @Route(&quot;/lucky/number&quot;)
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">function</span> <span class="function">numberAction</span>()
+    {
+        <span class="local-variable">$number</span> = mt_rand(<span class="integer">0</span>, <span class="integer">100</span>);
+
+        <span class="keyword">return</span> <span class="local-variable">$this</span>-&gt;render(<span class="string"><span class="delimiter">'</span><span class="content">lucky/number.html.twig</span><span class="delimiter">'</span></span>, <span class="predefined">array</span>( <i class="conum" data-value="1"></i><b>(1)</b>
+            <span class="string"><span class="delimiter">'</span><span class="content">number</span><span class="delimiter">'</span></span> =&gt; <span class="local-variable">$number</span>,
+        ));
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>appel à la méthode héritée (<em>render</em>) en lui passant le nom d&#8217;une vue, suivi d&#8217;un <strong>tableau associatif</strong>, appelé aussi <strong>dictionnaire</strong>, composé de <strong>couples (nom_variable&#8658;valeur)</strong>.
+Dans notre cas, le tableau n&#8217;a qu&#8217;un seul élément ('number'&#8658; $number),
+qui sera passé à la vue.
+La vue aura accès à ces valeurs <strong>directement</strong> par le nom des clés définis dans ce dictionnaire.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Les fichiers de vue seront cherchés par symfony, par défaut, dans le dossier <strong><em>templates</em></strong> à partir de la racine du projet (ce dossier est automatiquement crée lors de l&#8217;installation de twig).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="template-de-base-de-l-application"><a class="anchor" href="#template-de-base-de-l-application"></a>Template de base de l&#8217;application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>C&#8217;est un fichier qui détermnine la structure HTML/CSS générale de votre application.
+La plupart du temps un tel template se base sur un modèle proposé par des frameworks CSS (<em>bootstrap</em>, <em>semantic-ui</em>, &#8230;&#8203;). Il est parfois acheté auprès de sociétés spécialisées.</p>
+</div>
+<div class="paragraph">
+<p>Exemple de template simple, <em>from scratch</em>, créé par le composant <em>twig</em> lors de son intégration dans ce projet (symfony &gt;= 4)</p>
+</div>
+<div class="listingblock">
+<div class="title">localisation : projet/templates/base.html.twig</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="html"><span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html&gt;</span>
+    <span class="tag">&lt;head&gt;</span>
+        <span class="tag">&lt;meta</span> <span class="attribute-name">charset</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">UTF-8</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+        <span class="tag">&lt;title&gt;</span>{% block title %}Welcome!{% endblock %}<span class="tag">&lt;/title&gt;</span>
+        {% block stylesheets %}{% endblock %}
+    <span class="tag">&lt;/head&gt;</span>
+    <span class="tag">&lt;body&gt;</span>
+        {% block body %}{% endblock %} <i class="conum" data-value="1"></i><b>(1)</b>
+        {% block javascripts %}{% endblock %}
+    <span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Définition d&#8217;un block nommé <code>body</code> (ne pas confondre avec <code>&lt;body&gt;</code>).
+Les vues héritant pouvent alors redéfinir ces blocks.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Ce template de base définit 4 blocks : <code>title</code>, <code>stylesheets</code>, <code>body</code> et <code>javascripts</code>.</p>
+</div>
+<div class="paragraph">
+<p>Pour répondre au besoin de notre méthode <em>numberAction</em> de <em>LuckyController</em>, nous
+devons créer une nouvelle vue dans le dossier <em>templates/lucky</em>, nommée <code>number.html.twig</code> (<code>lucky</code> est un dossier qu&#8217;il faut créer) :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php">{<span class="comment"># templates/lucky/number.html.twig #} </span><i class="conum" data-value="1"></i><b>(1)</b>
+{% <span class="keyword">extends</span> <span class="string"><span class="delimiter">'</span><span class="content">base.html.twig</span><span class="delimiter">'</span></span> %} <i class="conum" data-value="2"></i><b>(2)</b>
+
+{% block title %}<span class="constant">Devine</span>{% endblock %} <i class="conum" data-value="3"></i><b>(3)</b>
+
+{% block body %} <i class="conum" data-value="4"></i><b>(4)</b>
+&lt;h1&gt;<span class="constant">Your</span> lucky number is {{ number }}&lt;/h1&gt;
+{% endblock %}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>un commentaire twig qui vous informe, vous lecteur, de la localisation de ce fichier</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>cette vue hérite d&#8217;un template qui définit les blocs <code>title</code> et <code>body</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>redéfinition du bloc <code>title</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>redéfinition du bloc <code>body</code></td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Vous trouverez la syntaxe twig ici : <a href="https://twig.symfony.com/" class="bare">https://twig.symfony.com/</a></p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2018-02-18 15:27:17 CET
+</div>
+</div>
+</body>
+</html>

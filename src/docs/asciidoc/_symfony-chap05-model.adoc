@@ -372,7 +372,7 @@ Dans un contrôleur :
     	->findAllLangues($lePays->getId());
 
  // puis passage des valeurs à la vue
- return render(..., array('lePays' => $lePays,
+ return $this->render('index/index.html.twig', array('lePays' => $lePays,
                 'formulaire' => $form->createView(),
     		    'lesLangues' => $lesLangues);
 ----
@@ -382,7 +382,7 @@ Dans la vue
 
 [source, html]
 ----
- <hr> <h4>Les principales langues</h4>
+ <hr> <h4>Les principales langues parlées ici</h4>
  <ul>
    {% for lg in lesLangues %}
      <li> {{ lg.langue.name }} </li>

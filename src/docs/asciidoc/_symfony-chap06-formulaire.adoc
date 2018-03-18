@@ -1,0 +1,206 @@
+= Cas du formulaire
+ifndef::backend-pdf[]
+:imagesdir: images
+endif::[]
+
+== Introduction
+
+La gestion de formulaires est un des points sensibles en développement web, comme l'est tout Entrée/Sortie d'une application.
+
+De plus, l'utilisateur s'attend à la fois à une certaine ergonomie
+(présentation de valeurs en base de données ou précédemment saisies
+ par ce dernier) ainsi qu'au respect de la cohérence (prise en compte de la validité des données côté client et serveur).
+
+Symfony intègre un composant nommé `form` qui prend en charge la gestion de formulaire.
+
+[source, bash, number]
+----
+ composer require form
+----
+
+Ce composant a sa propre documentation : https://symfony.com/doc/current/components/form.html
+
+
+== Logique de traitement du formulaire
+
+Dans sa version courante, un formulaire est lié à un objet métier (une classe Entity).
+
+De plus, il intégère les propriétés importantes suivantes :
+
+* Gestion des requêtes HTTP : prise en charge du traitement des demandes et des téléchargements de fichiers;
+* Protection CSRF: Prise en charge de la protection contre les attaques CSRF (Cross-Site-Request-Forgery);
+* Templating: Intégration d'une couche de présentation qui permet de réutiliser des fragments HTML lors du rendu d'un formulaire;
+* Traduction: Prise en charge de la traduction des messages d'erreur, des étiquettes de champs et d'autres chaînes;
+* Validation: Intégration d'une bibliothèque de validation pour générer des messages d'erreur pour les données soumises.
+
+== Logique métier du formulaire
+
+Dans cette phase d'initiation, nous nous concentrerons principalement sur
+
+* la relation Formulaire ↔ Entité
+* les systèmes de validation des attributs côté serveur
+* la création/suppression/mis à jour via Doctrine (aperçus au chapitre précédent)
+* la mise en forme des champs de formulaire
+
+=== Méthode d'action newXXX
+
+Nous prendrons le cas de la création d'une instance d'une entité.
+
+Dans ce cas, l'algorithme retenu par les concepteurs de Symfony et
+celui d'une seule méthode d'action (une route) pour, à la fois,
+
+.  Présenter le formulaire de création et, dans un second temps,
+.  Effectuer le traitement de création  (impacter le système d'information).
+
+Le pattern PRG (https://fr.wikipedia.org/wiki/Post-Redirect-Get) impose au développeur de fournir un ordre de redirection côté client comme réponse à toute action impactant le système (voir le lien si vous ne savez pas pourquoi).
+De ce fait, la logique du formulaire sera basée sur l'algorithme représenté ci-après.
+
+[plantuml, algo-form, png]
+----
+start
+:          (a)\nobtenir instance\n    de Request;
+:           (b)\ncréation instance\n      de Entity;
+:            (c)\ncréation instance\n      de Form\nbasée sur Entity;
+:                   (d)\nplacer les valeurs soumises\n (si elles existent) dans les\n       attributs de l'entité;
+if (données valides ?) then (yes)
+  :           (e)\nAction sur la base\n     de données;
+  :        (f)\nRéponse PRG;
+else (no)
+  :             (h)\nPasser des données\n         à la vue;
+  :        (i)\nRéponse par\nune vue twig;
+endif
+
+stop
+----
+
+En guise d'exemple, voici une méthode d'action typique.
+
+Observez la mise en correspondance des étapes numérotées avec des lettres de l'algorithme (diagramme ci-dessus) avec les lignes du code.
+
+[source, php, number]
+----
+use Symfony\Component\HttpFoundation\Request;
+
+public function new(Request $request)
+{
+    // création d'une instance d'entité
+    $task = new Task();
+
+    $form = $this->createFormBuilder($task)
+        ->add('task', TextType::class)
+        ->add('dueDate', DateType::class)
+        ->add('save', SubmitType::class, array('label' => 'Create Task'))
+        ->getForm();
+
+    $form->handleRequest($request);
+    // l'objet référencé par $task est mis à jour
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // $form->getData() holds the submitted values
+
+        $task = $form->getData();
+
+        // ... réalise quelques actions,
+        //    comme sauvegarder task dans la base de données
+        // $entityManager = $this->getDoctrine()->getManager();
+        // $entityManager->persist($task);
+        // $entityManager->flush();
+
+        return $this->redirectToRoute('task_success');
+    }
+
+    return $this->render('default/new.html.twig', array(
+        'form' => $form->createView(),
+    ));
+}
+----
+
+
+
+Lorsque la page est initialisée dans un navigateur,
+le formulaire est simplement créé et présenté (_created and rendered_).
+
+La première fois, la méthode _handleRequest()_ reconnaît  que le formulaire n'est pas
+soumis et ne fait donc rien.
+
+La méthode _isValid()_ retourne  false si le formulaire n'a pas reçu de data.
+Une bonne pratique consiste cependant à s'assurer ques des données sont reçues (_isSubmitted()_) avant de tester leur validité !
+
+Lorsque l'utilisateur soumet la requête avec des données, la méthode _handleRequest()_  transmet
+ces données à l'instance de l'entité détenue par form.
+Ensuite, si les données ne sont pas valides, alors elles sont de nouveau représentées
+à l'utilisateur avec les erreurs. Sinon, la méthode isValid rend true, et le
+développeur peut affiner un peu plus la situation avant de réaliser l'action cible
+(ligne 20-21).
+
+Afin d'éviter de devoir recoder la logique de createFormBuilder,
+vous pouvez définir des Form/Type (une classe par entité -voir doc symfony)
+
+Voici un autre exemple :
+
+image:form-quizbe.png[form-quizbe]
+
+TIP: La création du l'objet Form (via createFormBuilder) est sous-traitée à une méthode privée de la classe (createCreateForm).
+
+== Rendu du formulaire
+
+Exemple de rendu d'un formulaire associé à une entité Pays(Nom, AnnéeIndépendance)
+
+[source, xml]
+----
+[...]
+
+{% block content %}
+
+{{ form(formulaire) }} <1> <2>
+
+{% endblock %}
+----
+
+<1> form() est une fonction qui traduit les structures internes php en une représentation HTML
+<2> 'formulaire' dénote la variable passé par le controleur.
+
+ce qui donne : image:form-pays-1.png[form-pays-1]
+
+Bien entendu, Symfony vous permet de prendre la main finement sur la présentation du formulaire.
+
+Par exemple, en suivant les instructions d'usage de Bootstrap Twitter (http://getbootstrap.com/css/#forms), nous appliquons de nouvelles classes CSS à nos éléments de formulaire (label, zone de message d'erreur, input) :
+
+[source, xml]
+----
+{% block content %}
+
+{% set form = formulaire %}
+
+{{ form_start(form,
+   {'attr': {'role': 'form'}}
+   ) }}
+  {{ form_errors(form) }}
+
+    <div class="form-group">
+        {{ form_label(form.name) }}
+        {{ form_errors(form.name) }}
+        {{ form_widget(form.name,
+           {'attr': {'class': 'form-control'}}
+        )}}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.indepYear) }}
+        {{ form_errors(form.indepYear) }}
+        {{ form_widget(form.indepYear,
+          {'attr': {'class': 'form-control'}}
+        )}}
+    </div>
+
+    <button type="submit"
+       class="btn btn-default">
+       Enregistrer
+    </button>
+
+{{ form_end(form) }}
+----
+
+Ce qui donne.
+
+image:form-pays-2.png[form-pays-2]
