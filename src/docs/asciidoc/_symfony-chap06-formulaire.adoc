@@ -204,3 +204,41 @@ Par exemple, en suivant les instructions d'usage de Bootstrap Twitter (http://ge
 Ce qui donne.
 
 image:form-pays-2.png[form-pays-2]
+
+
+Exemple de code HTML généré par twig :
+
+[source, html, number]
+----
+
+<form method="post" action="" role="form">
+
+    <div class="form-group">
+        <label for="form_name" class="required">
+          Name
+        </label>
+
+        <input type="text" id="form_name"
+          name="form[name]" required="required"
+          class="form-control" value="Algeria" />
+    </div>
+
+    <div class="form-group">
+        <label for="form_indepYear" class="required">
+          Indep year
+        </label>
+
+        <input type="number" id="form_indepYear" name="form[indepYear]"
+          required="required" class="form-control" value="1962" />
+    </div>
+
+    <button type="submit" class="btn btn-default">Enregistrer</button>
+
+    <input type="hidden" id="form__token" name="form[_token]"
+        value="4c4d20ce63cb7b54836f6785b6d675b32be1954d" />
+</form>
+----
+
+On remarquera le `token` de prévention CRSF (_Cross site request forgery_) en fin
+de formulaire pour éviter qu'un site mal intentionné ne vous entraine à déclencher des actions à votre insue.
+
