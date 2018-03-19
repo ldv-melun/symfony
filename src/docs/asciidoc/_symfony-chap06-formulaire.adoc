@@ -38,9 +38,10 @@ De plus, il intégère les propriétés importantes suivantes :
 Dans cette phase d'initiation, nous nous concentrerons principalement sur
 
 * la relation Formulaire ↔ Entité
-* les systèmes de validation des attributs côté serveur
-* la création/suppression/mis à jour via Doctrine (aperçus au chapitre précédent)
+* la création/suppression/mise à jour via Doctrine (aperçus au chapitre précédent)
 * la mise en forme des champs de formulaire
+
+=> Devra être prolongée avec l'étude des systèmes de validation des attributs côté client et serveur.
 
 === Méthode d'action newXXX
 
