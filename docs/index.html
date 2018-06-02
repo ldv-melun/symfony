@@ -2015,7 +2015,7 @@ Voici une version possible qui retournera une instance de <code>Langue</code>:</
 </ul>
 </div>
 <div class="paragraph">
-<p>&#8658; Devra être prolongée avec l&#8217;étude des systèmes de validation des attributs côté client et serveur.</p>
+<p>&#8658; Devra être prolongée par l&#8217;étude des systèmes de validation des attributs côté client et serveur.</p>
 </div>
 <div class="sect3">
 <h4 id="méthode-d-action-newxxx"><a class="anchor" href="#méthode-d-action-newxxx"></a>Méthode d&#8217;action newXXX</h4>
@@ -2042,7 +2042,7 @@ De ce fait, la logique du formulaire sera basée sur l&#8217;algorithme représe
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/algo-form.png" alt="algo form" width="323" height="664">
+<img src="images/algo-form.png" alt="algo form" width="323" height="665">
 </div>
 </div>
 <div class="paragraph">
@@ -2091,21 +2091,21 @@ De ce fait, la logique du formulaire sera basée sur l&#8217;algorithme représe
 </pre></td>
   <td class="code"><pre><span class="keyword">use</span> <span class="constant">Symfony</span>\<span class="constant">Component</span>\<span class="constant">HttpFoundation</span>\<span class="constant">Request</span>;
 
-<span class="keyword">public</span> <span class="keyword">function</span> <span class="function">new</span>(<span class="constant">Request</span> <span class="local-variable">$request</span>)
+<span class="keyword">public</span> <span class="keyword">function</span> <span class="function">new</span>(<span class="constant">Request</span> <span class="local-variable">$request</span>) <i class="conum" data-value="1"></i><b>(1)</b>
 {
     <span class="comment">// création d'une instance d'entité</span>
-    <span class="local-variable">$task</span> = <span class="keyword">new</span> <span class="constant">Task</span>();
+    <span class="local-variable">$task</span> = <span class="keyword">new</span> <span class="constant">Task</span>();  <i class="conum" data-value="2"></i><b>(2)</b>
 
-    <span class="local-variable">$form</span> = <span class="local-variable">$this</span>-&gt;createFormBuilder(<span class="local-variable">$task</span>)
+    <span class="local-variable">$form</span> = <span class="local-variable">$this</span>-&gt;createFormBuilder(<span class="local-variable">$task</span>) <i class="conum" data-value="3"></i><b>(3)</b>
         -&gt;add(<span class="string"><span class="delimiter">'</span><span class="content">task</span><span class="delimiter">'</span></span>, <span class="constant">TextType</span>::<span class="keyword">class</span>)
         -&gt;add(<span class="string"><span class="delimiter">'</span><span class="content">dueDate</span><span class="delimiter">'</span></span>, <span class="constant">DateType</span>::<span class="keyword">class</span>)
         -&gt;add(<span class="string"><span class="delimiter">'</span><span class="content">save</span><span class="delimiter">'</span></span>, <span class="constant">SubmitType</span>::<span class="keyword">class</span>, <span class="predefined">array</span>(<span class="string"><span class="delimiter">'</span><span class="content">label</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">'</span><span class="content">Create Task</span><span class="delimiter">'</span></span>))
         -&gt;getForm();
 
-    <span class="local-variable">$form</span>-&gt;handleRequest(<span class="local-variable">$request</span>);
+    <span class="local-variable">$form</span>-&gt;handleRequest(<span class="local-variable">$request</span>); <i class="conum" data-value="4"></i><b>(4)</b>
     <span class="comment">// l'objet référencé par $task est mis à jour</span>
 
-    <span class="keyword">if</span> (<span class="local-variable">$form</span>-&gt;isSubmitted() &amp;&amp; <span class="local-variable">$form</span>-&gt;isValid()) {
+    <span class="keyword">if</span> (<span class="local-variable">$form</span>-&gt;isSubmitted() &amp;&amp; <span class="local-variable">$form</span>-&gt;isValid()) {  <i class="conum" data-value="5"></i><b>(5)</b>
         <span class="comment">// $form-&gt;getData() holds the submitted values</span>
 
         <span class="local-variable">$task</span> = <span class="local-variable">$form</span>-&gt;getData();
@@ -2113,13 +2113,13 @@ De ce fait, la logique du formulaire sera basée sur l&#8217;algorithme représe
         <span class="comment">// ... réalise quelques actions,</span>
         <span class="comment">//    comme sauvegarder task dans la base de données</span>
         <span class="comment">// $entityManager = $this-&gt;getDoctrine()-&gt;getManager();</span>
-        <span class="comment">// $entityManager-&gt;persist($task);</span>
+        <span class="comment">// $entityManager-&gt;persist($task); </span><i class="conum" data-value="6"></i><b>(6)</b>
         <span class="comment">// $entityManager-&gt;flush();</span>
 
-        <span class="keyword">return</span> <span class="local-variable">$this</span>-&gt;redirectToRoute(<span class="string"><span class="delimiter">'</span><span class="content">task_success</span><span class="delimiter">'</span></span>);
+        <span class="keyword">return</span> <span class="local-variable">$this</span>-&gt;redirectToRoute(<span class="string"><span class="delimiter">'</span><span class="content">task_success</span><span class="delimiter">'</span></span>); <i class="conum" data-value="7"></i><b>(7)</b>
     }
 
-    <span class="keyword">return</span> <span class="local-variable">$this</span>-&gt;render(<span class="string"><span class="delimiter">'</span><span class="content">default/new.html.twig</span><span class="delimiter">'</span></span>, <span class="predefined">array</span>(
+    <span class="keyword">return</span> <span class="local-variable">$this</span>-&gt;render(<span class="string"><span class="delimiter">'</span><span class="content">default/new.html.twig</span><span class="delimiter">'</span></span>, <span class="predefined">array</span>(  <i class="conum" data-value="8"></i><b>(8)</b> <i class="conum" data-value="9"></i><b>(9)</b>
         <span class="string"><span class="delimiter">'</span><span class="content">form</span><span class="delimiter">'</span></span> =&gt; <span class="local-variable">$form</span>-&gt;createView(),
     ));
 }</pre></td>

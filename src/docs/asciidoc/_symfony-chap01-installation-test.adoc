@@ -3,6 +3,14 @@ ifndef::backend-pdf[]
 :imagesdir: images
 endif::[]
 
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
 Le modèle d'architecture des applications web est de type 3 tiers (clients, serveur, SBBD)
 
 .Interaction type entre tiers d'une application web

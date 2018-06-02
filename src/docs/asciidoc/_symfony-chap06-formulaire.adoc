@@ -41,7 +41,7 @@ Dans cette phase d'initiation, nous nous concentrerons principalement sur
 * la création/suppression/mise à jour via Doctrine (aperçus au chapitre précédent)
 * la mise en forme des champs de formulaire
 
-=> Devra être prolongée avec l'étude des systèmes de validation des attributs côté client et serveur.
+=> Devra être prolongée par l'étude des systèmes de validation des attributs côté client et serveur.
 
 === Méthode d'action newXXX
 
@@ -59,16 +59,16 @@ De ce fait, la logique du formulaire sera basée sur l'algorithme représenté c
 [plantuml, algo-form, png]
 ----
 start
-:          (a)\nobtenir instance\n    de Request;
-:           (b)\ncréation instance\n      de Entity;
-:            (c)\ncréation instance\n      de Form\nbasée sur Entity;
-:                   (d)\nplacer les valeurs soumises\n (si elles existent) dans les\n       attributs de l'entité;
-if (données valides ?) then (yes)
-  :           (e)\nAction sur la base\n     de données;
-  :        (f)\nRéponse PRG;
+:          (1)\nobtenir instance\n    de Request;
+:           (2)\ncréation instance\n      de Entity;
+:            (3)\ncréation instance\n      de Form\nbasée sur Entity;
+:                   (4)\nplacer les valeurs soumises\n (si elles existent) dans les\n       attributs de l'entité;
+if (           (5)\ndonnées valides ?) then (yes)
+  :           (6)\nAction sur la base\n     de données;
+  :        (7)\nRéponse PRG;
 else (no)
-  :             (h)\nPasser des données\n         à la vue;
-  :        (i)\nRéponse par\nune vue twig;
+  :             (8)\nPasser des données\n         à la vue;
+  :        (9)\nRéponse par\nune vue twig;
 endif
 
 stop
@@ -82,21 +82,21 @@ Observez la mise en correspondance des étapes numérotées avec des lettres de 
 ----
 use Symfony\Component\HttpFoundation\Request;
 
-public function new(Request $request)
+public function new(Request $request) <1>
 {
     // création d'une instance d'entité
-    $task = new Task();
+    $task = new Task();  <2>
 
-    $form = $this->createFormBuilder($task)
+    $form = $this->createFormBuilder($task) <3>
         ->add('task', TextType::class)
         ->add('dueDate', DateType::class)
         ->add('save', SubmitType::class, array('label' => 'Create Task'))
         ->getForm();
 
-    $form->handleRequest($request);
+    $form->handleRequest($request); <4>
     // l'objet référencé par $task est mis à jour
 
-    if ($form->isSubmitted() && $form->isValid()) {
+    if ($form->isSubmitted() && $form->isValid()) {  <5>
         // $form->getData() holds the submitted values
 
         $task = $form->getData();
@@ -104,18 +104,17 @@ public function new(Request $request)
         // ... réalise quelques actions,
         //    comme sauvegarder task dans la base de données
         // $entityManager = $this->getDoctrine()->getManager();
-        // $entityManager->persist($task);
+        // $entityManager->persist($task); <6>
         // $entityManager->flush();
 
-        return $this->redirectToRoute('task_success');
+        return $this->redirectToRoute('task_success'); <7>
     }
 
-    return $this->render('default/new.html.twig', array(
+    return $this->render('default/new.html.twig', array( <8> <9>
         'form' => $form->createView(),
     ));
 }
 ----
-
 
 
 Lorsque la page est initialisée dans un navigateur,
@@ -241,5 +240,5 @@ Exemple de code HTML généré par twig :
 ----
 
 On remarquera le `token` de prévention CRSF (_Cross site request forgery_) en fin
-de formulaire pour éviter qu'un site mal intentionné ne vous entraine à déclencher des actions à votre insue.
+de formulaire dans le but d'éviter qu'un site mal intentionné ne vous entraine à déclencher des actions à votre insue.
 
