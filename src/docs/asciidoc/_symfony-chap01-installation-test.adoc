@@ -53,14 +53,15 @@ Dans ce cas, reférez-vous aux consignes de configurations disponibles sur le si
 
 == Prérequis
 
-=== Concernant le développeur
+=== Pour le développeur
 
-* Avoir une première expérience avec la programmation orientée objet (POO)
-* Comprendre les principes de fonctionnement d'une interaction HTTP (protocole sans état, passage de valeurs)
+* Avoir une première expérience en programmation orientée objet (POO)
+* Connaître les principes de fonctionnement d'une interaction HTTP (protocole sans état, transfert de valeurs typées)
   et les problématiques et solutions autour de la gestion du suivi de sessions HTTP
-* Une certaine connaissance en interaction applicative avec un SGBD( R ) - (SQL)
+* Maîtriser les concepts clés de l'interaction applicative avec un SGBD( R ) - (SQL)
+* Avoir des bases de HTML/CSS et JS.
 
-=== Concernant le système
+=== Pour le système
 
 Les prérequis système dépendent de la version de symfony que vous comptez utliser.
 On vérifiera en particulier :
