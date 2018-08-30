@@ -11,7 +11,7 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 
-Le modèle d'architecture des applications web est de type 3 tiers (clients, serveur, SBBD)
+Le modèle traditionnel d'architecture des applications web est de type 3 tiers (clients, serveur(s), SBBD(s))
 
 .Interaction type entre tiers d'une application web
 [plantuml]
@@ -32,7 +32,7 @@ end box
 serveur_http  --> application
 activate application
 application->application
-application --> sgbd : requêtes sql
+application --> sgbd : requêtes xql
 application <-- sgbd
 application --> application
 application --> serveur_http
@@ -41,10 +41,10 @@ serveur_http  --> client : réponse HTTP
 
 ----
 
-Les applications symfony se situent sur le tiers "server et applications" (derrière un serveur HTTP).
+Les applications symfony se situent sur le tiers du milieu "server et applications" (derrière un serveur HTTP).
 
 En environnement de développement, les développeurs PHP disposent du `PHP's internal web server`, un serveur http intégré au langage lui-même,
-ce qui assure un certain contrôle quant à la version de PHP utilisée lors de la phase de développement.
+ce qui assure une certaine cohérence quant à la version de PHP utilisée pour les tests en phase de développement.
 
 En environnement de production, l'application sera placée derrière un server Web de production, disposant d'une version de PHP conforme aux exigences du framework.
 Les serveurs HTTP de production les plus courants sont `Apache` et `Nginx`.
@@ -63,15 +63,32 @@ Dans ce cas, reférez-vous aux consignes de configurations disponibles sur le si
 === Concernant le système
 
 Les prérequis système dépendent de la version de symfony que vous comptez utliser.
-On se réfèrera à https://symfony.com/doc/current/reference/requirements.html[Symfony Requirements], en particulier :
+On vérifiera en particulier :
 
-* La version minimale attendue de PHP (dépend de la version de Symfony)
+* La version minimale attendue de PHP (dépend de la version de Symfony) actuellement >= 7.1.3 )
 
-* https://getcomposer.org/[`Composer`] (outils de gestion des dépendances pour des projets PHP, vérifier sa présence sur votre système)
+.Connaître la version de php
+....
+$ php -v
+PHP 7.2.7
+....
+
+* La présence de `composer` (suive ce lien https://getcomposer.org/[`Composer`]) qui est un outil de gestion des dépendances pour des projets PHP.
+
+.Vérifier la version de composer
+....
+$ composer -V
+Composer version 1.7.2 2018-08-16 16:57:12
+
+....
+
 
 == Création d'une application symfony et vérification des pré-requis
 
-Ce sont des opérations qui s'effectuent en ligne de commande :
+Ce sont des opérations qui s'effectuent en *ligne de commande*.
+
+Pour commencer, placez-vous dans un dossier racine, qui héberge(ra) vos différents projets web, puis,
+à partir de ce dossier, éxécuter la commande suivante :
 
 .Création d'un squelette d'application
 ....
@@ -94,10 +111,13 @@ composer <1>
 
 == Démarrage du serveur et de l'application
 
-.Activation du mode dev
+Depuis la version 5.4 de PHP, un serveur web est intégré à l'API.
+Pour simplifier son usage, un composant symfony (un bundle) est disponible :
+
+.Activation du mode dev avec le serveur HTTP intégré
 ....
  $ cd your-project
- $ composer require server --dev
+ $ composer require symfony/web-server-bundle --dev
 ....
 
 Symfony fonctionne par composants, et il y en a un qui vérifie les prérequis, `Symfony Requirements Checker tool`
@@ -111,8 +131,13 @@ $ composer require requirements-checker
 .Demarrage du serveur
 ....
 $ cd your-project
-$ php bin/console server:run
+$ php bin/console server:start
 ....
+
+
+NOTE: Par défaut, le serveur interne écoute sur le port 8000.
+S'il est déjà pris sur machine, vous pouvez en indiqué un autre, voir ici  https://symfony.com/doc/current/setup/built_in_web_server.html
+
 
 Une fois ce composant installé, votre application pourra être sollicitée
 par la route http://localhost:8000/check.php, dont voici le résultat attendu :
@@ -128,3 +153,26 @@ Après avoir réglé la situation, pour des questions de sécurité, ne pas oubl
 ....
 
 TIP: Vérifier les prerequis système est une des premières actions à réaliser lors de la phase de déploiement sur un serveur de production !
+
+== Sécurité
+
+Symfony fournit un utilitaire appelé *Security Checker* qui vérifie si les dépendances de votre projet contiennent des failles de sécurité connues.
+
+Une fois installé, cet utilitaire s'exécutera automatiquement chaque fois que vous installez ou mettez à jour une dépendance de l'application.
+Si une dépendance contient une vulnérabilité, en mode dev, un message clair vous sera présenté.
+
+*  Appliquer le composant `security checker` à votre projet. La procédure est décrite ici : https://symfony.com/doc/current/setup.html
+
+[NOTE]
+====
+Le développeur travaille et teste en mode `dev` (développement). Avant de passer en mode `prod` (production, c-a-d déploiement), des tests sont réalisés en mode `pré-prod` (pré-production), afin de vérifier le bon fonctionnement dans le cadre de l'architecture cible.
+====
+
+== Résumé
+
+À ce stade, vous avez, sur votre machine de dev, installé, configuré et testé un environnement de développement web avec Symfony.
+Vous avez installé Symfony en mode "boîte noire".
+
+L'étape suivante vous amène progressivement à comprendre l'intérieur de cette boîte, à savoir comment l'utiliser !
+
+
