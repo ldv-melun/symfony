@@ -1,26 +1,35 @@
-= Travaux Pratiques - 1 -
+= Travaux Pratiques Avancés
 ifndef::backend-pdf[]
 :imagesdir: images
 endif::[]
 
-== Premier travail
+== Prerequis
 
-. Après avoir installé et configuré votre IDE, atteindre la dernière étape de ce premier tutoriel (avec twig) à savoir :
+Avoir installé et configuré votre IDE et atteint la dernière étape de ce premier tutoriel (avec twig) à savoir `luckynumber` et `hello`:
 
 image:lucky-number-42.png[lucky number in action, 500]
 
-== Migration application PHP classique vers Symfony
+== Création d'une application PHP - sans état supporté côté serveur -
 
-* Traduction d'un code PHP mélangant logique de traitement et logique de vue en une structure séparant Vues (Twig) et Contrôleurs (objets)
-* Poursuite du développement de la solution en mode interatif et incrémental avec Symfony, à savoir une  application web répondant aux spécifications suivantes :
+. Traduction d'un code PHP mélangant logique de traitement et logique de vue en une structure séparant Vues (Twig) et Contrôleurs (méthodes)
+. Poursuite du développement de la solution en mode interatif et incrémental avec Symfony, à savoir une  application web répondant aux spécifications suivantes
 
-CAUTION: *SPECIFICATIONS* :   L'utilisateur cherche à trouver un nombre retenu par l'application de façon « aléatoire », sur une plage d'amplitude allant de zéro à, disons, 50.
- Chaque nombre sera représenté par une cellule `td` d'un tableau `html`. Lorsque l'utilisateur soumet une proposition (clique sur une cellule/nombre), l'application répond « valeur trop petite », « valeur trop grande » ou « Trouvé ! ». Durant les tentatives, l'application montre les cellules déjà sélectionnées par l'utilisateur (prévoir une classe CSS dédiée). La partie s'arrête lorsque l'utilisateur a trouvé le bon nombre.
+CAUTION: *SPECIFICATIONS*
+====
+* L'utilisateur cherche à trouver un nombre retenu par l'application de façon « aléatoire »,
+sur une plage d'amplitude allant de zéro à, disons, 50.
+* Chaque nombre sera représenté par une cellule `td` d'un tableau `html`.
+* Lorsque l'utilisateur soumet une proposition (clique sur une cellule/nombre), l'application répond *valeur trop petite*, *valeur trop grande* ou *trouvé !*.
+* Durant les tentatives, l'application montre les cellules déjà sélectionnées par
+l'utilisateur (prévoir une classe CSS dédiée).
+* La partie s'arrête lorsque l'utilisateur a trouvé le bon nombre.
+====
 
-WARNING: L'application ne sauvegardera aucune donnée du jeu (historique utilisateur) sur le serveur (les « données de sessions » seront transmises au client – et donc portées par celui-ci – un exemple de code est donné en annexe).
+WARNING: L'application ne sauvegardera aucune donnée sur le serveur du jeu (historique utilisateur)  (les « données de sessions » seront transmises au client – et donc portées par celui-ci – un exemple de code est donné en annexe).
 
-Étapes à suivre :
+=== Étapes à suivre
 
+. Tester, dans un dossier à part, le code PHP de l'annexe
 . Traduire le code PHP de l'annexe en un projet symfony (avec contrôleur index et vue twig)
 . Faire évoluer l'application afin qu'elle réponde aux attentes (exprimées ci-dessus).
 . Présentation des nombres dans une matrice 10 x 10
@@ -42,7 +51,7 @@ Pour déterminer le message à présenter, référez-vous aux caractéristiques 
 == Ressources à prendre en compte
 
 * Génération pseudo-aléatoire d'un nombre : http://php.net/manual/fr/function.mt-rand.php
-* Legacy code en annexe pour commencer.
+* Legacy d'une ébauche de code en annexe pour commencer.
 
 == Annexe TP-1 - code legacy (prototype)
 [source, php]

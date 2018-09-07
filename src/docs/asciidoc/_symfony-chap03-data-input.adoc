@@ -64,10 +64,10 @@ ce sont celles en provenance soit d'un *formulaire (HTML)* soit comme composante
 
 [source, php]
 ----
-    // retrieves POST variables respectively
-    $request->request->get('idProuit'); <1>
+    // obtenir une valeur transmises par POST d'après sa clé
+    $request->request->get('idproduit'); <1>
 
-    // retrieves an instance of UploadedFile identified by foo
+    // obtenir une instance de UploadedFile identifiée par foo
     $request->files->get('foo');
 ----
 
@@ -80,7 +80,6 @@ ce sont celles en provenance soit d'un *formulaire (HTML)* soit comme composante
  // retrieves GET variables respectively
     $request->query->get('x', 66); <1> <2>
 ----
-
 
 <1> C'est via l'attribut `query`, de l'objet référencé par `$request`, que le contrôleur aura accès aux données passées par `GET`.
  Par exemple, les données transmises en arguments de l'url (`?a=b&x=42`).
@@ -113,3 +112,84 @@ avec des exemples de redirection :
 
 * https://symfony.com/doc/current/controller.html
 
+== TP - Le contrôleur et la vue (initiation)
+
+WARNING: Attention à bien respecter les conventions de nommage :
+      http://symfony.com/doc/current/contributing/code/standards.html
+
+[TIP]
+====
+Pour ce TP, vous pouvez choisir d'utiliser le serveur HTTP intégré à PHP en le lançant en ligne de commande.
+
+ `php bin/console server:run`
+
+Dans ce cas, il vous faudra tester vos routes ainsi :
+
+`http://127.0.0.1:8000/lucky/number`
+====
+
+====
+[start=1]
+. Ajouter un nouveau controller nommé _IndexController_ disposant d'une méthode nommée _indexAction_.
+   Faire en sorte que l'index présente le message « Hello world ! » à l'utilisateur
+  (travail sur vue twig associée)
+====
+
+[start=2]
+====
+[start=2]
+. Ajouter la méthode d'action _helloAction_ ci-dessous, qui reçoit en paramètre
+  un nom, et retourne, via une vue twig, le message « Hello <nom> !» (où <nom>
+  est l'argument reçu)
+
+[source,php]
+----
+  /**
+  * @Route("/hello/{nom}", name="app_hello")
+  */
+  public function helloAction($nom) {
+    $this­>render('index/hello.html.twig', array('nom' => $nom));
+  }
+----
+
+Faire en sorte que le nom soit présenté à l'utilisateur en majuscule (voir : https://twig.symfony.com/doc/2.x/templates.html)
+====
+
+====
+[start=3]
+. Modifier la méthode d'action helloAction afin que, si le nom transmis est de
+  la forme _prenom*nom_ (prénom[étoile]nom), le message soit formaté (côté vue twig) selon
+  l'exemple ci-dessous : http://localhost:8000/hello/django*reinhardt
+
+image:hello-django.png[hello-django, caption="http://localhost:8000/hello/django*reinhardt"]
+
+WARNING: si aucune étoile n'est présente dans la dernière partie de l'url,
+le fonctionnement de `helloAction` devra rester conforme à l'attendu de la question précédente.
+====
+
+====
+[start=4]
+. Modifier le controleur de sorte que si aucun nom n'est passé à hello, le
+message 'Hello Inconnu !' est présenté. (voir le concept de *valeur par défaut* pour le paramètre)
+====
+
+====
+[start=5]
+.  Ajouter une nouvelle méthode d'action liée à la route
+_/hello/prenom/nom_
+
+Attention contrainte ! : cette méthode devra réutiliser la vue de la méthode
+d'action de la route `/hello` (conforme modifiée en question 3 de ce TP)
+... et montrera donc le prénom et nom comme précédemment (Ref. à django Reinhardt) car c'est
+la même vue.
+====
+
+====
+[start=6]
+. Ajouter un *message flash* (concept à étudier !), qui affiche un message de bienvenue à
+l'utilisateur lors de *sa première* sollicitation de l'action _hello_ (pour une même instance de son navigateur).
+
+TIP:  l'objet Session peut être retrouvé via un objet Request que l'on déclare
+en paramètre d'une méthode d'action et qui sera automatiquement
+« injecté » (passé) par le contrôleur principal de symfony.
+====

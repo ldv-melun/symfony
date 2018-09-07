@@ -5,21 +5,19 @@ endif::[]
 
 (d'après : https://symfony.com/doc/current/page_creation.html)
 
-Pour une application web, créer une page c'est permettre à un certain public
-d'accéder à une *ressource* (ou service) *web*. Pour cela, plusieurs activités sont concernées:
+Du point du développement logiciel d'une application web, "_créer une page_" c'est exposer une *ressource web* à un certain public. Pour cela, plusieurs activités sont concernées:
 
-* permettre à l'application web de répondre à une requête HTTP en définissant  une route (portion terminale d'un URL) pour la ressource en question
-* définir via quelle méthode d'accès HTTP cette ressource sera accessible (GET, POST, PUT, HEAD, ...)
-* concevoir le *contrô
-leur* associé à la ressource : une méthode d'une classe `Controller`
-* définir la structure de la resource dynamique soit dans le contrôleur, soit via un template de vue (*twig* par exemple)
+* permettre à l'application web de répondre à une *requête HTTP* en définissant  une *route* (portion terminale d'un chemin d'URL) pour la ressource en question
+* définir via quelle *méthode d'accès HTTP* cette ressource sera accessible (GET, POST, PUT, HEAD, ...)
+* concevoir le *contrôleur* associé à la ressource : une méthode d'une classe `Controller`
+* définir la structure (type mime - representation) de la resource dynamique (par exemple via le contrôleur ou un template de vue *twig*)
 
-Si cette requête est de type `GET`, elle correspond à une demande de _resssource distante_.
-Cela peut correspondre à une donnée statique (un fichier placé sur le serveur) ou dynamique (construite pour l'occasion).
+Un requête HTTP de type `GET` correspond à une demande de _resssource distante_.
+La ressource demandée peut correspondre à une donnée statique (un fichier placé sur le serveur) ou dynamique (construite pour l'occasion).
 
 Nous nous plaçons dans le cas où l'application répondra par du contenu dynamique `HTML`.
 
-Une application web n'expose jamais directement ses templates de vue de ses ressources dynamiques (pas de lien direct vers un script de vue)
+IMPORTANT: Une application web n'expose jamais directement ses templates de vue de ses ressources dynamiques (pas de lien direct vers un script de vue)
 
 Dans le cadre de symfony, un contôleur central (_front controller_) réceptionne les requêtes HTTP
 et les traduit en appel de *méthodes* d'instance d'une classe *contrôleur* (_controller_)
@@ -32,13 +30,13 @@ ifndef::backend-pdf[]
 image:request-flow.png[symfony-flow-schema]
 endif::[]
 
-Comme le montre ce schéma, le développeur doit mettre à disposition du framework des méthodes.
+Comme le montre ce schéma, le développeur doit mettre à disposition du framework des méthodes dites _d'actions_.
 
 WARNING: Attention, le schéma ne montre que les méthodes (`blogAction`, `contactAction` et `homepageAction`),
          mais ne donne pas le nom de la (ou des) classes où elles sont définies (source symfony.com).
 
-La liaison méthode <--> URL peut se réaliser soit par un _fichier de configuration_, soit via des *_annotations_* dans le code.
-Nous choisirons cette dernière option, bien pratique, mais avant de concevoir une telle classe, vous devrez ajouter des composants à votre
+La liaison _méthode <--> URL_ peut se réaliser soit par un _fichier de configuration_, soit via des *_annotations_* dans le code.
+Nous choisirons cette dernière option, fort pratique. Avant de concevoir une telle classe, vous devrez ajouter des composants à votre
 application. Le plus souple pour cela est de demander à `composer` de le faire pour vous :
 
 ....
@@ -78,7 +76,7 @@ class LuckyController <3>
 } <7>
 ----
 
-<1> un comment à destination du lecteur, afin d'identifier le chemin de sauvegarde
+<1> un _comment_ à destination du lecteur, afin d'identifier le chemin de sauvegarde
 <2> les librairies dont dépend le code ci-dessous (Classe et annotation)
 <3> une classe normale PHP Objet
 <4> définition de la logique d'appel (extrait terminal URL de l'application)
@@ -116,25 +114,25 @@ $ cd your-project/
 $ composer require twig
 ....
 
-Il faut ensuite s'assurer `LuckyController` hérite de la classe de base des contrôleurs `Controller`:
+Il faut ensuite s'assurer `LuckyController` hérite de la classe de base des contrôleurs `AbstractController`:
 
-.MVC : Les classes contrôleur héritent de Controller
+.MVC : Les classes contrôleur héritent de _AbstractController_
 [source, php]
 ----
 
 // src/Controller/LuckyController.php
 
 // ...
-+ use Symfony\Bundle\FrameworkBundle\Controller\Controller; <1>
++ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController; <1>
 
 - class LuckyController
-+ class LuckyController extends Controller <2>
++ class LuckyController extends AbstractController <2>
 {
     // ...
 }
 ----
 <1> déclaration de la dépendance (un import)
-<2> la classe LuckyController hérite de Controller
+<2> la classe LuckyController hérite de AbstractController
 
 Et faire en sorte que la méthode contrôleur *délègue* la vue à une page twig :
 
@@ -144,7 +142,7 @@ Et faire en sorte que la méthode contrôleur *délègue* la vue à une page twi
 // src/Controller/LuckyController.php
 
 // ...
-class LuckyController extends Controller
+class LuckyController extends AbstractController
 {
     /**
      * @Route("/lucky/number")
@@ -163,7 +161,7 @@ class LuckyController extends Controller
 <1> appel à la méthode héritée (_render_) en lui passant le nom d'une vue, suivi d'un *tableau associatif*, appelé aussi *dictionnaire*, composé de *couples (nom_variable=>valeur)*.
 Dans notre cas, le tableau n'a qu'un seul élément ('number'=> $number),
 qui sera passé à la vue.
-La vue aura accès à ces valeurs *directement* par le nom des clés définis dans ce dictionnaire.
+La vue aura accès à ces valeurs *directement* par le *nom des clés définis dans ce dictionnaire*.
 
 Les fichiers de vue seront cherchés par symfony, par défaut, dans le dossier *_templates_* à partir de la racine du projet (ce dossier est automatiquement crée lors de l'installation de twig).
 
@@ -217,3 +215,14 @@ devons créer une nouvelle vue dans le dossier _templates/lucky_, nommée `numbe
 <4> redéfinition du bloc `body`
 
 Vous trouverez la syntaxe twig ici : https://twig.symfony.com/
+
+== En résumé
+
+Nous avons vu les principes d'interaction d'une application web :
+
+*  Les requêtes HTTP entrantes sont routées par symfony sur des classes contrôleurs :
+   Comprendre : une requête client déclenche un appel de méthode d'un objet _Controller_.
+   C'est à ce niveau que des décisions algorithmiques métier sont exécutées.
+
+*  La représentation de la réponse est déléguée à une logique de vue (*twig*)
+
