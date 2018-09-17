@@ -132,7 +132,7 @@ $ composer require requirements-checker
 .Demarrage du serveur
 ....
 $ cd your-project
-$ php bin/console server:start
+$ php bin/console server:run
 ....
 
 

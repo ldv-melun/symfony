@@ -62,27 +62,28 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class LuckyController <3>
 {
-  /**
-  * @Route("/lucky/number") <4>
+  /** <4>
+  * @Route("/lucky/number") <5>
   */
-  public function number() <5>
+  public function number() <6>
   {
     $number = mt_rand(0, 100);
 
-    return new Response( <6>
+    return new Response( <7>
       '<html><body>Lucky number: '.$number.'</body></html>'
     );
   }
-} <7>
+} <8>
 ----
 
 <1> un _comment_ à destination du lecteur, afin d'identifier le chemin de sauvegarde
 <2> les librairies dont dépend le code ci-dessous (Classe et annotation)
 <3> une classe normale PHP Objet
-<4> définition de la logique d'appel (extrait terminal URL de l'application)
-<5> une méthode public; Elle sera automatiquement appelée via le _front controller_.
-<6> retourne un instance de `Response` (avec du contenu _HTML_)
-<7> le marqueur de fin de traitement PHP (`?>`) est volontairement absent afin de conserver le sens _librairie_ d'une classe Controller.
+<4> Attention : démarre avec 2 étoiles (ref. à PHPDOC)
+<5> définition de la logique d'appel (extrait terminal URL de l'application)
+<6> une méthode public; Elle sera automatiquement appelée via le _front controller_.
+<7> retourne un instance de `Response` (avec du contenu _HTML_)
+<8> le marqueur de fin de traitement PHP (`?>`) est volontairement absent afin de conserver le sens _librairie_ d'une classe Controller.
 
 Voici un extrait des spécifications de la fonction http://php.net/manual/fr/function.mt-rand.php
 [source, php]

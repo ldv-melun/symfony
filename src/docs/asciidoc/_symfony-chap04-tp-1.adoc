@@ -1,4 +1,4 @@
-= Travaux Pratiques Avancés
+= Travaux Dirigés Avancés
 ifndef::backend-pdf[]
 :imagesdir: images
 endif::[]
@@ -14,12 +14,13 @@ image:lucky-number-42.png[lucky number in action, 500]
 . Traduction d'un code PHP mélangant logique de traitement et logique de vue en une structure séparant Vues (Twig) et Contrôleurs (méthodes)
 . Poursuite du développement de la solution en mode interatif et incrémental avec Symfony, à savoir une  application web répondant aux spécifications suivantes
 
+<<<
 CAUTION: *SPECIFICATIONS*
 ====
 * L'utilisateur cherche à trouver un nombre retenu par l'application de façon « aléatoire »,
-sur une plage d'amplitude allant de zéro à, disons, 50.
-* Chaque nombre sera représenté par une cellule `td` d'un tableau `html`.
-* Lorsque l'utilisateur soumet une proposition (clique sur une cellule/nombre), l'application répond *valeur trop petite*, *valeur trop grande* ou *trouvé !*.
+sur une plage d'amplitude donnée, disons [0..30], qui correspond à la taille d'une chaine de caractères en fait. La valeur d'un caractère à l'indice i de cette chaine permettra de connaître si i est le nombre à trouver ou s'il y a été soumis précédemment comme solution possible par l'utilisateur.
+* Chaque nombre sera représenté par une cellule `td` d'un tableau `html` (comme dans le code fourni en annexe).
+* A chaque tentative de réponse, le système présente son analyse (nombre proposé trop petit, trop grand, exact)
 * Durant les tentatives, l'application montre les cellules déjà sélectionnées par
 l'utilisateur (prévoir une classe CSS dédiée).
 * La partie s'arrête lorsque l'utilisateur a trouvé le bon nombre.
@@ -27,7 +28,7 @@ l'utilisateur (prévoir une classe CSS dédiée).
 
 WARNING: L'application ne sauvegardera aucune donnée sur le serveur du jeu (historique utilisateur)  (les « données de sessions » seront transmises au client – et donc portées par celui-ci – un exemple de code est donné en annexe).
 
-=== Étapes à suivre
+=== Veuillez respecter les étapes suivantes
 
 . Tester, dans un dossier à part, le code PHP de l'annexe
 . Traduire le code PHP de l'annexe en un projet symfony (avec contrôleur index et vue twig)
@@ -42,7 +43,7 @@ WARNING: L'application ne sauvegardera aucune donnée sur le serveur du jeu (his
 
 Pour déterminer le message à présenter, référez-vous aux caractéristiques d'efficacité de la *recherche dichotomique* : https://fr.wikipedia.org/wiki/Dichotomie
 
-[start=6]
+[start=7]
 . Optionnel, pour les plus avancés :
 
  * L'utilisateur peut étendre l'amplitude de la matrice.
@@ -52,6 +53,7 @@ Pour déterminer le message à présenter, référez-vous aux caractéristiques 
 
 * Génération pseudo-aléatoire d'un nombre : http://php.net/manual/fr/function.mt-rand.php
 * Legacy d'une ébauche de code en annexe pour commencer.
+* Les principe de la recherche dichotomique : https://fr.wikipedia.org/wiki/Dichotomie
 
 == Annexe TP-1 - code legacy (prototype)
 [source, php]

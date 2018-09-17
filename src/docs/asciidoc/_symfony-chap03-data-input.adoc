@@ -121,7 +121,7 @@ WARNING: Attention à bien respecter les conventions de nommage :
 ====
 Pour ce TP, vous pouvez choisir d'utiliser le serveur HTTP intégré à PHP en le lançant en ligne de commande.
 
- `php bin/console server:run`
+`php bin/console server:run`
 
 Dans ce cas, il vous faudra tester vos routes ainsi :
 
@@ -148,7 +148,7 @@ Dans ce cas, il vous faudra tester vos routes ainsi :
   * @Route("/hello/{nom}", name="app_hello")
   */
   public function helloAction($nom) {
-    $this­>render('index/hello.html.twig', array('nom' => $nom));
+    return $this­>render('index/hello.html.twig', array('nom' => $nom));
   }
 ----
 
@@ -158,8 +158,10 @@ Faire en sorte que le nom soit présenté à l'utilisateur en majuscule (voir : 
 ====
 [start=3]
 . Modifier la méthode d'action helloAction afin que, si le nom transmis est de
-  la forme _prenom*nom_ (prénom[étoile]nom), le message soit formaté (côté vue twig) selon
+  la forme _prenom*nom_ (prénom[étoile]nom), le message soit présenté  selon
   l'exemple ci-dessous : http://localhost:8000/hello/django*reinhardt
+
+=> à vous de déterminer le travail qui devra être réalisé côté contrôleur et côté logique de présentaiton (twig)
 
 image:hello-django.png[hello-django, caption="http://localhost:8000/hello/django*reinhardt"]
 
@@ -187,7 +189,8 @@ la même vue.
 ====
 [start=6]
 . Ajouter un *message flash* (concept à étudier !), qui affiche un message de bienvenue à
-l'utilisateur lors de *sa première* sollicitation de l'action _hello_ (pour une même instance de son navigateur).
+l'utilisateur lors de *sa première* sollicitation de l'action _hello_ (pour une même instance de son navigateur). Conseil : Afficher dans un premier temps le message, puis mettre sous condition la création du message en gérant une donnée de session utilisateur.
+
 
 TIP:  l'objet Session peut être retrouvé via un objet Request que l'on déclare
 en paramètre d'une méthode d'action et qui sera automatiquement
