@@ -26,12 +26,11 @@
 <div id="toctitle">Table des matieres</div>
 <ul class="sectlevel1">
 <li><a href="#présentation">Présentation</a></li>
-<li><a href="#travaux-dirigés-avancés">Travaux Dirigés Avancés</a>
+<li><a href="#introduction-au-model">Introduction au Model</a>
 <ul class="sectlevel2">
-<li><a href="#prerequis">Prerequis</a></li>
-<li><a href="#création-d-une-application-php-sans-état-supporté-côté-serveur">Création d&#8217;une application PHP - sans état supporté côté serveur -</a></li>
-<li><a href="#ressources-à-prendre-en-compte">Ressources à prendre en compte</a></li>
-<li><a href="#annexe-tp-1-code-legacy-prototype">Annexe TP-1 - code legacy (prototype)</a></li>
+<li><a href="#Éléments-d-architecture">Éléments d&#8217;architecture</a></li>
+<li><a href="#premiers-pas-avec-le-model">Premiers pas avec le model</a></li>
+<li><a href="#travaux-pratiques">Travaux pratiques</a></li>
 </ul>
 </li>
 </ul>
@@ -71,220 +70,176 @@ La documentation Symfony est accessible ici : <a href="https://symfony.com/doc/c
 </div>
 </div>
 <div class="sect1">
-<h2 id="travaux-dirigés-avancés"><a class="anchor" href="#travaux-dirigés-avancés"></a>Travaux Dirigés Avancés</h2>
+<h2 id="introduction-au-model"><a class="anchor" href="#introduction-au-model"></a>Introduction au Model</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="prerequis"><a class="anchor" href="#prerequis"></a>Prerequis</h3>
+<h3 id="Éléments-d-architecture"><a class="anchor" href="#Éléments-d-architecture"></a>Éléments d&#8217;architecture</h3>
 <div class="paragraph">
-<p>Avoir installé et configuré votre IDE et atteint la dernière étape de ce premier tutoriel (avec twig) à savoir <code>luckynumber</code> et <code>hello</code>:</p>
+<p>Nous avons vu comment associer des <em>routes</em> à des <em>contrôleurs</em> (méthodes d&#8217;action d&#8217;une classe Controller).</p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="images/lucky-number-42.png" alt="lucky number in action" width="500"></span></p>
+<p>Nous allons voir comment le contrôleur peut s&#8217;appuyer sur des <strong>objets métier</strong> pour <strong>implémenter une logique de cas d&#8217;utilisation</strong>.</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="création-d-une-application-php-sans-état-supporté-côté-serveur"><a class="anchor" href="#création-d-une-application-php-sans-état-supporté-côté-serveur"></a>Création d&#8217;une application PHP - sans état supporté côté serveur -</h3>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Traduction d&#8217;un code PHP mélangant logique de traitement et logique de vue en une structure séparant Vues (Twig) et Contrôleurs (méthodes)</p>
-</li>
-<li>
-<p>Poursuite du développement de la solution en mode interatif et incrémental avec Symfony, à savoir une  application web répondant aux spécifications suivantes</p>
-</li>
-</ol>
-</div>
-<div style="page-break-after: always;"></div>
-<div class="admonitionblock caution">
+<div class="admonitionblock tip">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-caution" title="Caution"></i>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-<strong>SPECIFICATIONS</strong>
+Il est courant de faire porter la responsabilité d&#8217;un cas d&#8217;utilisation à une classe contrôleur.
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>Il existe 2 sortes d&#8217;objets métier : <code>Entity</code> et <code>EntityRepository</code>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Entity</code> : Représente une classe métier pour le domaine étudié (<code>Client</code>, <code>Contrat</code>, &#8230;&#8203;).</p>
+</li>
+<li>
+<p><code>EntityRepository</code> : Est responsable de la communication avec le système de persistance, notamment en lien avec l' <code>ORM</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Le contrôleur dépend de <code>Entity</code> et <code>EntityRepository</code>, <code>Entity</code> ne dépend pas d&#8217;un ORM, <code>EntityRepository</code> si.</p>
+</div>
+<div class="paragraph">
+<div class="title">Architecture vue en couches</div>
+<p><span class="image"><img src="images/schema-interactions-couches.png" alt="Interactions vue en couches" width="600"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="premiers-pas-avec-le-model"><a class="anchor" href="#premiers-pas-avec-le-model"></a>Premiers pas avec le model</h3>
+<div class="sect3">
+<h4 id="guide"><a class="anchor" href="#guide"></a>Guide</h4>
+<div class="paragraph">
+<p>Faire le lien entre un objet (instance d&#8217;une classe Entity) et une ligne d&#8217;une table d&#8217;une base de données
+est une opération complexe (synchronisation, mise en cache, cohérence de type, &#8230;&#8203;).</p>
+</div>
+<div class="paragraph">
+<p>Les <strong>ORMs</strong> (<em>object-relational mapping</em>) sont des logiciels qui effectuent le lien entre <strong>objet métier</strong> et <strong>ligne</strong>
+de table d&#8217;une base de données. Par défaut, symfony utilise la solution <a href="http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/">doctrine</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tutoriel-doctrine-de-symfony"><a class="anchor" href="#tutoriel-doctrine-de-symfony"></a>Tutoriel doctrine de symfony</h4>
+<div class="paragraph">
+<p><code>Doctrine</code> peut être mise en oeuvre sans Symfony, mais nous vous invitons néanmoins à
+étudier le tutoriel Doctrine avec Symfony, car ce dernier en simplifie l&#8217;accès.</p>
+</div>
+<div class="paragraph">
+<p>Ce tutoriel vous montre comment lier une classe métier à une table d&#8217;une base de données, et donc une instance (un objet) à une ligne (occurrence d&#8217;une table),
+et les opérations CRUD associées.</p>
+</div>
+<div class="paragraph">
+<p>Tutoriel à suivre : <a href="https://symfony.com/doc/current/doctrine.html">Introduction à Doctrine avec Symfony</a> - Durée estimée : 2H (étude, configuration, codage des exemples et tests)</p>
+</div>
+<div class="paragraph">
+<p>Au menu :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Entity et Table liée</p>
+</li>
+<li>
+<p>Liaison Attribut - Colonne (<em>field</em> - <em>column</em>)</p>
+</li>
+<li>
+<p>Migration modèle objet &#8592;&#8594; schéma de la base de données</p>
+</li>
+<li>
+<p>Opérations CRUD</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>À l'<strong>issue de ce tutoriel (~2H)</strong>, vous réaliserez les travaux suivants :</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="travaux-pratiques"><a class="anchor" href="#travaux-pratiques"></a>Travaux pratiques</h3>
+<div class="paragraph">
+<p>Durée moyenne : 8H</p>
 </div>
 <div class="exampleblock">
 <div class="content">
-<div class="ulist">
-<ul>
+<div class="olist arabic">
+<ol class="arabic" start="1">
 <li>
-<p>L&#8217;utilisateur cherche à trouver un nombre retenu par l&#8217;application de façon « aléatoire »,
-sur une plage d&#8217;amplitude donnée, disons [0..30], qui correspond à la taille d&#8217;une chaine de caractères en fait. La valeur d&#8217;un caractère à l&#8217;indice i de cette chaine permettra de connaître si i est le nombre à trouver ou s&#8217;il y a été soumis précédemment comme solution possible par l&#8217;utilisateur.</p>
+<p>Tester vos connaissances sur <a href="http://quizbe.org/" class="bare">http://quizbe.org/</a> (créer un compte et lier-le à votre classe SIO22-LDV-2018-19)</p>
 </li>
-<li>
-<p>Chaque nombre sera représenté par une cellule <code>td</code> d&#8217;un tableau <code>html</code> (comme dans le code fourni en annexe).</p>
-</li>
-<li>
-<p>A chaque tentative de réponse, le système présente son analyse (nombre proposé trop petit, trop grand, exact)</p>
-</li>
-<li>
-<p>Durant les tentatives, l&#8217;application montre les cellules déjà sélectionnées par
-l&#8217;utilisateur (prévoir une classe CSS dédiée).</p>
-</li>
-<li>
-<p>La partie s&#8217;arrête lorsque l&#8217;utilisateur a trouvé le bon nombre.</p>
-</li>
-</ul>
+</ol>
 </div>
 </div>
 </div>
-<div class="admonitionblock warning">
+<div class="exampleblock">
+<div class="content">
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p>Ajouter, sur la plateforme quizbe, une nouvelle question QCM sur le thème du Model avec Symfony</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock tip">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-L&#8217;application ne sauvegardera aucune donnée sur le serveur du jeu (historique utilisateur)  (les « données de sessions » seront transmises au client – et donc portées par celui-ci – un exemple de code est donné en annexe).
+Bonus de 1 point (sur un des contrôles) si proposition originale, juste et pertinente.
 </td>
 </tr>
 </table>
 </div>
-<div class="sect3">
-<h4 id="veuillez-respecter-les-étapes-suivantes"><a class="anchor" href="#veuillez-respecter-les-étapes-suivantes"></a>Veuillez respecter les étapes suivantes</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Tester, dans un dossier à part, le code PHP de l&#8217;annexe</p>
-</li>
-<li>
-<p>Traduire le code PHP de l&#8217;annexe en un projet symfony (avec contrôleur index et vue twig)</p>
-</li>
-<li>
-<p>Faire évoluer l&#8217;application afin qu&#8217;elle réponde aux attentes (exprimées ci-dessus).</p>
-</li>
-<li>
-<p>Présentation des nombres dans une matrice 10 x 10</p>
-</li>
-<li>
-<p>L&#8217;utilisateur pourra relancer autant de parties qu&#8217;il le souhaite. Comme il se doit, l&#8217;application sera capable de gérer plusieurs utilisateurs en même temps.</p>
-</li>
-<li>
-<p>Lorsque que le nombre est trouvé, l&#8217;application affiche un des messages suivants :</p>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>« Vous avez de la chance !»</strong> si le nombre d’essai du joueur est inférieur au nombre optimal (à déterminer après avoir étudié le principe de la recherche dichotomique - lien wikipédia ci-dessous).</p>
-</li>
-<li>
-<p><strong>« Votre stratégie a été la bonne »</strong> si le nombre d’essai du joueur est égale au nombre optimal.</p>
-</li>
-<li>
-<p><strong>« Vous avez débordé de n tentatives »</strong> où <em>n</em> est le nombre de tentatives au-delà du nombre optimal.</p>
-</li>
-</ul>
-</div>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>Pour déterminer le message à présenter, référez-vous aux caractéristiques d&#8217;efficacité de la <strong>recherche dichotomique</strong> : <a href="https://fr.wikipedia.org/wiki/Dichotomie" class="bare">https://fr.wikipedia.org/wiki/Dichotomie</a></p>
-</div>
-<div class="olist arabic">
-<ol class="arabic" start="7">
-<li>
-<p>Optionnel, pour les plus avancés :</p>
-<div class="ulist">
-<ul>
-<li>
-<p>L&#8217;utilisateur peut étendre l&#8217;amplitude de la matrice.</p>
-</li>
-<li>
-<p>Proposer une version qui n’expose pas la valeur à trouver au client (prévoir un  cryptage symétrique du nombre – l’expéditeur est le destinataire).</p>
-</li>
-</ul>
-</div>
-</li>
-</ol>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="ressources-à-prendre-en-compte"><a class="anchor" href="#ressources-à-prendre-en-compte"></a>Ressources à prendre en compte</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Génération pseudo-aléatoire d&#8217;un nombre : <a href="http://php.net/manual/fr/function.mt-rand.php" class="bare">http://php.net/manual/fr/function.mt-rand.php</a></p>
-</li>
-<li>
-<p>Legacy d&#8217;une ébauche de code en annexe pour commencer.</p>
-</li>
-<li>
-<p>Les principe de la recherche dichotomique : <a href="https://fr.wikipedia.org/wiki/Dichotomie" class="bare">https://fr.wikipedia.org/wiki/Dichotomie</a></p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="annexe-tp-1-code-legacy-prototype"><a class="anchor" href="#annexe-tp-1-code-legacy-prototype"></a>Annexe TP-1 - code legacy (prototype)</h3>
-<div class="listingblock">
+<div class="exampleblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="php"><span class="inline-delimiter">&lt;?php</span>
-<span class="comment">// exploitation des données reçues (ou attendues) – on attend un couple i=n</span>
-<span class="keyword">if</span> (<span class="predefined">isset</span>(<span class="predefined">$_GET</span>[<span class="string"><span class="delimiter">'</span><span class="content">i</span><span class="delimiter">'</span></span>])) :
-  <span class="local-variable">$iChoixJoueur</span> = (<span class="predefined-type">int</span>) <span class="predefined">$_GET</span>[<span class="string"><span class="delimiter">'</span><span class="content">i</span><span class="delimiter">'</span></span>];
-  <span class="comment">// force l'interprétation de la valeur en un entier</span>
-  <span class="keyword">else</span> :
-    <span class="local-variable">$iChoixJoueur</span> = -<span class="integer">1</span>;
-  <span class="keyword">endif</span>;
-  <span class="comment">// ou (même traitement que ci-dessus)</span>
-  <span class="comment">// $iChoixJoueur = isset($_GET['i']) ? (int) $_GET['i'] : -1; //opérateur ternaire</span>
-  <span class="comment">// on récupère l'historique des tentatives (une chaîne de caractères en fait)</span>
-  <span class="keyword">if</span> (<span class="predefined">empty</span>(<span class="predefined">$_GET</span>[<span class="string"><span class="delimiter">'</span><span class="content">histo</span><span class="delimiter">'</span></span>])) :
-    <span class="local-variable">$histo</span> = <span class="string"><span class="delimiter">'</span><span class="content">----------w--------------</span><span class="delimiter">'</span></span>;
-    <span class="comment">// TODO : placer le numéro gagnant (w)iner de façon aléatoire</span>
-  <span class="keyword">else</span>:
-    <span class="local-variable">$histo</span> = <span class="predefined">$_GET</span>[<span class="string"><span class="delimiter">'</span><span class="content">histo</span><span class="delimiter">'</span></span>];
-  <span class="keyword">endif</span>;
-  <span class="comment">// mise à jour de l'historique : prise en compte du choix utilisateur</span>
-  <span class="keyword">if</span> (<span class="local-variable">$iChoixJoueur</span> &gt;= <span class="integer">0</span> &amp;&amp; <span class="local-variable">$iChoixJoueur</span> &lt; <span class="predefined">strlen</span>(<span class="local-variable">$histo</span>)) :
-    <span class="local-variable">$histo</span>[<span class="local-variable">$iChoixJoueur</span>] = <span class="string"><span class="delimiter">'</span><span class="content">j</span><span class="delimiter">'</span></span>;
-  <span class="keyword">endif</span>;
- <span class="inline-delimiter">?&gt;</span>
-<span class="doctype">&lt;!DOCTYPE html&gt;</span>
-<span class="tag">&lt;html</span> <span class="attribute-name">lang</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">fr</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-<span class="tag">&lt;head&gt;</span>
-  <span class="tag">&lt;meta</span> <span class="attribute-name">charset</span>=<span class="string"><span class="delimiter">'</span><span class="content">utf-8</span><span class="delimiter">'</span></span> <span class="tag">/&gt;</span>
-  <span class="tag">&lt;title&gt;</span>À la recherche du nombre<span class="tag">&lt;/title&gt;</span>
-  <span class="tag">&lt;style</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text/css</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-<span class="inline">  <span class="class">.normal</span> {
-    <span class="key">border</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="value">black</span>;
-  }
-  <span class="class">.dejajoue</span> {
-    <span class="key">border</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="value">black</span>;
-    <span class="key">background-color</span>: <span class="value">lightgreen</span>;
-  }</span>
-  <span class="tag">&lt;/style&gt;</span>
-<span class="tag">&lt;/head&gt;</span>
-<span class="tag">&lt;body&gt;</span>
-  <span class="tag">&lt;h2&gt;</span>à la recherche du nombre<span class="tag">&lt;/h2&gt;</span>
-  <span class="tag">&lt;table&gt;</span>
-    <span class="tag">&lt;tbody&gt;</span>
-      <span class="tag">&lt;tr&gt;</span>
-        <span class="inline-delimiter">&lt;?php</span>
-          <span class="comment">// mode debug : var_dump($histo);</span>
-          <span class="comment">// TODO : il faudrait mieux appliquer la classe &quot;dejajoue&quot;</span>
-          <span class="comment">//        a toutes les cellules deja jouees</span>
-          <span class="keyword">for</span> (<span class="local-variable">$i</span>=<span class="integer">0</span>; <span class="local-variable">$i</span> &lt; <span class="predefined">strlen</span>(<span class="local-variable">$histo</span>); <span class="local-variable">$i</span>++) :
-            <span class="keyword">if</span> (<span class="local-variable">$i</span> == <span class="local-variable">$iChoixJoueur</span>) : <span class="inline-delimiter">?&gt;</span>
-              <span class="tag">&lt;td</span> <span class="attribute-name">class</span> = <span class="string"><span class="delimiter">&quot;</span><span class="content">dejajoue</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-            <span class="inline-delimiter">&lt;?php</span> <span class="keyword">else</span> : <span class="inline-delimiter">?&gt;</span>
-              <span class="tag">&lt;td</span> <span class="attribute-name">class</span> = <span class="string"><span class="delimiter">&quot;</span><span class="content">normal</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-            <span class="inline-delimiter">&lt;?php</span> <span class="keyword">endif</span>; <span class="inline-delimiter">?&gt;</span>
-              <span class="tag">&lt;a</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">?i=</span></span><span class="inline-delimiter">&lt;?php</span> <span class="predefined">echo</span> <span class="local-variable">$i</span> <span class="inline-delimiter">?&gt;</span><span class="string"><span class="content">&amp;</span><span class="content">histo=</span></span><span class="inline-delimiter">&lt;?php</span> <span class="predefined">echo</span> <span class="local-variable">$histo</span> <span class="inline-delimiter">?&gt;</span><span class="string"><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-                <span class="inline-delimiter">&lt;?php</span> <span class="predefined">echo</span> <span class="local-variable">$i</span>; <span class="inline-delimiter">?&gt;</span>
-              <span class="tag">&lt;/a&gt;</span>
-            <span class="tag">&lt;/td&gt;</span>
-          <span class="inline-delimiter">&lt;?php</span> <span class="keyword">endfor</span>; <span class="inline-delimiter">?&gt;</span>
-        <span class="tag">&lt;/tr&gt;</span>
-      <span class="tag">&lt;/tbody&gt;</span>
-    <span class="tag">&lt;/table&gt;</span>
-  <span class="tag">&lt;/body&gt;</span>
-  <span class="tag">&lt;/html&gt;</span></code></pre>
+<div class="olist arabic">
+<ol class="arabic" start="3">
+<li>
+<p>À partir de l&#8217;exemple étudié dans le tutoriel de Symfony sur la notion de <code>Model</code> (classe <code>Product</code>), réalisez les opérations permettant à un utilisateur lambda de :</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Lister les produits</p>
+</li>
+<li>
+<p>Création d&#8217;un produit</p>
+</li>
+<li>
+<p>Modifier un produit</p>
+</li>
+<li>
+<p>Supprimer un produit</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Dans les vues twig, vos liens seront basés sur le <strong>nom</strong> des routes et non sur les routes elles-mêmes.
+Ces noms sont consultatbles en ligne de commande : <code>php bin/console debug:router</code>. Voir aussi <a href="https://symfony.com/doc/current/templating.html#linking-to-pages" class="bare">https://symfony.com/doc/current/templating.html#linking-to-pages</a>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -294,7 +249,7 @@ L&#8217;application ne sauvegardera aucune donnée sur le serveur du jeu (histor
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2018-09-12 18:38:49 CEST
+Last updated 2018-09-19 17:27:38 CEST
 </div>
 </div>
 </body>

@@ -3,54 +3,6 @@ ifndef::backend-pdf[]
 :imagesdir: images
 endif::[]
 
-== Éléments d'architecture
-
-Nous avons vu comment associer des _routes_ à des _contrôleurs_ (méthodes d'action d'une classe Controller).
-
-Nous allons voir comment le contrôleur peut s'appuyer sur des *objets métier* pour *implémenter une logique de cas d'utilisation*.
-
-TIP: Il est courant de faire porter la responsabilité d'un cas d'utilisation à une classe contrôleur.
-
-Il existe 2 sortes d'objets métier : `Entity` et `EntityRepository`.
-
-* `Entity` : Représente une classe métier pour le domaine étudié (`Client`, `Contrat`, ...).
-* `EntityRepository` : Responsable de la communication avec les système de persistance, notamment en lien avec l' `ORM`.
-
-Le contrôleur dépend de `Entity` et `EntityRepository`, `Entity` ne dépend pas d'un ORM, `EntityRepository` si.
-
-.Architecture en couches
-image:schema-interactions-couches.png[Interactions vue en couches, 600]
-
-== Premiers pas avec le model
-
-=== Guide
-
-Faire le lien entre un objet (instance d'une classe Entity) et une ligne d'une table d'une base de données
-est une opération complexe (synchronisation, mise en cache, cohérence de type, ...).
-
-Les *ORM* (_object-relational mapping_) sont des logiciels qui effectuent le lien entre objet métier et ligne
-de table d'une base de données. Par défaut, symfony utilise la solution link:http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/[doctrine].
-
-=== Tutoriel doctrine de symfony
-
-Doctrine peut être mise en oeuvre sans Symfony, mais nous vous invitons néanmoins à
-étudier ce tutoriel d'introduction avec Symfony, car ce dernier en simplifie l'accès.
-
-Ce tutoriel vous montre comment lier une classe métier à un table d'une base de données, et donc une instance (un objet) à une ligne,
-et les opérations CRUD associées.
-
-Tutoriel à suivre : link:https://symfony.com/doc/current/doctrine.html[Introduction à Doctrine avec Symfony].
-
-Au menu :
-
-* Entity et Table liée
-* Liaison Attribut - Colonne (_field_ - _column_)
-* Migration modèle objet <--> schéma de la base de données
-* Opérations CRUD
-
-=> temps moyen 2h, avec configuration et code.
-
-<<<
 == Liaison entre Entités - Contexte support
 
 Nous nous plaçons dans le cas d'une application exploitant des données stockées
@@ -229,7 +181,7 @@ TIP: Attention : Il ne faut pas abuser des liens bidirectionnels ! Car comme v
      	Il est important de limiter les relations autant que possible. Cela signifie:
      Imposer un sens de parcours (éviter associations bidirectionnelles si possible)
 
-TIP: Cette limitation n'est vraie pour tout les ORMs (_hibernate_ par exemple)
+TIP: Cette limitation n'est pas applicable à tous les ORMs (_hibernate_ par exemple)
 
 Éliminer les associations non essentielles offre plusieurs avantages:
 
@@ -668,3 +620,19 @@ Parameters:
 * string $fieldName The name of the field on the declaring class.
 ----
 
+
+== Travaux pratiques
+
+Durée moyenne 4h
+
+On considère qu'un produit (classe `Product`) appratient forcément
+à une catégorie (classe `Category`).
+
+====
+[start=1]
+. Ajouter le concept de catégorie à votre application support de TP.
+====
+====
+[start=2]
+. Permettre à l'utilisateur de sélectionner les produits d'une catégorie donnée.
+====

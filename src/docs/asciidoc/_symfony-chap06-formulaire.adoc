@@ -5,7 +5,7 @@ endif::[]
 
 == Introduction
 
-La gestion de formulaires est un des points sensibles en développement web, comme l'est tout Entrée/Sortie d'une application.
+La gestion de formulaires est un des points sensibles en développement web, comme l'est toute Entrée/Sortie d'une application.
 
 De plus, l'utilisateur s'attend à la fois à une certaine ergonomie
 (présentation de valeurs en base de données ou précédemment saisies
@@ -15,10 +15,10 @@ Symfony intègre un composant nommé `form` qui prend en charge la gestion de fo
 
 [source, bash, number]
 ----
- composer require form
+ composer require symfony/form
 ----
 
-Ce composant a sa propre documentation : https://symfony.com/doc/current/components/form.html
+Ce composant a sa propre documentation : https://symfony.com/doc/current/forms.html
 
 
 == Logique de traitement du formulaire
