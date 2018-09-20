@@ -56,18 +56,6 @@ Durée moyenne : 8H
 
 ====
 [start=1]
-
-. Tester vos connaissances sur http://quizbe.org/ (créer un compte et lier-le à votre classe SIO22-LDV-2018-19)
-====
-====
-[start=2]
-. Ajouter, sur la plateforme quizbe, une nouvelle question QCM sur le thème du Model avec Symfony
-
-TIP: Bonus de 1 point (sur un des contrôles) si proposition originale, juste et pertinente.
-====
-
-====
-[start=3]
 . À partir de l'exemple étudié dans le tutoriel de Symfony sur la notion de `Model` (classe `Product`), réalisez les opérations permettant à un utilisateur lambda de :
 .. Lister les produits
 .. Création d'un produit

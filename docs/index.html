@@ -26,43 +26,19 @@
 <div id="toctitle">Table des matieres</div>
 <ul class="sectlevel1">
 <li><a href="#présentation">Présentation</a></li>
-<li><a href="#modèle-d-architecture-applicative">Modèle d&#8217;architecture applicative</a>
-<ul class="sectlevel2">
-<li><a href="#prérequis">Prérequis</a></li>
-<li><a href="#création-d-une-application-symfony-et-vérification-des-pré-requis">Création d&#8217;une application symfony et vérification des pré-requis</a></li>
-<li><a href="#démarrage-du-serveur-et-de-l-application">Démarrage du serveur et de l&#8217;application</a></li>
-<li><a href="#sécurité">Sécurité</a></li>
-<li><a href="#résumé">Résumé</a></li>
-</ul>
-</li>
-<li><a href="#première-page-notion-de-vue-contrôleur">Première page : notion de Vue/Contrôleur</a>
-<ul class="sectlevel2">
-<li><a href="#rendu-par-une-logique-de-vue-archtecture-mvc">Rendu par une logique de vue (archtecture MVC)</a></li>
-<li><a href="#template-de-base-de-l-application">Template de base de l&#8217;application</a></li>
-<li><a href="#en-résumé">En résumé</a></li>
-</ul>
-</li>
-<li><a href="#gestion-des-données-d-entrée">Gestion des données d&#8217;entrée</a>
-<ul class="sectlevel2">
-<li><a href="#auto-injection-de-l-objet-request">Auto-injection de l&#8217;objet Request</a></li>
-<li><a href="#données-implicites">Données implicites</a></li>
-<li><a href="#données-explicites">Données explicites</a></li>
-<li><a href="#tp-le-contrôleur-et-la-vue-initiation">TP - Le contrôleur et la vue (initiation)</a></li>
-</ul>
-</li>
-<li><a href="#travaux-dirigés-avancés">Travaux Dirigés Avancés</a>
-<ul class="sectlevel2">
-<li><a href="#prerequis">Prerequis</a></li>
-<li><a href="#création-d-une-application-php-sans-état-supporté-côté-serveur">Création d&#8217;une application PHP - sans état supporté côté serveur -</a></li>
-<li><a href="#ressources-à-prendre-en-compte">Ressources à prendre en compte</a></li>
-<li><a href="#annexe-tp-1-code-legacy-prototype">Annexe TP-1 - code legacy (prototype)</a></li>
-</ul>
-</li>
 <li><a href="#introduction-au-model">Introduction au Model</a>
 <ul class="sectlevel2">
 <li><a href="#Éléments-d-architecture">Éléments d&#8217;architecture</a></li>
 <li><a href="#premiers-pas-avec-le-model">Premiers pas avec le model</a></li>
 <li><a href="#travaux-pratiques">Travaux pratiques</a></li>
+</ul>
+</li>
+<li><a href="#cas-du-formulaire">Cas du formulaire</a>
+<ul class="sectlevel2">
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#logique-de-traitement-du-formulaire">Logique de traitement du formulaire</a></li>
+<li><a href="#logique-métier-du-formulaire">Logique métier du formulaire</a></li>
+<li><a href="#rendu-du-formulaire">Rendu du formulaire</a></li>
 </ul>
 </li>
 </ul>
@@ -97,1184 +73,6 @@ développeurs ayant eu un premier contact avec le développement web.</p>
 <div class="paragraph">
 <p>Pour réaliser les travaux pratiques, vous aurez besoin d&#8217;aller plus en profondeur sur la connaissance des composants.
 La documentation Symfony est accessible ici : <a href="https://symfony.com/doc/current/index.html" class="bare">https://symfony.com/doc/current/index.html</a></p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="modèle-d-architecture-applicative"><a class="anchor" href="#modèle-d-architecture-applicative"></a>Modèle d&#8217;architecture applicative</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Le modèle traditionnel d&#8217;architecture des applications web est de type 3 tiers (clients, serveur(s), SBBD(s))</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="images/diag-bdefc054a3e4aafd0670be26eb258583.png" alt="Interaction type entre tiers d&#8217;une application web" width="393" height="283">
-</div>
-<div class="title">Interaction type entre tiers d&#8217;une application web</div>
-</div>
-<div class="paragraph">
-<p>Les applications symfony se situent sur le tiers du milieu "server et applications" (derrière un serveur HTTP).</p>
-</div>
-<div class="paragraph">
-<p>En environnement de développement, les développeurs PHP disposent du <code>PHP&#8217;s internal web server</code>, un serveur http intégré au langage lui-même,
-ce qui assure une certaine cohérence quant à la version de PHP utilisée pour les tests en phase de développement.</p>
-</div>
-<div class="paragraph">
-<p>En environnement de production, l&#8217;application sera placée derrière un server Web de production, disposant d&#8217;une version de PHP conforme aux exigences du framework.
-Les serveurs HTTP de production les plus courants sont <code>Apache</code> et <code>Nginx</code>.
-Dans ce cas, reférez-vous aux consignes de configurations disponibles sur le site de symfony : <a href="https://symfony.com/doc/current/setup/web_server_configuration.html">web server configurations</a>.</p>
-</div>
-<div class="sect2">
-<h3 id="prérequis"><a class="anchor" href="#prérequis"></a>Prérequis</h3>
-<div class="sect3">
-<h4 id="pour-le-développeur"><a class="anchor" href="#pour-le-développeur"></a>Pour le développeur</h4>
-<div class="ulist">
-<ul>
-<li>
-<p>Avoir une première expérience en programmation orientée objet (POO)</p>
-</li>
-<li>
-<p>Connaître les principes de fonctionnement d&#8217;une interaction HTTP (protocole sans état, transfert de valeurs typées)
-et les problématiques et solutions autour de la gestion du suivi de sessions HTTP</p>
-</li>
-<li>
-<p>Maîtriser les concepts clés de l&#8217;interaction applicative avec un SGBD( R ) - (SQL)</p>
-</li>
-<li>
-<p>Avoir des bases de HTML/CSS et JS.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="pour-le-système"><a class="anchor" href="#pour-le-système"></a>Pour le système</h4>
-<div class="paragraph">
-<p>Les prérequis système dépendent de la version de symfony que vous comptez utliser.
-On vérifiera en particulier :</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>La version minimale attendue de PHP (dépend de la version de Symfony) actuellement &gt;= 7.1.3 )</p>
-</li>
-</ul>
-</div>
-<div class="literalblock">
-<div class="title">Connaître la version de php</div>
-<div class="content">
-<pre>$ php -v
-PHP 7.2.7</pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>La présence de <code>composer</code> (suive ce lien <a href="https://getcomposer.org/"><code>Composer</code></a>) qui est un outil de gestion des dépendances pour des projets PHP.</p>
-</li>
-</ul>
-</div>
-<div class="literalblock">
-<div class="title">Vérifier la version de composer</div>
-<div class="content">
-<pre>$ composer -V
-Composer version 1.7.2 2018-08-16 16:57:12</pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="création-d-une-application-symfony-et-vérification-des-pré-requis"><a class="anchor" href="#création-d-une-application-symfony-et-vérification-des-pré-requis"></a>Création d&#8217;une application symfony et vérification des pré-requis</h3>
-<div class="paragraph">
-<p>Ce sont des opérations qui s&#8217;effectuent en <strong>ligne de commande</strong>.</p>
-</div>
-<div class="paragraph">
-<p>Pour commencer, placez-vous dans un dossier racine, qui héberge(ra) vos différents projets web, puis,
-à partir de ce dossier, éxécuter la commande suivante :</p>
-</div>
-<div class="literalblock">
-<div class="title">Création d&#8217;un squelette d&#8217;application</div>
-<div class="content">
-<pre>composer create-project symfony/website-skeleton my-project</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Explications :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>composer <i class="conum" data-value="1"></i><b>(1)</b>
-    create-project symfony/website-skeleton <i class="conum" data-value="2"></i><b>(2)</b>
-         my-project <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>appel de la commande <code>composer</code> ou <code>composer.phar</code> selon le cas</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>premier et deuxième arguments pour créer un projet selon un modèle</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>le troisième est le nom du projet, et donc du <strong>sous-dossier</strong> qui sera <strong>créé</strong>
-à partir de la racine courante (il est donc important de se placer dans un dossier de travail avant de lancer une telle commande)</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="démarrage-du-serveur-et-de-l-application"><a class="anchor" href="#démarrage-du-serveur-et-de-l-application"></a>Démarrage du serveur et de l&#8217;application</h3>
-<div class="paragraph">
-<p>Depuis la version 5.4 de PHP, un serveur web est intégré à l&#8217;API.
-Pour simplifier son usage, un composant symfony (un bundle) est disponible :</p>
-</div>
-<div class="literalblock">
-<div class="title">Activation du mode dev avec le serveur HTTP intégré</div>
-<div class="content">
-<pre> $ cd your-project
- $ composer require symfony/web-server-bundle --dev</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Symfony fonctionne par composants, et il y en a un qui vérifie les prérequis, <code>Symfony Requirements Checker tool</code></p>
-</div>
-<div class="literalblock">
-<div class="title">Installation du composant de vérification de la configuration système</div>
-<div class="content">
-<pre>$ cd your-project/
-$ composer require requirements-checker</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="title">Demarrage du serveur</div>
-<div class="content">
-<pre>$ cd your-project
-$ php bin/console server:run</pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Par défaut, le serveur interne écoute sur le port 8000.
-S&#8217;il est déjà pris sur machine, vous pouvez en indiqué un autre, voir ici  <a href="https://symfony.com/doc/current/setup/built_in_web_server.html" class="bare">https://symfony.com/doc/current/setup/built_in_web_server.html</a>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Une fois ce composant installé, votre application pourra être sollicitée
-par la route <a href="http://localhost:8000/check.php" class="bare">http://localhost:8000/check.php</a>, dont voici le résultat attendu :</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/symfony-check.png" alt="check-configuration"></span></p>
-</div>
-<div class="paragraph">
-<p>Après avoir réglé la situation, pour des questions de sécurité, ne pas oublier de supprimer cette fonctionnalité :</p>
-</div>
-<div class="literalblock">
-<div class="title">Désinstallation du composant de vérification de la configuration système</div>
-<div class="content">
-<pre> cd your-project/
- composer remove requirements-checker</pre>
-</div>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-Vérifier les prerequis système est une des premières actions à réaliser lors de la phase de déploiement sur un serveur de production !
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="sécurité"><a class="anchor" href="#sécurité"></a>Sécurité</h3>
-<div class="paragraph">
-<p>Symfony fournit un utilitaire appelé <strong>Security Checker</strong> qui vérifie si les dépendances de votre projet contiennent des failles de sécurité connues.</p>
-</div>
-<div class="paragraph">
-<p>Une fois installé, cet utilitaire s&#8217;exécutera automatiquement chaque fois que vous installez ou mettez à jour une dépendance de l&#8217;application.
-Si une dépendance contient une vulnérabilité, en mode dev, un message clair vous sera présenté.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Appliquer le composant <code>security checker</code> à votre projet. La procédure est décrite ici : <a href="https://symfony.com/doc/current/setup.html" class="bare">https://symfony.com/doc/current/setup.html</a></p>
-</li>
-</ul>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Le développeur travaille et teste en mode <code>dev</code> (développement). Avant de passer en mode <code>prod</code> (production, c-a-d déploiement), des tests sont réalisés en mode <code>pré-prod</code> (pré-production), afin de vérifier le bon fonctionnement dans le cadre de l&#8217;architecture cible.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="résumé"><a class="anchor" href="#résumé"></a>Résumé</h3>
-<div class="paragraph">
-<p>À ce stade, vous avez, sur votre machine de dev, installé, configuré et testé un environnement de développement web avec Symfony.
-Vous avez installé Symfony en mode "boîte noire".</p>
-</div>
-<div class="paragraph">
-<p>L&#8217;étape suivante vous amène progressivement à comprendre l&#8217;intérieur de cette boîte, à savoir comment l&#8217;utiliser !</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="première-page-notion-de-vue-contrôleur"><a class="anchor" href="#première-page-notion-de-vue-contrôleur"></a>Première page : notion de Vue/Contrôleur</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>(d&#8217;après : <a href="https://symfony.com/doc/current/page_creation.html" class="bare">https://symfony.com/doc/current/page_creation.html</a>)</p>
-</div>
-<div class="paragraph">
-<p>Du point du développement logiciel d&#8217;une application web, "<em>créer une page</em>" c&#8217;est exposer une <strong>ressource web</strong> à un certain public. Pour cela, plusieurs activités sont concernées:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>permettre à l&#8217;application web de répondre à une <strong>requête HTTP</strong> en définissant  une <strong>route</strong> (portion terminale d&#8217;un chemin d&#8217;URL) pour la ressource en question</p>
-</li>
-<li>
-<p>définir via quelle <strong>méthode d&#8217;accès HTTP</strong> cette ressource sera accessible (GET, POST, PUT, HEAD, &#8230;&#8203;)</p>
-</li>
-<li>
-<p>concevoir le <strong>contrôleur</strong> associé à la ressource : une méthode d&#8217;une classe <code>Controller</code></p>
-</li>
-<li>
-<p>définir la structure (type mime - representation) de la resource dynamique (par exemple via le contrôleur ou un template de vue <strong>twig</strong>)</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Un requête HTTP de type <code>GET</code> correspond à une demande de <em>resssource distante</em>.
-La ressource demandée peut correspondre à une donnée statique (un fichier placé sur le serveur) ou dynamique (construite pour l&#8217;occasion).</p>
-</div>
-<div class="paragraph">
-<p>Nous nous plaçons dans le cas où l&#8217;application répondra par du contenu dynamique <code>HTML</code>.</p>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-Une application web n&#8217;expose jamais directement ses templates de vue de ses ressources dynamiques (pas de lien direct vers un script de vue)
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Dans le cadre de symfony, un contôleur central (<em>front controller</em>) réceptionne les requêtes HTTP
-et les traduit en appel de <strong>méthodes</strong> d&#8217;instance d&#8217;une classe <strong>contrôleur</strong> (<em>controller</em>)</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/request-flow.png" alt="symfony-flow-schema"></span></p>
-</div>
-<div class="paragraph">
-<p>Comme le montre ce schéma, le développeur doit mettre à disposition du framework des méthodes dites <em>d&#8217;actions</em>.</p>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-Attention, le schéma ne montre que les méthodes (<code>blogAction</code>, <code>contactAction</code> et <code>homepageAction</code>),
-         mais ne donne pas le nom de la (ou des) classes où elles sont définies (source symfony.com).
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>La liaison <em>méthode &#8592;&#8594; URL</em> peut se réaliser soit par un <em>fichier de configuration</em>, soit via des <strong><em>annotations</em></strong> dans le code.
-Nous choisirons cette dernière option, fort pratique. Avant de concevoir une telle classe, vous devrez ajouter des composants à votre
-application. Le plus souple pour cela est de demander à <code>composer</code> de le faire pour vous :</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>$ cd your-project/
-$ composer require annotations</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Il serait également préférable d&#8217;installer des plugins à votre IDE : avec PhpStorm,
-aller <code>File&#8594;Settings</code> puis chercher <code>plugin symfony</code> et les installer.</p>
-</div>
-<div class="paragraph">
-<p>Voici un exemple de classe contrôleur, extrait de la documentation : <a href="https://symfony.com/doc/current/page_creation.html">Symfony - page_creation.html</a></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="php"><span class="inline-delimiter">&lt;?php</span>
-
-<span class="comment">// src/Controller/LuckyController.php  </span><i class="conum" data-value="1"></i><b>(1)</b>
-
-<span class="keyword">namespace</span> <span class="constant">App</span>\<span class="constant">Controller</span>;  <i class="conum" data-value="2"></i><b>(2)</b>
-
-<span class="keyword">use</span> <span class="constant">Symfony</span>\<span class="constant">Component</span>\<span class="constant">HttpFoundation</span>\<span class="constant">Response</span>;  <i class="conum" data-value="2"></i><b>(2)</b>
-<span class="keyword">use</span> <span class="constant">Symfony</span>\<span class="constant">Component</span>\<span class="constant">Routing</span>\<span class="constant">Annotation</span>\<span class="constant">Route</span>;
-
-<span class="keyword">class</span> <span class="class">LuckyController</span> <i class="conum" data-value="3"></i><b>(3)</b>
-{
-  <span class="comment">/** <i class="conum" data-value="4"></i><b>(4)</b>
-  * @Route(&quot;/lucky/number&quot;) <i class="conum" data-value="5"></i><b>(5)</b>
-  */</span>
-  <span class="keyword">public</span> <span class="keyword">function</span> <span class="function">number</span>() <i class="conum" data-value="6"></i><b>(6)</b>
-  {
-    <span class="local-variable">$number</span> = mt_rand(<span class="integer">0</span>, <span class="integer">100</span>);
-
-    <span class="keyword">return</span> <span class="keyword">new</span> <span class="constant">Response</span>( <i class="conum" data-value="7"></i><b>(7)</b>
-      <span class="string"><span class="delimiter">'</span><span class="content">&lt;html&gt;&lt;body&gt;Lucky number: </span><span class="delimiter">'</span></span>.<span class="local-variable">$number</span>.<span class="string"><span class="delimiter">'</span><span class="content">&lt;/body&gt;&lt;/html&gt;</span><span class="delimiter">'</span></span>
-    );
-  }
-} <i class="conum" data-value="8"></i><b>(8)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>un <em>comment</em> à destination du lecteur, afin d&#8217;identifier le chemin de sauvegarde</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>les librairies dont dépend le code ci-dessous (Classe et annotation)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>une classe normale PHP Objet</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Attention : démarre avec 2 étoiles (ref. à PHPDOC)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>définition de la logique d&#8217;appel (extrait terminal URL de l&#8217;application)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>une méthode public; Elle sera automatiquement appelée via le <em>front controller</em>.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="7"></i><b>7</b></td>
-<td>retourne un instance de <code>Response</code> (avec du contenu <em>HTML</em>)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="8"></i><b>8</b></td>
-<td>le marqueur de fin de traitement PHP (<code>?&gt;</code>) est volontairement absent afin de conserver le sens <em>librairie</em> d&#8217;une classe Controller.</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Voici un extrait des spécifications de la fonction <a href="http://php.net/manual/fr/function.mt-rand.php" class="bare">http://php.net/manual/fr/function.mt-rand.php</a></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="php"><span class="predefined-type">int</span> mt_rand ( <span class="predefined-type">int</span> <span class="local-variable">$min</span> , <span class="predefined-type">int</span> <span class="local-variable">$max</span> )
-
-<span class="constant">Valeurs</span> de retour
-
-<span class="constant">Un</span> entier aléatoire compris entre <span class="predefined">min</span> (ou <span class="integer">0</span>) et <span class="predefined">max</span> inclusif, ou <span class="predefined-constant">FALSE</span> si le paramètre <span class="predefined">max</span> est inférieur à <span class="predefined">min</span>.</code></pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="title">Activation de la page (demande de la ressource "number")</div>
-<div class="content">
-<pre>http://localhost:8000/lucky/number</pre>
-</div>
-</div>
-<div class="sect2">
-<h3 id="rendu-par-une-logique-de-vue-archtecture-mvc"><a class="anchor" href="#rendu-par-une-logique-de-vue-archtecture-mvc"></a>Rendu par une logique de vue (archtecture MVC)</h3>
-<div class="paragraph">
-<p>Concevoir la logique de présentation (HTML and Co) dans un contrôleur n&#8217;est pas une bonne pratique.</p>
-</div>
-<div class="paragraph">
-<p>Fort heureusement Symfony vient avec <a href="https://twig.symfony.com/"><strong>Twig</strong></a> : un langage
-de vue puissant et plaisant à utiliser.</p>
-</div>
-<div class="paragraph">
-<p>Twig est proposé en tant que composant, qu&#8217;il faut installer :</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>$ cd your-project/
-$ composer require twig</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Il faut ensuite s&#8217;assurer <code>LuckyController</code> hérite de la classe de base des contrôleurs <code>AbstractController</code>:</p>
-</div>
-<div class="listingblock">
-<div class="title">Listing 1. MVC : Les classes contrôleur héritent de <em>AbstractController</em></div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="php"><span class="comment">// src/Controller/LuckyController.php</span>
-
-<span class="comment">// ...</span>
-+ <span class="keyword">use</span> <span class="constant">Symfony</span>\<span class="constant">Bundle</span>\<span class="constant">FrameworkBundle</span>\<span class="constant">Controller</span>\<span class="constant">AbstractController</span>; <i class="conum" data-value="1"></i><b>(1)</b>
-
-- <span class="keyword">class</span> <span class="class">LuckyController</span>
-+ <span class="keyword">class</span> <span class="class">LuckyController</span> <span class="keyword">extends</span> <span class="constant">AbstractController</span> <i class="conum" data-value="2"></i><b>(2)</b>
-{
-    <span class="comment">// ...</span>
-}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>déclaration de la dépendance (un import)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>la classe LuckyController hérite de AbstractController</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Et faire en sorte que la méthode contrôleur <strong>délègue</strong> la vue à une page twig :</p>
-</div>
-<div class="listingblock">
-<div class="title">Listing 2. MVC : Une classe contrôleur hérite de Controller</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="php"><span class="comment">// src/Controller/LuckyController.php</span>
-
-<span class="comment">// ...</span>
-<span class="keyword">class</span> <span class="class">LuckyController</span> <span class="keyword">extends</span> <span class="constant">AbstractController</span>
-{
-    <span class="comment">/**
-     * @Route(&quot;/lucky/number&quot;)
-     */</span>
-    <span class="keyword">public</span> <span class="keyword">function</span> <span class="function">numberAction</span>()
-    {
-        <span class="local-variable">$number</span> = mt_rand(<span class="integer">0</span>, <span class="integer">100</span>);
-
-        <span class="keyword">return</span> <span class="local-variable">$this</span>-&gt;render(<span class="string"><span class="delimiter">'</span><span class="content">lucky/number.html.twig</span><span class="delimiter">'</span></span>, <span class="predefined">array</span>( <i class="conum" data-value="1"></i><b>(1)</b>
-            <span class="string"><span class="delimiter">'</span><span class="content">number</span><span class="delimiter">'</span></span> =&gt; <span class="local-variable">$number</span>,
-        ));
-    }
-}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>appel à la méthode héritée (<em>render</em>) en lui passant le nom d&#8217;une vue, suivi d&#8217;un <strong>tableau associatif</strong>, appelé aussi <strong>dictionnaire</strong>, composé de <strong>couples (nom_variable&#8658;valeur)</strong>.
-Dans notre cas, le tableau n&#8217;a qu&#8217;un seul élément ('number'&#8658; $number),
-qui sera passé à la vue.
-La vue aura accès à ces valeurs <strong>directement</strong> par le <strong>nom des clés définis dans ce dictionnaire</strong>.</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Les fichiers de vue seront cherchés par symfony, par défaut, dans le dossier <strong><em>templates</em></strong> à partir de la racine du projet (ce dossier est automatiquement crée lors de l&#8217;installation de twig).</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="template-de-base-de-l-application"><a class="anchor" href="#template-de-base-de-l-application"></a>Template de base de l&#8217;application</h3>
-<div class="paragraph">
-<p>C&#8217;est un fichier qui détermnine la structure HTML/CSS générale de votre application.
-La plupart du temps un tel template se base sur un modèle proposé par des frameworks CSS (<em>bootstrap</em>, <em>semantic-ui</em>, &#8230;&#8203;). Il est parfois acheté auprès de sociétés spécialisées.</p>
-</div>
-<div class="paragraph">
-<p>Exemple de template simple, <em>from scratch</em>, créé par le composant <em>twig</em> lors de son intégration dans ce projet (symfony &gt;= 4)</p>
-</div>
-<div class="listingblock">
-<div class="title">Listing 3. localisation : projet/templates/base.html.twig</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="html"><span class="doctype">&lt;!DOCTYPE html&gt;</span>
-<span class="tag">&lt;html&gt;</span>
-    <span class="tag">&lt;head&gt;</span>
-        <span class="tag">&lt;meta</span> <span class="attribute-name">charset</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">UTF-8</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-        <span class="tag">&lt;title&gt;</span>{% block title %}Welcome!{% endblock %}<span class="tag">&lt;/title&gt;</span>
-        {% block stylesheets %}{% endblock %}
-    <span class="tag">&lt;/head&gt;</span>
-    <span class="tag">&lt;body&gt;</span>
-        {% block body %}{% endblock %} <i class="conum" data-value="1"></i><b>(1)</b>
-        {% block javascripts %}{% endblock %}
-    <span class="tag">&lt;/body&gt;</span>
-<span class="tag">&lt;/html&gt;</span></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Définition d&#8217;un block nommé <code>body</code> (ne pas confondre avec <code>&lt;body&gt;</code>).
-Les vues héritant pouvent alors redéfinir ces blocks.</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Ce template de base définit 4 blocks : <code>title</code>, <code>stylesheets</code>, <code>body</code> et <code>javascripts</code>.</p>
-</div>
-<div class="paragraph">
-<p>Pour répondre au besoin de notre méthode <em>numberAction</em> de <em>LuckyController</em>, nous
-devons créer une nouvelle vue dans le dossier <em>templates/lucky</em>, nommée <code>number.html.twig</code> (<code>lucky</code> est un dossier qu&#8217;il faut créer) :</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="php">{<span class="comment"># templates/lucky/number.html.twig #} </span><i class="conum" data-value="1"></i><b>(1)</b>
-{% <span class="keyword">extends</span> <span class="string"><span class="delimiter">'</span><span class="content">base.html.twig</span><span class="delimiter">'</span></span> %} <i class="conum" data-value="2"></i><b>(2)</b>
-
-{% block title %}<span class="constant">Devine</span>{% endblock %} <i class="conum" data-value="3"></i><b>(3)</b>
-
-{% block body %} <i class="conum" data-value="4"></i><b>(4)</b>
-&lt;h1&gt;<span class="constant">Your</span> lucky number is {{ number }}&lt;/h1&gt;
-{% endblock %}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>un commentaire twig qui vous informe, vous lecteur, de la localisation de ce fichier</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>cette vue hérite d&#8217;un template qui définit les blocs <code>title</code> et <code>body</code></td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>redéfinition du bloc <code>title</code></td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>redéfinition du bloc <code>body</code></td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Vous trouverez la syntaxe twig ici : <a href="https://twig.symfony.com/" class="bare">https://twig.symfony.com/</a></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="en-résumé"><a class="anchor" href="#en-résumé"></a>En résumé</h3>
-<div class="paragraph">
-<p>Nous avons vu les principes d&#8217;interaction d&#8217;une application web :</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Les requêtes HTTP entrantes sont routées par symfony sur des classes contrôleurs :
-Comprendre : une requête client déclenche un appel de méthode d&#8217;un objet <em>Controller</em>.
-C&#8217;est à ce niveau que des décisions algorithmiques métier sont exécutées.</p>
-</li>
-<li>
-<p>La représentation de la réponse est déléguée à une logique de vue (<strong>twig</strong>)</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="gestion-des-données-d-entrée"><a class="anchor" href="#gestion-des-données-d-entrée"></a>Gestion des données d&#8217;entrée</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Conformément à l&#8217;architecture applicative, c&#8217;est une méthode dite <em>contrôleur</em> qui prend en charge l&#8217;exploitation des données transmises par le client (celui qui est à l&#8217;origine de la requête HTTP)</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-Teminologie : les méthodes associées à des <em>Routes</em> dans une classe <em>Controller</em> sont appelées <strong><em>méthodes d&#8217;action</em></strong>. Par extension, on nomme parfois de telles méthodes des <strong><em>contrôleurs</em></strong>.
-</td>
-</tr>
-</table>
-</div>
-<div class="sect2">
-<h3 id="auto-injection-de-l-objet-request"><a class="anchor" href="#auto-injection-de-l-objet-request"></a>Auto-injection de l&#8217;objet Request</h3>
-<div class="paragraph">
-<p>Pour accéder aux données transmises avec la requête HTTP,
-le contrôleur passera par un objet de type <em>Request</em> (de <em>HttpFoundation</em>).</p>
-</div>
-<div class="paragraph">
-<p>C&#8217;est par l&#8217;intermédiaire de cet objet, que nous pourrons accéder aux données
-de la session utilisateur.</p>
-</div>
-<div class="paragraph">
-<p>Utilisation d&#8217;un objet de la classe <code>Symfony\Component\HttpFoundation\Request</code>.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="php"><span class="keyword">use</span> <span class="constant">Symfony</span>\<span class="constant">Component</span>\<span class="constant">HttpFoundation</span>\<span class="constant">Request</span>; <i class="conum" data-value="1"></i><b>(1)</b>
-
-[...]
-
-<span class="keyword">public</span> <span class="keyword">function</span> <span class="function">index</span>(<span class="constant">Request</span> <span class="local-variable">$request</span>) <i class="conum" data-value="2"></i><b>(2)</b>
-{
-  <span class="comment">// exploiter $request</span>
-}
-
-[...]</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>un composant du micro-framework</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>en déclarant un paramètre de type Request, on demande à symfony de nous <strong>auto-injecter</strong> un argument de ce type, parfaitement bien initialisé.</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-Attention, ne pas faire usage de variables super-globales comme GET[], SESSION[], &#8230;&#8203;
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="données-implicites"><a class="anchor" href="#données-implicites"></a>Données implicites</h3>
-<div class="paragraph">
-<p>Ce sont les données transmises par le client, et le serveur,
- dans la partie entête HTTP. Ces données sont accessibles <strong>via</strong> l&#8217;objet <code>Request</code>
- qui dispose de méthodes bient pratiques pour interroger ces données.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>getLanguages()
-Returns the list of accepted languages ordered by descending quality.</p>
-</li>
-<li>
-<p>getCharsets()
-Returns the list of accepted charsets ordered by descending quality.</p>
-</li>
-<li>
-<p>bool isXmlHttpRequest()
-Returns true if the request is a XMLHttpRequest.</p>
-</li>
-<li>
-<p>&#8230;&#8203;</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>voir <a href="http://api.symfony.com/4.0/Symfony/Component/HttpFoundation/Request.html">API Request</a></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="données-explicites"><a class="anchor" href="#données-explicites"></a>Données explicites</h3>
-<div class="paragraph">
-<p>ce sont celles en provenance soit d&#8217;un <strong>formulaire (HTML)</strong> soit comme composantes <a href="https://en.wikipedia.org/wiki/Query_string">QueryString</a> de l'<strong>URL</strong>.</p>
-</div>
-<div class="sect3">
-<h4 id="via-un-formulaire"><a class="anchor" href="#via-un-formulaire"></a>via un formulaire</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="php">    <span class="comment">// obtenir une valeur transmises par POST d'après sa clé</span>
-    <span class="local-variable">$request</span>-&gt;request-&gt;get(<span class="string"><span class="delimiter">'</span><span class="content">idproduit</span><span class="delimiter">'</span></span>); <i class="conum" data-value="1"></i><b>(1)</b>
-
-    <span class="comment">// obtenir une instance de UploadedFile identifiée par foo</span>
-    <span class="local-variable">$request</span>-&gt;files-&gt;get(<span class="string"><span class="delimiter">'</span><span class="content">foo</span><span class="delimiter">'</span></span>);</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>C&#8217;est via l&#8217;attribut <code>request</code>, de l&#8217;objet référencé par <code>$request</code> (à ne pas confondre) que le contrôleur aura accès aux données passées par <code>POST</code>.</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect3">
-<h4 id="cas-des-arguments-passés-dans-l-url"><a class="anchor" href="#cas-des-arguments-passés-dans-l-url"></a>Cas des arguments passés dans l&#8217;url</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="php"> <span class="comment">// retrieves GET variables respectively</span>
-    <span class="local-variable">$request</span>-&gt;query-&gt;get(<span class="string"><span class="delimiter">'</span><span class="content">x</span><span class="delimiter">'</span></span>, <span class="integer">66</span>);  <i class="conum" data-value="1"></i><b>(1)</b> <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>C&#8217;est via l&#8217;attribut <code>query</code>, de l&#8217;objet référencé par <code>$request</code>, que le contrôleur aura accès aux données passées par <code>GET</code>.
-Par exemple, les données transmises en arguments de l&#8217;url (<code>?a=b&amp;x=42</code>).</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>La méthode <code>get</code> prend en premier argument la <strong>clé</strong> (ici <code>a</code> ou <code>x</code>), le deuxième étant une <strong>valeur par défaut</strong>.</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect3">
-<h4 id="cas-de-valeurs-incluses-dans-l-url-même"><a class="anchor" href="#cas-de-valeurs-incluses-dans-l-url-même"></a>Cas de valeurs incluses dans l&#8217;url même</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="php"> <span class="comment">/**
-     * Matches /blog/*
-     *
-     * @Route(&quot;/blog/{slug}&quot;, name=&quot;blog_show&quot;)  <i class="conum" data-value="1"></i><b>(1)</b>
-     */</span>
-    <span class="keyword">public</span> <span class="keyword">function</span> <span class="function">show</span>(<span class="local-variable">$slug</span>) { ... } <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>La route contient une partie variable, représentée par un paramètre placé en <code>{  }</code> (ici <em>slug</em>). Exemples d&#8217;arguments : <code>/blog/usecase1</code> ou <code>/blog/usecase2</code>.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Reprise de la partie variable de l&#8217;url comme <strong>paramètre</strong> de la méthode (attention, même nom que le paramètre de route)</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Il est dans ce cas très facile de récupérer la valeur en question, car elle est passée automatiquement à la méthode !</p>
-</div>
-<div class="paragraph">
-<p>Plus d&#8217;infos sur l&#8217;exploitation des valeurs d&#8217;entrée :</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://symfony.com/doc/current/routing.html" class="bare">https://symfony.com/doc/current/routing.html</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>avec des exemples de redirection :</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://symfony.com/doc/current/controller.html" class="bare">https://symfony.com/doc/current/controller.html</a></p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="tp-le-contrôleur-et-la-vue-initiation"><a class="anchor" href="#tp-le-contrôleur-et-la-vue-initiation"></a>TP - Le contrôleur et la vue (initiation)</h3>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-Attention à bien respecter les conventions de nommage :
-      <a href="http://symfony.com/doc/current/contributing/code/standards.html" class="bare">http://symfony.com/doc/current/contributing/code/standards.html</a>
-</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Pour ce TP, vous pouvez choisir d&#8217;utiliser le serveur HTTP intégré à PHP en le lançant en ligne de commande.</p>
-</div>
-<div class="paragraph">
-<p><code>php bin/console server:run</code></p>
-</div>
-<div class="paragraph">
-<p>Dans ce cas, il vous faudra tester vos routes ainsi :</p>
-</div>
-<div class="paragraph">
-<p><code><a href="http://127.0.0.1:8000/lucky/number" class="bare">http://127.0.0.1:8000/lucky/number</a></code></p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="exampleblock">
-<div class="content">
-<div class="olist arabic">
-<ol class="arabic" start="1">
-<li>
-<p>Ajouter un nouveau controller nommé <em>IndexController</em> disposant d&#8217;une méthode nommée <em>indexAction</em>.
- Faire en sorte que l&#8217;index présente le message « Hello world ! » à l&#8217;utilisateur
-(travail sur vue twig associée)</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="exampleblock">
-<div class="content">
-<div class="olist arabic">
-<ol class="arabic" start="2">
-<li>
-<p>Ajouter la méthode d&#8217;action <em>helloAction</em> ci-dessous, qui reçoit en paramètre
-un nom, et retourne, via une vue twig, le message « Hello &lt;nom&gt; !» (où &lt;nom&gt;
-est l&#8217;argument reçu)</p>
-</li>
-</ol>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="php">  <span class="comment">/**
-  * @Route(&quot;/hello/{nom}&quot;, name=&quot;app_hello&quot;)
-  */</span>
-  <span class="keyword">public</span> <span class="keyword">function</span> <span class="function">helloAction</span>(<span class="local-variable">$nom</span>) {
-    <span class="keyword">return</span> <span class="local-variable">$this­</span>&gt;render(<span class="string"><span class="delimiter">'</span><span class="content">index/hello.html.twig</span><span class="delimiter">'</span></span>, <span class="predefined">array</span>(<span class="string"><span class="delimiter">'</span><span class="content">nom</span><span class="delimiter">'</span></span> =&gt; <span class="local-variable">$nom</span>));
-  }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Faire en sorte que le nom soit présenté à l&#8217;utilisateur en majuscule (voir : <a href="https://twig.symfony.com/doc/2.x/templates.html" class="bare">https://twig.symfony.com/doc/2.x/templates.html</a>)</p>
-</div>
-</div>
-</div>
-<div class="exampleblock">
-<div class="content">
-<div class="olist arabic">
-<ol class="arabic" start="3">
-<li>
-<p>Modifier la méthode d&#8217;action helloAction afin que, si le nom transmis est de
-la forme <em>prenom*nom</em> (prénom[étoile]nom), le message soit présenté  selon
-l&#8217;exemple ci-dessous : <a href="http://localhost:8000/hello/django*reinhardt" class="bare">http://localhost:8000/hello/django*reinhardt</a></p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>&#8658; à vous de déterminer le travail qui devra être réalisé côté contrôleur et côté logique de présentaiton (twig)</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/hello-django.png" alt="hello-django"></span></p>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-si aucune étoile n&#8217;est présente dans la dernière partie de l&#8217;url,
-le fonctionnement de <code>helloAction</code> devra rester conforme à l&#8217;attendu de la question précédente.
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="exampleblock">
-<div class="content">
-<div class="olist arabic">
-<ol class="arabic" start="4">
-<li>
-<p>Modifier le controleur de sorte que si aucun nom n&#8217;est passé à hello, le
-message 'Hello Inconnu !' est présenté. (voir le concept de <strong>valeur par défaut</strong> pour le paramètre)</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="exampleblock">
-<div class="content">
-<div class="olist arabic">
-<ol class="arabic" start="5">
-<li>
-<p>Ajouter une nouvelle méthode d&#8217;action liée à la route
-<em>/hello/prenom/nom</em></p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>Attention contrainte ! : cette méthode devra réutiliser la vue de la méthode
-d&#8217;action de la route <code>/hello</code> (conforme modifiée en question 3 de ce TP)
-&#8230;&#8203; et montrera donc le prénom et nom comme précédemment (Ref. à django Reinhardt) car c&#8217;est
-la même vue.</p>
-</div>
-</div>
-</div>
-<div class="exampleblock">
-<div class="content">
-<div class="olist arabic">
-<ol class="arabic" start="6">
-<li>
-<p>Ajouter un <strong>message flash</strong> (concept à étudier !), qui affiche un message de bienvenue à
-l&#8217;utilisateur lors de <strong>sa première</strong> sollicitation de l&#8217;action <em>hello</em> (pour une même instance de son navigateur). Conseil : Afficher dans un premier temps le message, puis mettre sous condition la création du message en gérant une donnée de session utilisateur.</p>
-</li>
-</ol>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-l&#8217;objet Session peut être retrouvé via un objet Request que l&#8217;on déclare
-en paramètre d&#8217;une méthode d&#8217;action et qui sera automatiquement
-« injecté » (passé) par le contrôleur principal de symfony.
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="travaux-dirigés-avancés"><a class="anchor" href="#travaux-dirigés-avancés"></a>Travaux Dirigés Avancés</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="prerequis"><a class="anchor" href="#prerequis"></a>Prerequis</h3>
-<div class="paragraph">
-<p>Avoir installé et configuré votre IDE et atteint la dernière étape de ce premier tutoriel (avec twig) à savoir <code>luckynumber</code> et <code>hello</code>:</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="images/lucky-number-42.png" alt="lucky number in action" width="500"></span></p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="création-d-une-application-php-sans-état-supporté-côté-serveur"><a class="anchor" href="#création-d-une-application-php-sans-état-supporté-côté-serveur"></a>Création d&#8217;une application PHP - sans état supporté côté serveur -</h3>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Traduction d&#8217;un code PHP mélangant logique de traitement et logique de vue en une structure séparant Vues (Twig) et Contrôleurs (méthodes)</p>
-</li>
-<li>
-<p>Poursuite du développement de la solution en mode interatif et incrémental avec Symfony, à savoir une  application web répondant aux spécifications suivantes</p>
-</li>
-</ol>
-</div>
-<div style="page-break-after: always;"></div>
-<div class="admonitionblock caution">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-caution" title="Caution"></i>
-</td>
-<td class="content">
-<strong>SPECIFICATIONS</strong>
-</td>
-</tr>
-</table>
-</div>
-<div class="exampleblock">
-<div class="content">
-<div class="ulist">
-<ul>
-<li>
-<p>L&#8217;utilisateur cherche à trouver un nombre retenu par l&#8217;application de façon « aléatoire »,
-sur une plage d&#8217;amplitude donnée, disons [0..30], qui correspond à la taille d&#8217;une chaine de caractères en fait. La valeur d&#8217;un caractère à l&#8217;indice i de cette chaine permettra de connaître si i est le nombre à trouver ou s&#8217;il y a été soumis précédemment comme solution possible par l&#8217;utilisateur.</p>
-</li>
-<li>
-<p>Chaque nombre sera représenté par une cellule <code>td</code> d&#8217;un tableau <code>html</code> (comme dans le code fourni en annexe).</p>
-</li>
-<li>
-<p>A chaque tentative de réponse, le système présente son analyse (nombre proposé trop petit, trop grand, exact)</p>
-</li>
-<li>
-<p>Durant les tentatives, l&#8217;application montre les cellules déjà sélectionnées par
-l&#8217;utilisateur (prévoir une classe CSS dédiée).</p>
-</li>
-<li>
-<p>La partie s&#8217;arrête lorsque l&#8217;utilisateur a trouvé le bon nombre.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-L&#8217;application ne sauvegardera aucune donnée sur le serveur du jeu (historique utilisateur)  (les « données de sessions » seront transmises au client – et donc portées par celui-ci – un exemple de code est donné en annexe).
-</td>
-</tr>
-</table>
-</div>
-<div class="sect3">
-<h4 id="veuillez-respecter-les-étapes-suivantes"><a class="anchor" href="#veuillez-respecter-les-étapes-suivantes"></a>Veuillez respecter les étapes suivantes</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Tester, dans un dossier à part, le code PHP de l&#8217;annexe</p>
-</li>
-<li>
-<p>Traduire le code PHP de l&#8217;annexe en un projet symfony (avec contrôleur index et vue twig)</p>
-</li>
-<li>
-<p>Faire évoluer l&#8217;application afin qu&#8217;elle réponde aux attentes (exprimées ci-dessus).</p>
-</li>
-<li>
-<p>Présentation des nombres dans une matrice 10 x 10</p>
-</li>
-<li>
-<p>L&#8217;utilisateur pourra relancer autant de parties qu&#8217;il le souhaite. Comme il se doit, l&#8217;application sera capable de gérer plusieurs utilisateurs en même temps.</p>
-</li>
-<li>
-<p>Lorsque que le nombre est trouvé, l&#8217;application affiche un des messages suivants :</p>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>« Vous avez de la chance !»</strong> si le nombre d’essai du joueur est inférieur au nombre optimal (à déterminer après avoir étudié le principe de la recherche dichotomique - lien wikipédia ci-dessous).</p>
-</li>
-<li>
-<p><strong>« Votre stratégie a été la bonne »</strong> si le nombre d’essai du joueur est égale au nombre optimal.</p>
-</li>
-<li>
-<p><strong>« Vous avez débordé de n tentatives »</strong> où <em>n</em> est le nombre de tentatives au-delà du nombre optimal.</p>
-</li>
-</ul>
-</div>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>Pour déterminer le message à présenter, référez-vous aux caractéristiques d&#8217;efficacité de la <strong>recherche dichotomique</strong> : <a href="https://fr.wikipedia.org/wiki/Dichotomie" class="bare">https://fr.wikipedia.org/wiki/Dichotomie</a></p>
-</div>
-<div class="olist arabic">
-<ol class="arabic" start="7">
-<li>
-<p>Optionnel, pour les plus avancés :</p>
-<div class="ulist">
-<ul>
-<li>
-<p>L&#8217;utilisateur peut étendre l&#8217;amplitude de la matrice.</p>
-</li>
-<li>
-<p>Proposer une version qui n’expose pas la valeur à trouver au client (prévoir un  cryptage symétrique du nombre – l’expéditeur est le destinataire).</p>
-</li>
-</ul>
-</div>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="ressources-à-prendre-en-compte"><a class="anchor" href="#ressources-à-prendre-en-compte"></a>Ressources à prendre en compte</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Génération pseudo-aléatoire d&#8217;un nombre : <a href="http://php.net/manual/fr/function.mt-rand.php" class="bare">http://php.net/manual/fr/function.mt-rand.php</a></p>
-</li>
-<li>
-<p>Legacy d&#8217;une ébauche de code en annexe pour commencer.</p>
-</li>
-<li>
-<p>Les principe de la recherche dichotomique : <a href="https://fr.wikipedia.org/wiki/Dichotomie" class="bare">https://fr.wikipedia.org/wiki/Dichotomie</a></p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="annexe-tp-1-code-legacy-prototype"><a class="anchor" href="#annexe-tp-1-code-legacy-prototype"></a>Annexe TP-1 - code legacy (prototype)</h3>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="php"><span class="inline-delimiter">&lt;?php</span>
-<span class="comment">// exploitation des données reçues (ou attendues) – on attend un couple i=n</span>
-<span class="keyword">if</span> (<span class="predefined">isset</span>(<span class="predefined">$_GET</span>[<span class="string"><span class="delimiter">'</span><span class="content">i</span><span class="delimiter">'</span></span>])) :
-  <span class="local-variable">$iChoixJoueur</span> = (<span class="predefined-type">int</span>) <span class="predefined">$_GET</span>[<span class="string"><span class="delimiter">'</span><span class="content">i</span><span class="delimiter">'</span></span>];
-  <span class="comment">// force l'interprétation de la valeur en un entier</span>
-  <span class="keyword">else</span> :
-    <span class="local-variable">$iChoixJoueur</span> = -<span class="integer">1</span>;
-  <span class="keyword">endif</span>;
-  <span class="comment">// ou (même traitement que ci-dessus)</span>
-  <span class="comment">// $iChoixJoueur = isset($_GET['i']) ? (int) $_GET['i'] : -1; //opérateur ternaire</span>
-  <span class="comment">// on récupère l'historique des tentatives (une chaîne de caractères en fait)</span>
-  <span class="keyword">if</span> (<span class="predefined">empty</span>(<span class="predefined">$_GET</span>[<span class="string"><span class="delimiter">'</span><span class="content">histo</span><span class="delimiter">'</span></span>])) :
-    <span class="local-variable">$histo</span> = <span class="string"><span class="delimiter">'</span><span class="content">----------w--------------</span><span class="delimiter">'</span></span>;
-    <span class="comment">// TODO : placer le numéro gagnant (w)iner de façon aléatoire</span>
-  <span class="keyword">else</span>:
-    <span class="local-variable">$histo</span> = <span class="predefined">$_GET</span>[<span class="string"><span class="delimiter">'</span><span class="content">histo</span><span class="delimiter">'</span></span>];
-  <span class="keyword">endif</span>;
-  <span class="comment">// mise à jour de l'historique : prise en compte du choix utilisateur</span>
-  <span class="keyword">if</span> (<span class="local-variable">$iChoixJoueur</span> &gt;= <span class="integer">0</span> &amp;&amp; <span class="local-variable">$iChoixJoueur</span> &lt; <span class="predefined">strlen</span>(<span class="local-variable">$histo</span>)) :
-    <span class="local-variable">$histo</span>[<span class="local-variable">$iChoixJoueur</span>] = <span class="string"><span class="delimiter">'</span><span class="content">j</span><span class="delimiter">'</span></span>;
-  <span class="keyword">endif</span>;
- <span class="inline-delimiter">?&gt;</span>
-<span class="doctype">&lt;!DOCTYPE html&gt;</span>
-<span class="tag">&lt;html</span> <span class="attribute-name">lang</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">fr</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-<span class="tag">&lt;head&gt;</span>
-  <span class="tag">&lt;meta</span> <span class="attribute-name">charset</span>=<span class="string"><span class="delimiter">'</span><span class="content">utf-8</span><span class="delimiter">'</span></span> <span class="tag">/&gt;</span>
-  <span class="tag">&lt;title&gt;</span>À la recherche du nombre<span class="tag">&lt;/title&gt;</span>
-  <span class="tag">&lt;style</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text/css</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-<span class="inline">  <span class="class">.normal</span> {
-    <span class="key">border</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="value">black</span>;
-  }
-  <span class="class">.dejajoue</span> {
-    <span class="key">border</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="value">black</span>;
-    <span class="key">background-color</span>: <span class="value">lightgreen</span>;
-  }</span>
-  <span class="tag">&lt;/style&gt;</span>
-<span class="tag">&lt;/head&gt;</span>
-<span class="tag">&lt;body&gt;</span>
-  <span class="tag">&lt;h2&gt;</span>à la recherche du nombre<span class="tag">&lt;/h2&gt;</span>
-  <span class="tag">&lt;table&gt;</span>
-    <span class="tag">&lt;tbody&gt;</span>
-      <span class="tag">&lt;tr&gt;</span>
-        <span class="inline-delimiter">&lt;?php</span>
-          <span class="comment">// mode debug : var_dump($histo);</span>
-          <span class="comment">// TODO : il faudrait mieux appliquer la classe &quot;dejajoue&quot;</span>
-          <span class="comment">//        a toutes les cellules deja jouees</span>
-          <span class="keyword">for</span> (<span class="local-variable">$i</span>=<span class="integer">0</span>; <span class="local-variable">$i</span> &lt; <span class="predefined">strlen</span>(<span class="local-variable">$histo</span>); <span class="local-variable">$i</span>++) :
-            <span class="keyword">if</span> (<span class="local-variable">$i</span> == <span class="local-variable">$iChoixJoueur</span>) : <span class="inline-delimiter">?&gt;</span>
-              <span class="tag">&lt;td</span> <span class="attribute-name">class</span> = <span class="string"><span class="delimiter">&quot;</span><span class="content">dejajoue</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-            <span class="inline-delimiter">&lt;?php</span> <span class="keyword">else</span> : <span class="inline-delimiter">?&gt;</span>
-              <span class="tag">&lt;td</span> <span class="attribute-name">class</span> = <span class="string"><span class="delimiter">&quot;</span><span class="content">normal</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-            <span class="inline-delimiter">&lt;?php</span> <span class="keyword">endif</span>; <span class="inline-delimiter">?&gt;</span>
-              <span class="tag">&lt;a</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">?i=</span></span><span class="inline-delimiter">&lt;?php</span> <span class="predefined">echo</span> <span class="local-variable">$i</span> <span class="inline-delimiter">?&gt;</span><span class="string"><span class="content">&amp;</span><span class="content">histo=</span></span><span class="inline-delimiter">&lt;?php</span> <span class="predefined">echo</span> <span class="local-variable">$histo</span> <span class="inline-delimiter">?&gt;</span><span class="string"><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
-                <span class="inline-delimiter">&lt;?php</span> <span class="predefined">echo</span> <span class="local-variable">$i</span>; <span class="inline-delimiter">?&gt;</span>
-              <span class="tag">&lt;/a&gt;</span>
-            <span class="tag">&lt;/td&gt;</span>
-          <span class="inline-delimiter">&lt;?php</span> <span class="keyword">endfor</span>; <span class="inline-delimiter">?&gt;</span>
-        <span class="tag">&lt;/tr&gt;</span>
-      <span class="tag">&lt;/tbody&gt;</span>
-    <span class="tag">&lt;/table&gt;</span>
-  <span class="tag">&lt;/body&gt;</span>
-  <span class="tag">&lt;/html&gt;</span></code></pre>
-</div>
-</div>
 </div>
 </div>
 </div>
@@ -1382,40 +180,6 @@ et les opérations CRUD associées.</p>
 <div class="olist arabic">
 <ol class="arabic" start="1">
 <li>
-<p>Tester vos connaissances sur <a href="http://quizbe.org/" class="bare">http://quizbe.org/</a> (créer un compte et lier-le à votre classe SIO22-LDV-2018-19)</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="exampleblock">
-<div class="content">
-<div class="olist arabic">
-<ol class="arabic" start="2">
-<li>
-<p>Ajouter, sur la plateforme quizbe, une nouvelle question QCM sur le thème du Model avec Symfony</p>
-</li>
-</ol>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-Bonus de 1 point (sur un des contrôles) si proposition originale, juste et pertinente.
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="exampleblock">
-<div class="content">
-<div class="olist arabic">
-<ol class="arabic" start="3">
-<li>
 <p>À partir de l&#8217;exemple étudié dans le tutoriel de Symfony sur la notion de <code>Model</code> (classe <code>Product</code>), réalisez les opérations permettant à un utilisateur lambda de :</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
@@ -1454,11 +218,391 @@ Ces noms sont consultatbles en ligne de commande : <code>php bin/console debug:r
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="cas-du-formulaire"><a class="anchor" href="#cas-du-formulaire"></a>Cas du formulaire</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="introduction"><a class="anchor" href="#introduction"></a>Introduction</h3>
+<div class="paragraph">
+<p>La gestion de formulaires est un des points sensibles en développement web, comme l&#8217;est toute Entrée/Sortie d&#8217;une application.</p>
+</div>
+<div class="paragraph">
+<p>De plus, l&#8217;utilisateur s&#8217;attend à la fois à une certaine ergonomie
+(présentation de valeurs en base de données ou précédemment saisies
+ par ce dernier) ainsi qu&#8217;au respect de la cohérence (prise en compte de la validité des données côté client et serveur).</p>
+</div>
+<div class="paragraph">
+<p>Symfony intègre un composant nommé <code>form</code> qui prend en charge la gestion de formulaire.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+</pre></td>
+  <td class="code"><pre> composer require symfony/form</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ce composant a sa propre documentation : <a href="https://symfony.com/doc/current/forms.html" class="bare">https://symfony.com/doc/current/forms.html</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="logique-de-traitement-du-formulaire"><a class="anchor" href="#logique-de-traitement-du-formulaire"></a>Logique de traitement du formulaire</h3>
+<div class="paragraph">
+<p>Dans sa version courante, un formulaire est lié à un objet métier (une classe Entity).</p>
+</div>
+<div class="paragraph">
+<p>De plus, il intégère les propriétés importantes suivantes :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Gestion des requêtes HTTP : prise en charge du traitement des demandes et des téléchargements de fichiers;</p>
+</li>
+<li>
+<p>Protection CSRF: Prise en charge de la protection contre les attaques CSRF (Cross-Site-Request-Forgery);</p>
+</li>
+<li>
+<p>Templating: Intégration d&#8217;une couche de présentation qui permet de réutiliser des fragments HTML lors du rendu d&#8217;un formulaire;</p>
+</li>
+<li>
+<p>Traduction: Prise en charge de la traduction des messages d&#8217;erreur, des étiquettes de champs et d&#8217;autres chaînes;</p>
+</li>
+<li>
+<p>Validation: Intégration d&#8217;une bibliothèque de validation pour générer des messages d&#8217;erreur pour les données soumises.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="logique-métier-du-formulaire"><a class="anchor" href="#logique-métier-du-formulaire"></a>Logique métier du formulaire</h3>
+<div class="paragraph">
+<p>Dans cette phase d&#8217;initiation, nous nous concentrerons principalement sur</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>la relation Formulaire ↔ Entité</p>
+</li>
+<li>
+<p>la création/suppression/mise à jour via Doctrine (aperçus au chapitre précédent)</p>
+</li>
+<li>
+<p>la mise en forme des champs de formulaire</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>&#8658; Devra être prolongée par l&#8217;étude des systèmes de validation des attributs côté client et serveur.</p>
+</div>
+<div class="sect3">
+<h4 id="méthode-d-action-newxxx"><a class="anchor" href="#méthode-d-action-newxxx"></a>Méthode d&#8217;action newXXX</h4>
+<div class="paragraph">
+<p>Nous prendrons le cas de la création d&#8217;une instance d&#8217;une entité.</p>
+</div>
+<div class="paragraph">
+<p>Dans ce cas, l&#8217;algorithme retenu par les concepteurs de Symfony et
+celui d&#8217;une seule méthode d&#8217;action (une route) pour, à la fois,</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Présenter le formulaire de création et, dans un second temps,</p>
+</li>
+<li>
+<p>Effectuer le traitement de création  (impacter le système d&#8217;information).</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Le pattern PRG (<a href="https://fr.wikipedia.org/wiki/Post-Redirect-Get" class="bare">https://fr.wikipedia.org/wiki/Post-Redirect-Get</a>) impose au développeur de fournir un ordre de redirection côté client comme réponse à toute action impactant le système (voir le lien si vous ne savez pas pourquoi).
+De ce fait, la logique du formulaire sera basée sur l&#8217;algorithme représenté ci-après.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/algo-form.png" alt="algo form" width="323" height="665">
+</div>
+</div>
+<div class="paragraph">
+<p>En guise d&#8217;exemple, voici une méthode d&#8217;action typique.</p>
+</div>
+<div class="paragraph">
+<p>Observez la mise en correspondance des étapes numérotées avec des lettres de l&#8217;algorithme (diagramme ci-dessus) avec les lignes du code.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+</pre></td>
+  <td class="code"><pre><span class="keyword">use</span> <span class="constant">Symfony</span>\<span class="constant">Component</span>\<span class="constant">HttpFoundation</span>\<span class="constant">Request</span>;
+
+<span class="keyword">public</span> <span class="keyword">function</span> <span class="function">new</span>(<span class="constant">Request</span> <span class="local-variable">$request</span>) <i class="conum" data-value="1"></i><b>(1)</b>
+{
+    <span class="comment">// création d'une instance d'entité</span>
+    <span class="local-variable">$task</span> = <span class="keyword">new</span> <span class="constant">Task</span>();  <i class="conum" data-value="2"></i><b>(2)</b>
+
+    <span class="local-variable">$form</span> = <span class="local-variable">$this</span>-&gt;createFormBuilder(<span class="local-variable">$task</span>) <i class="conum" data-value="3"></i><b>(3)</b>
+        -&gt;add(<span class="string"><span class="delimiter">'</span><span class="content">task</span><span class="delimiter">'</span></span>, <span class="constant">TextType</span>::<span class="keyword">class</span>)
+        -&gt;add(<span class="string"><span class="delimiter">'</span><span class="content">dueDate</span><span class="delimiter">'</span></span>, <span class="constant">DateType</span>::<span class="keyword">class</span>)
+        -&gt;add(<span class="string"><span class="delimiter">'</span><span class="content">save</span><span class="delimiter">'</span></span>, <span class="constant">SubmitType</span>::<span class="keyword">class</span>, <span class="predefined">array</span>(<span class="string"><span class="delimiter">'</span><span class="content">label</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">'</span><span class="content">Create Task</span><span class="delimiter">'</span></span>))
+        -&gt;getForm();
+
+    <span class="local-variable">$form</span>-&gt;handleRequest(<span class="local-variable">$request</span>); <i class="conum" data-value="4"></i><b>(4)</b>
+    <span class="comment">// l'objet référencé par $task est mis à jour</span>
+
+    <span class="keyword">if</span> (<span class="local-variable">$form</span>-&gt;isSubmitted() &amp;&amp; <span class="local-variable">$form</span>-&gt;isValid()) {  <i class="conum" data-value="5"></i><b>(5)</b>
+        <span class="comment">// $form-&gt;getData() holds the submitted values</span>
+
+        <span class="local-variable">$task</span> = <span class="local-variable">$form</span>-&gt;getData();
+
+        <span class="comment">// ... réalise quelques actions,</span>
+        <span class="comment">//    comme sauvegarder task dans la base de données</span>
+        <span class="comment">// $entityManager = $this-&gt;getDoctrine()-&gt;getManager();</span>
+        <span class="comment">// $entityManager-&gt;persist($task); </span><i class="conum" data-value="6"></i><b>(6)</b>
+        <span class="comment">// $entityManager-&gt;flush();</span>
+
+        <span class="keyword">return</span> <span class="local-variable">$this</span>-&gt;redirectToRoute(<span class="string"><span class="delimiter">'</span><span class="content">task_success</span><span class="delimiter">'</span></span>); <i class="conum" data-value="7"></i><b>(7)</b>
+    }
+
+    <span class="keyword">return</span> <span class="local-variable">$this</span>-&gt;render(<span class="string"><span class="delimiter">'</span><span class="content">default/new.html.twig</span><span class="delimiter">'</span></span>, <span class="predefined">array</span>(  <i class="conum" data-value="8"></i><b>(8)</b> <i class="conum" data-value="9"></i><b>(9)</b>
+        <span class="string"><span class="delimiter">'</span><span class="content">form</span><span class="delimiter">'</span></span> =&gt; <span class="local-variable">$form</span>-&gt;createView(),
+    ));
+}</pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Lorsque la page est initialisée dans un navigateur,
+le formulaire est simplement créé et présenté (<em>created and rendered</em>).</p>
+</div>
+<div class="paragraph">
+<p>La première fois, la méthode <em>handleRequest()</em> reconnaît  que le formulaire n&#8217;est pas
+soumis et ne fait donc rien.</p>
+</div>
+<div class="paragraph">
+<p>La méthode <em>isValid()</em> retourne  false si le formulaire n&#8217;a pas reçu de data.
+Une bonne pratique consiste cependant à s&#8217;assurer ques des données sont reçues (<em>isSubmitted()</em>) avant de tester leur validité !</p>
+</div>
+<div class="paragraph">
+<p>Lorsque l&#8217;utilisateur soumet la requête avec des données, la méthode <em>handleRequest()</em>  transmet
+ces données à l&#8217;instance de l&#8217;entité détenue par form.
+Ensuite, si les données ne sont pas valides, alors elles sont de nouveau représentées
+à l&#8217;utilisateur avec les erreurs. Sinon, la méthode isValid rend true, et le
+développeur peut affiner un peu plus la situation avant de réaliser l&#8217;action cible
+(ligne 20-21).</p>
+</div>
+<div class="paragraph">
+<p>Afin d&#8217;éviter de devoir recoder la logique de createFormBuilder,
+vous pouvez définir des Form/Type (une classe par entité -voir doc symfony)</p>
+</div>
+<div class="paragraph">
+<p>Voici un autre exemple :</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/form-quizbe.png" alt="form-quizbe"></span></p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+La création du l&#8217;objet Form (via createFormBuilder) est sous-traitée à une méthode privée de la classe (createCreateForm).
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="rendu-du-formulaire"><a class="anchor" href="#rendu-du-formulaire"></a>Rendu du formulaire</h3>
+<div class="paragraph">
+<p>Exemple de rendu d&#8217;un formulaire associé à une entité Pays(Nom, AnnéeIndépendance)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml">[...]
+
+{% block content %}
+
+{{ form(formulaire) }}  <i class="conum" data-value="1"></i><b>(1)</b> <i class="conum" data-value="2"></i><b>(2)</b>
+
+{% endblock %}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>form() est une fonction qui traduit les structures internes php en une représentation HTML</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>'formulaire' dénote la variable passé par le controleur.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>ce qui donne : <span class="image"><img src="images/form-pays-1.png" alt="form-pays-1"></span></p>
+</div>
+<div class="paragraph">
+<p>Bien entendu, Symfony vous permet de prendre la main finement sur la présentation du formulaire.</p>
+</div>
+<div class="paragraph">
+<p>Par exemple, en suivant les instructions d&#8217;usage de Bootstrap Twitter (<a href="http://getbootstrap.com/css/#forms" class="bare">http://getbootstrap.com/css/#forms</a>), nous appliquons de nouvelles classes CSS à nos éléments de formulaire (label, zone de message d&#8217;erreur, input) :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml">{% block content %}
+
+{% set form = formulaire %}
+
+{{ form_start(form,
+   {'attr': {'role': 'form'}}
+   ) }}
+  {{ form_errors(form) }}
+
+    <span class="tag">&lt;div</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">form-group</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+        {{ form_label(form.name) }}
+        {{ form_errors(form.name) }}
+        {{ form_widget(form.name,
+           {'attr': {'class': 'form-control'}}
+        )}}
+    <span class="tag">&lt;/div&gt;</span>
+
+    <span class="tag">&lt;div</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">form-group</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+        {{ form_label(form.indepYear) }}
+        {{ form_errors(form.indepYear) }}
+        {{ form_widget(form.indepYear,
+          {'attr': {'class': 'form-control'}}
+        )}}
+    <span class="tag">&lt;/div&gt;</span>
+
+    <span class="tag">&lt;button</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">submit</span><span class="delimiter">&quot;</span></span>
+       <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">btn btn-default</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+       Enregistrer
+    <span class="tag">&lt;/button&gt;</span>
+
+{{ form_end(form) }}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Ce qui donne.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/form-pays-2.png" alt="form-pays-2"></span></p>
+</div>
+<div class="paragraph">
+<p>Exemple de code HTML généré par twig :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="html"><table class="CodeRay"><tr>
+  <td class="line-numbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+</pre></td>
+  <td class="code"><pre>
+<span class="tag">&lt;form</span> <span class="attribute-name">method</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">post</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">action</span>=<span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">role</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">form</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+
+    <span class="tag">&lt;div</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">form-group</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+        <span class="tag">&lt;label</span> <span class="attribute-name">for</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">form_name</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">required</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+          Name
+        <span class="tag">&lt;/label&gt;</span>
+
+        <span class="tag">&lt;input</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">form_name</span><span class="delimiter">&quot;</span></span>
+          <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">form[name]</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">required</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">required</span><span class="delimiter">&quot;</span></span>
+          <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">form-control</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">Algeria</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+
+    <span class="tag">&lt;div</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">form-group</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+        <span class="tag">&lt;label</span> <span class="attribute-name">for</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">form_indepYear</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">required</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+          Indep year
+        <span class="tag">&lt;/label&gt;</span>
+
+        <span class="tag">&lt;input</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">number</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">form_indepYear</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">form[indepYear]</span><span class="delimiter">&quot;</span></span>
+          <span class="attribute-name">required</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">required</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">form-control</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">1962</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+
+    <span class="tag">&lt;button</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">submit</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">btn btn-default</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>Enregistrer<span class="tag">&lt;/button&gt;</span>
+
+    <span class="tag">&lt;input</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">hidden</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">form__token</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">form[_token]</span><span class="delimiter">&quot;</span></span>
+        <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">4c4d20ce63cb7b54836f6785b6d675b32be1954d</span><span class="delimiter">&quot;</span></span> <span class="tag">/&gt;</span>
+<span class="tag">&lt;/form&gt;</span></pre></td>
+</tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On remarquera le <code>token</code> de prévention CRSF (<em>Cross site request forgery</em>) en fin
+de formulaire dans le but d&#8217;éviter qu&#8217;un site mal intentionné ne vous entraine à déclencher des actions à votre insue.</p>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2018-09-20 10:24:35 CEST
+Last updated 2018-09-20 16:08:24 CEST
 </div>
 </div>
 </body>
