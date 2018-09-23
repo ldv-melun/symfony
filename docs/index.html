@@ -62,7 +62,6 @@
 <ul class="sectlevel2">
 <li><a href="#Éléments-d-architecture">Éléments d&#8217;architecture</a></li>
 <li><a href="#premiers-pas-avec-le-model">Premiers pas avec le model</a></li>
-<li><a href="#travaux-pratiques">Travaux pratiques</a></li>
 </ul>
 </li>
 <li><a href="#cas-du-formulaire">Cas du formulaire</a>
@@ -71,6 +70,19 @@
 <li><a href="#logique-de-traitement-du-formulaire">Logique de traitement du formulaire</a></li>
 <li><a href="#logique-métier-du-formulaire">Logique métier du formulaire</a></li>
 <li><a href="#rendu-du-formulaire">Rendu du formulaire</a></li>
+<li><a href="#travaux-pratiques">Travaux pratiques</a></li>
+</ul>
+</li>
+<li><a href="#liaison-entre-entités">Liaison entre Entités</a>
+<ul class="sectlevel2">
+<li><a href="#tutotiel-doctrine-et-associations-liaison-entre-objets-métier">Tutotiel Doctrine et Associations (Liaison entre objets métier)</a></li>
+<li><a href="#travaux-pratiques-2">Travaux pratiques</a></li>
+<li><a href="#liaison-entre-entités-avec-uml-contexte-support">Liaison entre Entités avec UML - Contexte support</a></li>
+<li><a href="#classe-métier-et-table">Classe métier et table</a></li>
+<li><a href="#manytomany-porteuse-de-propriétés">ManyToMany - porteuse de propriétés</a></li>
+<li><a href="#alternative-à-la-classe-association">Alternative à la classe association</a></li>
+<li><a href="#méthodes-find-requêtes-assistées">Méthodes find* – Requêtes assistées</a></li>
+<li><a href="#méthodes-createnativequery-requêtes-natives">Méthodes createNativeQuery – Requêtes natives</a></li>
 </ul>
 </li>
 </ul>
@@ -1375,55 +1387,6 @@ et les opérations CRUD associées.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>À l'<strong>issue de ce tutoriel (~2H)</strong>, vous réaliserez les travaux suivants :</p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="travaux-pratiques"><a class="anchor" href="#travaux-pratiques"></a>Travaux pratiques</h3>
-<div class="paragraph">
-<p>Durée moyenne : 8H</p>
-</div>
-<div class="exampleblock">
-<div class="content">
-<div class="olist arabic">
-<ol class="arabic" start="1">
-<li>
-<p>À partir de l&#8217;exemple étudié dans le tutoriel de Symfony sur la notion de <code>Model</code> (classe <code>Product</code>), réalisez les opérations permettant à un utilisateur lambda de :</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Lister les produits</p>
-</li>
-<li>
-<p>Création d&#8217;un produit</p>
-</li>
-<li>
-<p>Modifier un produit</p>
-</li>
-<li>
-<p>Supprimer un produit</p>
-</li>
-</ol>
-</div>
-</li>
-</ol>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-Dans les vues twig, vos liens seront basés sur le <strong>nom</strong> des routes et non sur les routes elles-mêmes.
-Ces noms sont consultatbles en ligne de commande : <code>php bin/console debug:router</code>. Voir aussi <a href="https://symfony.com/doc/current/templating.html#linking-to-pages" class="bare">https://symfony.com/doc/current/templating.html#linking-to-pages</a>
-</td>
-</tr>
-</table>
-</div>
-</div>
 </div>
 </div>
 </div>
@@ -1806,13 +1769,961 @@ La création du l&#8217;objet Form (via createFormBuilder) est sous-traitée à 
 de formulaire dans le but d&#8217;éviter qu&#8217;un site mal intentionné ne vous entraine à déclencher des actions à votre insue.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="travaux-pratiques"><a class="anchor" href="#travaux-pratiques"></a>Travaux pratiques</h3>
+<div class="paragraph">
+<p>Durée moyenne : 8H</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="olist arabic">
+<ol class="arabic" start="1">
+<li>
+<p>À partir de l&#8217;exemple étudié dans le tutoriel de Symfony sur la notion de <code>Model</code> (classe <code>Product</code>), réalisez les opérations permettant à un utilisateur lambda de :</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Lister les produits</p>
+</li>
+<li>
+<p>Création d&#8217;un produit</p>
+</li>
+<li>
+<p>Modifier un produit</p>
+</li>
+<li>
+<p>Supprimer un produit</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Dans les vues twig, vos liens seront basés sur le <strong>nom</strong> des routes et non sur les routes elles-mêmes.
+Ces noms sont consultatbles en ligne de commande : <code>php bin/console debug:router</code>. Voir aussi <a href="https://symfony.com/doc/current/templating.html#linking-to-pages" class="bare">https://symfony.com/doc/current/templating.html#linking-to-pages</a>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="liaison-entre-entités"><a class="anchor" href="#liaison-entre-entités"></a>Liaison entre Entités</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="tutotiel-doctrine-et-associations-liaison-entre-objets-métier"><a class="anchor" href="#tutotiel-doctrine-et-associations-liaison-entre-objets-métier"></a>Tutotiel Doctrine et Associations (Liaison entre objets métier)</h3>
+<div class="paragraph">
+<p>Nous venons de voir les concepts d'`Entity` et d'`EntityRepository` associé à <code>Doctrine</code>.</p>
+</div>
+<div class="paragraph">
+<p>L&#8217;étape suivante consiste à étudier les liaisons type entre entités.</p>
+</div>
+<div class="paragraph">
+<p>En effet, tout comme les classes techniques (array, string, &#8230;&#8203;) un classe métier n&#8217;est jamais seule,
+mais liée à d&#8217;autres classe métier par des liaisons de type <code>ManyToOne</code>- <code>OneToMany</code>, <code>ManyToMany</code> et OneToOne.</p>
+</div>
+<div class="paragraph">
+<p>Suivre ce tutoriel qui introduit ces concepts et fait suite au précédent : <a href="https://symfony.com/doc/current/doctrine/associations.html" class="bare">https://symfony.com/doc/current/doctrine/associations.html</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="travaux-pratiques-2"><a class="anchor" href="#travaux-pratiques-2"></a>Travaux pratiques</h3>
+<div class="paragraph">
+<p>Durée moyenne 4h</p>
+</div>
+<div class="paragraph">
+<p>On considère qu&#8217;un produit (classe <code>Product</code>) appratient forcément
+à une catégorie (classe <code>Category</code>).</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="olist arabic">
+<ol class="arabic" start="1">
+<li>
+<p>Permettre à l&#8217;utilisateur de consulter et gérer les produits d&#8217;une catégorie donnée.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="liaison-entre-entités-avec-uml-contexte-support"><a class="anchor" href="#liaison-entre-entités-avec-uml-contexte-support"></a>Liaison entre Entités avec UML - Contexte support</h3>
+<div class="paragraph">
+<p>Nous nous plaçons dans le cas d&#8217;une application exploitant des données stockées
+par un système de gestion de bases de données relationnel (SGBDR).</p>
+</div>
+<div class="paragraph">
+<p>Voici le schéma relationnel de la base de données utilisé.
+« world » est une base de données statistiques géo-politiques sur le monde datant de 2006,
+d&#8217;après <a href="http://www.stat.fi/tup/maanum/index_en.html">Official Statistics of Finland</a>.</p>
+</div>
+<div class="paragraph">
+<div class="title">Schéma Relationnel de la base de données World</div>
+<p><span class="image"><img src="images/SR-World.png" alt="SR-World.png" width="400"></span></p>
+</div>
+<div class="paragraph">
+<p>Les données seront exploitées, par la logique applicative, sous forme de <em>Classe</em>, plus précisément :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Classe &#8592;&#8594; Table</p>
+</li>
+<li>
+<p>Objet &#8592;&#8594; Ligne</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Cette façon de faire permet de mettre le <em>domaine métier</em> <strong>au coeur de la logique de l&#8217;application</strong>.
+Voici une analyse du modèle : les classes "métier" ("entity")</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/diagram-classes.png" alt="Diagramme d&#8217;analyse UML (les entités du domaine)" width="271" height="288">
+</div>
+<div class="title">Diagramme d&#8217;analyse UML (les entités du domaine)</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Les données de la base seront exploitées par l&#8217;intermédiaire
+d&#8217;objets (instances de classes métier)
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Pour aider le travail de l&#8217;ORM Doctrine (<em>Object Relational Mapping</em>), la défintion des entités intégre des directives de mapping sous forme d'<strong>annotations</strong>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="classe-métier-et-table"><a class="anchor" href="#classe-métier-et-table"></a>Classe métier et table</h3>
+<div class="paragraph">
+<p>Dans ce qui suit, afin de bien distinguer ce qui de l&#8217;ordre du
+modèle de persistance (tables du schéma relationnel) et
+du modèle métier (les classes entité), nous nommerons les éléments
+du modèle métier en <strong>langue française</strong>.</p>
+</div>
+<div class="paragraph">
+<p>Ainsi la classe entité qui mappe la table <code>Country</code> s&#8217;appellera <code>Pays</code>, <code>Language</code> → <code>Langue</code>,
+ <code>CountryLanguage</code> → <code>PaysLangue</code>, <code>City</code> → <code>Ville</code>.</p>
+</div>
+<div class="sect3">
+<h4 id="manytoone"><a class="anchor" href="#manytoone"></a>ManyToOne</h4>
+<div class="paragraph">
+<p>Exemple du <strong>point de vue de la table <code>City</code></strong> :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Une ville est située dans un et un seul pays (One = 1..1)</p>
+</li>
+<li>
+<p>Plusieurs villes peuvent être reliées au même pays (Many = 0..*)_</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="côté-schéma-relationnel"><a class="anchor" href="#côté-schéma-relationnel"></a>Côté Schéma Relationnel</h5>
+<div class="paragraph">
+<p>La relation, partant de <code>City</code>, est <strong>ManyToOne</strong> (symbole UML de plusieurs vers un):</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/many-to-one-sr.png" alt="many-to-one-sr"></span></p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="côté-classe-métier-classe-entity"><a class="anchor" href="#côté-classe-métier-classe-entity"></a>Côté classe métier (classe Entity)</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>Les identifiants ne sont pas montrés</p>
+</li>
+<li>
+<p>Les liaisons sont représentées par des associations (rappel : une association est l&#8217;expression d&#8217;un lien en objets)</p>
+</li>
+<li>
+<p>les rôles sont précisés (optionnel si trivial comme ici)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/many-to-one-metier.png" alt="many-to-one-metier"></span></p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+L&#8217;attribut <code>$pays</code> est de type <code>Pays</code> (et non integer !) car il est
+une référence potentielle à un objet <code>Pays</code>.
+La notion de lien-bidirectionnel est vue dans le paragraphe suivant.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="onetomany"><a class="anchor" href="#onetomany"></a>OneToMany</h4>
+<div class="paragraph">
+<p>Exemple du <strong>point de vue de la table <code>Country</code></strong>  :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Un <code>Pays</code> est référençable par plusieurs instances de <code>Ville</code>  (Many = 0..*)</p>
+</li>
+<li>
+<p>Un <code>Pays</code> a l&#8217;exclusivité des villes qui le référencent (One = 1..1)</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="côté-schéma-relationnel-2"><a class="anchor" href="#côté-schéma-relationnel-2"></a>Côté Schéma Relationnel</h5>
+<div class="paragraph">
+<p>La relation, partant de <code>Country</code>, est <strong>OneToMany</strong> (de un vers plusieurs)</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/one-to-many-sr.png" alt="one-to-many-sr"></span></p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="côté-modèle-métier"><a class="anchor" href="#côté-modèle-métier"></a>Côté modèle métier</h5>
+<div class="paragraph">
+<p><span class="image"><img src="images/one-to-many-metier.png" alt="one-to-many-metier" width="550"></span></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>L&#8217;attribut d&#8217;instance <code>$villes</code> est de type <code>collection de Ville</code></p>
+</li>
+<li>
+<p>La valeur de <code>mappedBy</code> est l&#8217;attribut d&#8217;instance responsable de la liaison <code>One</code> du côté opposé (c&#8217;est grâce à lui que l&#8217;ensemble
+des villes de l&#8217;instance courante de <code>Pays</code> pourra être constitué)</p>
+</li>
+<li>
+<p>Côté <code>Ville</code>, en renseignant la valeur de <code>inversedBy</code> on précise que c&#8217;est <code>Ville</code>
+qui est responsable (owner = lien actif) de la cohérence bidirectionnelle (sur ce sujet, voir  plus bas, chapitre lien-bidirectionnel)</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+L&#8217;usage de <strong>mappedBy</strong> et <strong>inversedBy</strong> signifie qu&#8217;il s&#8217;agit du <strong>même lien</strong> entre objet, donc de la <strong>même</strong> association dans le modèle d&#8217;analyse métier UML.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="onetoone"><a class="anchor" href="#onetoone"></a>OneToOne</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Un pays a au plus une capitale (une Ville)</p>
+</li>
+<li>
+<p>Seules certaines villes sont capitales d&#8217;un pays.</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="côté-schéma-relationnel-3"><a class="anchor" href="#côté-schéma-relationnel-3"></a>Côté Schéma Relationnel</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>La relation entre <code>Country</code> et <code>City</code>, est <strong>OneToOne</strong>
+<span class="image"><img src="images/one-to-one-sr.png" alt="one-to-one-sr"></span></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="côté-modèle-métier-2"><a class="anchor" href="#côté-modèle-métier-2"></a>Côté modèle métier</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>C&#8217;est le <code>Pays</code> qui connaît sa <strong>capitale</strong>, le lien inverse serait trop souvent non valorisé, nous appliquons un lien <strong>uni-directionnel</strong>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/one-to-one-metier.png" alt="one-to-one-metier"></span></p>
+</div>
+<div class="paragraph">
+<p>Remarque 1 : le <strong>rôle</strong> d&#8217;une instance de Ville dans cette association est d&#8217;être une <strong>capitale</strong>. Ce rôle n&#8217;étant pas trivial (ne peut être deviné à la lecture du diagramme), nous le précisons. Le nommage de l&#8217;attribut d&#8217;instance de Ville dans pays est alors tout trouvé.</p>
+</div>
+<div class="paragraph">
+<p>Remarque 2: le lien uni-directionnel spécifie le sens de la navigation possible (de <code>Pays</code> vers <code>Ville</code>)</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="manytoone-onetomany-lien-bidirectionnel"><a class="anchor" href="#manytoone-onetomany-lien-bidirectionnel"></a>ManyToOne-OneToMany : Lien bidirectionnel</h4>
+<div class="paragraph">
+<p>Lorsque l&#8217;on traite une association navigable dans les 2 sens (lien bidirectionnel), il faut assurer sa cohérence après le chargement des objets. Exemple :
+Si une ville nouvellement créée se déclare appartenir à un pays,
+ce dernier devra alors l&#8217;avoir dans sa liste de ses villes, et inversement !.
+Par convention, c&#8217;est l&#8217;objet qui est au plus prêt du lien <strong>One</strong> qui se charge de la cohérence.
+Dans notre exemple ce sera <code>Ville</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"> <span class="comment">/**
+  * Ville
+  *
+  * @ORM\Table(name=&quot;City&quot;)
+  * @ORM\Entity(repositoryClass=&quot;Acme\DemoBundle\Entity\VilleRepository&quot;)
+  */</span>
+ <span class="keyword">class</span> <span class="class">Ville</span>
+ {
+
+ . . .
+
+     <span class="comment">/**
+      * Set pays
+      *
+      * @param \Acme\DemoBundle\Entity\Pays $pays
+      * @return Ville
+      */</span>
+     <span class="keyword">public</span> <span class="keyword">function</span> <span class="function">setPays</span>(\<span class="constant">Acme</span>\<span class="constant">DemoBundle</span>\<span class="constant">Entity</span>\<span class="constant">Pays</span> <span class="local-variable">$pays</span> = <span class="predefined-constant">null</span>)
+     {
+       <span class="keyword">if</span> (<span class="local-variable">$this</span>-&gt;pays) {
+          <span class="local-variable">$this</span>-&gt;<span class="local-variable">$pays</span>-&gt;removeVille(<span class="local-variable">$this</span>);
+        }
+        <span class="local-variable">$this</span>-&gt;pays = <span class="local-variable">$pays</span>;
+        <span class="local-variable">$pays</span>-&gt;addVille(<span class="local-variable">$this</span>);
+        <span class="keyword">return</span> <span class="local-variable">$this</span>;
+     }</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Attention : Il ne faut pas abuser des liens bidirectionnels ! Car comme vous l&#8217;avez constaté, les objets du domaine sont plus délicats à programmer. Parmi les premiers Best Practices de Doctrine, on peut lire :
+     	Il est important de limiter les relations autant que possible. Cela signifie:
+     Imposer un sens de parcours (éviter associations bidirectionnelles si possible)
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Cette limitation n&#8217;est pas applicable à tous les ORMs (<em>hibernate</em> par exemple)
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Éliminer les associations non essentielles offre plusieurs avantages:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Couplage réduit dans votre modèle de domaine</p>
+</li>
+<li>
+<p>Code plus simple dans votre modèle de domaine (pas besoin de maintenir la bi-directionnalité correctement)</p>
+</li>
+<li>
+<p>Moins de travail pour L’ORM (Doctrine)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Voir plus loin : <a href="http://docs.doctrine-project.org/en/latest/reference/best-practices.html" class="bare">http://docs.doctrine-project.org/en/latest/reference/best-practices.html</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="association-bidirectionnelle-owner-side-and-inverse-side"><a class="anchor" href="#association-bidirectionnelle-owner-side-and-inverse-side"></a>Association bidirectionnelle : Owner side and Inverse side</h4>
+<div class="paragraph">
+<p>Libre traduction de : <a href="http://docs.doctrine-project.org/en/2.0.x/reference/association-mapping.html" class="bare">http://docs.doctrine-project.org/en/2.0.x/reference/association-mapping.html</a></p>
+</div>
+<div class="paragraph">
+<p>Lorsque l&#8217;on utilise une relation bidirectionnelle, il est important de bien comprendre le concept de owner (propriétaire) et d&#8217;inverse.</p>
+</div>
+<div class="paragraph">
+<p>Une relation bidirectionnelle dans le modèle objet est implémentée par 2 références, qui représentent la même association, mais peuvent techniquement changer indépendamment l&#8217;une de l&#8217;autre et le développeur doit s&#8217;assurer que la cohérence métier est maintenue lors de manipulation de ces références.</p>
+</div>
+<div class="paragraph">
+<p>Techniquement, Doctrine a besoin de savoir laquelle de ces 2 références mémoire (les instance qu&#8217;elles pointent) doit être persistée et laquelle non. C&#8217;est pourquoi le concept de owning/inverse est principalement utilisé. Tout changement de valeur côté inverse sera ignoré (pas d&#8217;impact dans la base de donnée).</p>
+</div>
+<div class="paragraph">
+<p>Les règles générales suivantes s&#8217;appliquent :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Une relation bidirectionnelle a deux extrémités : le côté propriétaire (owner - partie active de la relation) et le côté inverse (inverse).</p>
+</li>
+<li>
+<p>Le côté <strong>propriétaire</strong> d&#8217;une relation détermine les opérations de mises à jour dans la base de données.</p>
+</li>
+<li>
+<p>Le côté <strong>propriétaire</strong> d&#8217;une relation bidirectionnelle doit référencer le <strong>côté inverse</strong> par l&#8217;usage de l&#8217;attribut <strong>inversedBy</strong> lors de la déclaration du mapping OneToOne, ManyToOne, ou ManyToMany. L&#8217;attribut inversedBy désigne le champ (l&#8217;attribut d&#8217;instance) de l&#8217;entité inverse de la relation.</p>
+</li>
+<li>
+<p>Le côté inverse d&#8217;une relation bidirectionnelle doit référencer son <strong>côté propriétaire</strong> par l&#8217;usage de l&#8217;attribut <strong>mappedBy</strong> lors de la déclaration du mapping OneToOne, OneToMany, ou ManyToMany. L&#8217;attribut mappedBy désigne le champ (l&#8217;attribut d&#8217;instance) de l&#8217;entité propriétaire de la relation.</p>
+</li>
+<li>
+<p>Le côté many de la relation bidirectionnelle OneToMany/ManyToOne doit être le côté propriétaire.</p>
+</li>
+<li>
+<p>Une relation unidirectionnelle a seulement un côté propriétaire.</p>
+</li>
+<li>
+<p>Concernant la relation bidirectionnelle OneToOne, le propriétaire correspond au côté qui mappe la table disposant de la clé étrangère en question (@JoinColumn(s)).</p>
+</li>
+<li>
+<p>Concernant la relation bidirectionnelle ManyToMany chacune des extrémités peut être le propriétaire : Le propriétaire est déterminé
+par le fait qu&#8217;il définit la jointure - @JoinTable <strong>ou</strong> s&#8217;il ne fait pas usage de l&#8217;attribut mappedBy.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Les concepts de <em>propriétaire/inverse</em> <strong>ne sont pas</strong> des concepts métier, mais techniques (la relation propriétaire—inverse n&#8217;a pas de sens métier).
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="manytomany-porteuse-de-propriétés"><a class="anchor" href="#manytomany-porteuse-de-propriétés"></a>ManyToMany - porteuse de propriétés</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Pour un pays donné, plusieurs langues sont parlées (dont une est officielle)</p>
+</li>
+<li>
+<p>Une langue est parlée dans plusieurs pays.</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="côté-schéma-relationnel-4"><a class="anchor" href="#côté-schéma-relationnel-4"></a>Côté Schéma Relationnel</h4>
+<div class="paragraph">
+<p><code>CountryLanguage</code> est une <em>table de liaison</em>.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/many-to-many-sr-porteuse.png" alt="many-to-many-sr-porteuse"></span></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="côté-modèle-metier"><a class="anchor" href="#côté-modèle-metier"></a>Côté modèle metier</h4>
+<div class="paragraph">
+<p>Nous avons 3 classes. Deux options s&#8217;offre à nous, qui dépend de l&#8217;approche
+Primauté du Schéma Relationnel sur le modèle objet
+Primauté de l&#8217;Objet sur le Schéma Relationnel.</p>
+</div>
+<div class="paragraph">
+<p>Dans le premier cas nous avons la solution suivante :</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/many-to-many-metier-porteuse-1.png" alt="many-to-many-metier-porteuse-1"></span></p>
+</div>
+<div class="paragraph">
+<p>En UML, une classe-association peut aussi être représentée comme une
+classe ordinaire reliée à une association <strong>ManyToMany</strong> porteuse d&#8217;attributs, comme ici :</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/many-to-many-metier-porteuse-2.png" alt="many-to-many-metier-porteuse-2"></span></p>
+</div>
+<div class="paragraph">
+<p>Exemple d&#8217;opération CREATE (d&#8217;ajout d&#8217;une langue non officielle à un pays) :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="comment">// pour initialiser une classe association, on reconstitue les</span>
+     <span class="comment">// élements de sa clé : ici un objet Langue et un objet Pays.</span>
+     <span class="local-variable">$lePays</span> = <span class="local-variable">$this</span>-&gt;getDoctrine()
+            -&gt;getRepository(<span class="string"><span class="delimiter">'</span><span class="content">AcmeDemoBundle:Pays</span><span class="delimiter">'</span></span>)
+            -&gt;findOneByName(<span class="string"><span class="delimiter">'</span><span class="content">France</span><span class="delimiter">'</span></span>);
+
+            <span class="local-variable">$laLangue</span> = <span class="local-variable">$this</span>-&gt;getDoctrine()
+            -&gt;getRepository(<span class="string"><span class="delimiter">'</span><span class="content">AcmeDemoBundle:Langue</span><span class="delimiter">'</span></span>)
+            -&gt;findOneByName(<span class="string"><span class="delimiter">'</span><span class="content">Danish</span><span class="delimiter">'</span></span>);
+
+
+            <span class="keyword">if</span> (!<span class="local-variable">$lePays</span> || !<span class="local-variable">$laLangue</span>)
+                    <span class="keyword">throw</span> <span class="local-variable">$this</span>-&gt;createNotFoundException(
+                                    <span class="string"><span class="delimiter">'</span><span class="content">Pb de récupération d</span><span class="char">\'</span><span class="content">instance</span><span class="delimiter">'</span></span>
+                    );
+
+     <span class="comment">// création de l'instance de la classe association</span>
+            <span class="local-variable">$pl</span> = <span class="keyword">new</span> <span class="constant">PaysLangue</span>();
+            <span class="local-variable">$pl</span>-&gt;setLangue(<span class="local-variable">$laLangue</span>);
+            <span class="local-variable">$pl</span>-&gt;setPays(<span class="local-variable">$lePays</span>);
+
+     <span class="comment">// puis initialisation de ses attributs portés</span>
+            <span class="local-variable">$pl</span>-&gt;setOfficiel(<span class="predefined-constant">false</span>);
+
+     <span class="comment">// et sauvegarder le tout</span>
+            <span class="local-variable">$em</span> = <span class="local-variable">$this</span>-&gt;getDoctrine()-&gt;getManager();
+            <span class="local-variable">$em</span>-&gt;persist(<span class="local-variable">$pl</span>);
+            <span class="local-variable">$em</span>-&gt;<span class="predefined">flush</span>();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Exemple d&#8217;opération RETREIVE (observez la différence d&#8217;expression de la clé) :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="local-variable">$pl</span> = <span class="local-variable">$this</span>-&gt;getDoctrine()
+      -&gt;getRepository(<span class="string"><span class="delimiter">'</span><span class="content">AcmeDemoBundle:PaysLangue</span><span class="delimiter">'</span></span>)
+      -&gt;find(<span class="predefined">array</span>(
+          <span class="string"><span class="delimiter">&quot;</span><span class="content">pays</span><span class="delimiter">&quot;</span></span>  =&gt; <span class="local-variable">$lePays</span>-&gt;getId(),
+          <span class="string"><span class="delimiter">&quot;</span><span class="content">langue</span><span class="delimiter">&quot;</span></span>=&gt; <span class="local-variable">$laLangue</span>-&gt;getId()));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>L&#8217;exploitation en consultation (<code>RETREIVE</code>) de données de type <code>ManyToMany</code> amène naturellement à recueillir une collections d&#8217;objets (un ensemble de lignes d&#8217;un point de vue relationnel).</p>
+</div>
+<div class="paragraph">
+<p>Par exemple, nous souhaitons connaître l&#8217;ensemble des langues parlées (enfin référencées) pour un pays donné.</p>
+</div>
+<div class="paragraph">
+<p>Nous pouvons définir une méthode dans <code>PaysRepository</code>. qui retourne les langues en question (des instances de PaysLangue pour avoir les propriétés portées). Voici un exemple de service attendu :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php">        <span class="local-variable">$lesLangues</span> = <span class="local-variable">$this</span>-&gt;getDoctrine()
+            -&gt;getRepository(<span class="string"><span class="delimiter">'</span><span class="content">AcmeDemoBundle:Pays</span><span class="delimiter">'</span></span>)
+            -&gt;findAllLangues(<span class="local-variable">$lePays</span>-&gt;getId());</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Un exemple d&#8217;implémentation de <code>findAllLangues</code> !</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="comment">// on demande aussi de remonter le pays et la langue</span>
+<span class="comment">// (à cause du lazy loading)</span>
+<span class="keyword">public</span> <span class="keyword">function</span> <span class="function">findAllLangues</span>(<span class="local-variable">$idPays</span>){
+   <span class="local-variable">$em</span> = <span class="local-variable">$this</span>-&gt;getEntityManager();
+   <span class="local-variable">$q</span> = <span class="local-variable">$em</span>-&gt;createQuery(
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT pl, p, lg FROM AcmeDemoBundle:PaysLangue pl </span><span class="delimiter">&quot;</span></span>
+           .  <span class="string"><span class="delimiter">&quot;</span><span class="content"> JOIN pl.pays p</span><span class="delimiter">&quot;</span></span>
+           .  <span class="string"><span class="delimiter">&quot;</span><span class="content"> JOIN pl.langue lg</span><span class="delimiter">&quot;</span></span>
+           .  <span class="string"><span class="delimiter">&quot;</span><span class="content"> WHERE p.id = :idp</span><span class="delimiter">&quot;</span></span>);
+   <span class="local-variable">$q</span>-&gt;setParameter(<span class="string"><span class="delimiter">&quot;</span><span class="content">idp</span><span class="delimiter">&quot;</span></span>, <span class="local-variable">$idPays</span>);
+   <span class="keyword">return</span> <span class="local-variable">$q</span>-&gt;getResult();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Dans un contrôleur :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"> <span class="local-variable">$lesLangues</span> = <span class="local-variable">$this</span>-&gt;getDoctrine()
+            -&gt;getRepository(<span class="string"><span class="delimiter">'</span><span class="content">AcmeDemoBundle:Pays</span><span class="delimiter">'</span></span>)
+            -&gt;findAllLangues(<span class="local-variable">$lePays</span>-&gt;getId());
+
+ <span class="comment">// puis passage des valeurs à la vue</span>
+ <span class="keyword">return</span> <span class="local-variable">$this</span>-&gt;render(<span class="string"><span class="delimiter">'</span><span class="content">index/index.html.twig</span><span class="delimiter">'</span></span>, <span class="predefined">array</span>(<span class="string"><span class="delimiter">'</span><span class="content">lePays</span><span class="delimiter">'</span></span> =&gt; <span class="local-variable">$lePays</span>,
+                <span class="string"><span class="delimiter">'</span><span class="content">formulaire</span><span class="delimiter">'</span></span> =&gt; <span class="local-variable">$form</span>-&gt;createView(),
+                        <span class="string"><span class="delimiter">'</span><span class="content">lesLangues</span><span class="delimiter">'</span></span> =&gt; <span class="local-variable">$lesLangues</span>);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Dans la vue</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="html"> <span class="tag">&lt;hr&gt;</span> <span class="tag">&lt;h4&gt;</span>Les principales langues parlées ici<span class="tag">&lt;/h4&gt;</span>
+ <span class="tag">&lt;ul&gt;</span>
+   {% for lg in lesLangues %}
+     <span class="tag">&lt;li&gt;</span> {{ lg.langue.name }} <span class="tag">&lt;/li&gt;</span>
+   {% endfor %}
+<span class="tag">&lt;/ul&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="alternative-à-la-classe-association"><a class="anchor" href="#alternative-à-la-classe-association"></a>Alternative à la classe association</h3>
+<div class="paragraph">
+<p>Une alternative à la classe association est de la considérer comme une classe ordinaire (liée à une table ordinaire), avec un id propre, et relayer la contrainte de clé composite à la couche applicative.</p>
+</div>
+<div class="paragraph">
+<p>On peut cependant demander au système de persistance de prendre en compte la contrainte d&#8217;unicité (rôle d&#8217;une table de liaison) en déclarant cette contrainte sur la clé composite candidate (usage de <code>UniqueConstraint</code> ci dessous):</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/classe-association-no.png" alt="classe-association-no"></span></p>
+</div>
+<div class="paragraph">
+<p>Exemple de génération du schéma physique, cible MySQL :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="sql"><span class="class">CREATE</span> <span class="type">TABLE</span> <span class="string"><span class="delimiter">`</span><span class="content">CountryLanguage</span><span class="delimiter">`</span></span> (
+  <span class="string"><span class="delimiter">`</span><span class="content">id</span><span class="delimiter">`</span></span> <span class="predefined-type">int</span>(<span class="integer">11</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span> <span class="directive">AUTO_INCREMENT</span>,
+  <span class="string"><span class="delimiter">`</span><span class="content">IsOfficial</span><span class="delimiter">`</span></span> <span class="predefined-type">tinyint</span>(<span class="integer">1</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
+  <span class="string"><span class="delimiter">`</span><span class="content">idCountry</span><span class="delimiter">`</span></span> <span class="predefined-type">int</span>(<span class="integer">11</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
+  <span class="string"><span class="delimiter">`</span><span class="content">idLanguage</span><span class="delimiter">`</span></span> <span class="predefined-type">int</span>(<span class="integer">11</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
+  <span class="directive">PRIMARY</span> <span class="type">KEY</span> (<span class="string"><span class="delimiter">`</span><span class="content">id</span><span class="delimiter">`</span></span>),
+  <span class="directive">UNIQUE</span> <span class="type">KEY</span> <span class="string"><span class="delimiter">`</span><span class="content">review_unique_by_pays_lang</span><span class="delimiter">`</span></span> (<span class="string"><span class="delimiter">`</span><span class="content">idCountry</span><span class="delimiter">`</span></span>,<span class="string"><span class="delimiter">`</span><span class="content">idLanguage</span><span class="delimiter">`</span></span>),
+  <span class="type">KEY</span> <span class="string"><span class="delimiter">`</span><span class="content">IDX_186C946D43CAA294</span><span class="delimiter">`</span></span> (<span class="string"><span class="delimiter">`</span><span class="content">idCountry</span><span class="delimiter">`</span></span>),
+  <span class="type">KEY</span> <span class="string"><span class="delimiter">`</span><span class="content">IDX_186C946D87785BEE</span><span class="delimiter">`</span></span> (<span class="string"><span class="delimiter">`</span><span class="content">idLanguage</span><span class="delimiter">`</span></span>),
+  <span class="type">CONSTRAINT</span> <span class="string"><span class="delimiter">`</span><span class="content">FK_186C946D43CAA294</span><span class="delimiter">`</span></span>
+      <span class="directive">FOREIGN</span> <span class="type">KEY</span> (<span class="string"><span class="delimiter">`</span><span class="content">idCountry</span><span class="delimiter">`</span></span>) <span class="keyword">REFERENCES</span> <span class="string"><span class="delimiter">`</span><span class="content">Country</span><span class="delimiter">`</span></span> (<span class="string"><span class="delimiter">`</span><span class="content">id</span><span class="delimiter">`</span></span>),
+  <span class="type">CONSTRAINT</span> <span class="string"><span class="delimiter">`</span><span class="content">FK_186C946D87785BEE</span><span class="delimiter">`</span></span>
+      <span class="directive">FOREIGN</span> <span class="type">KEY</span> (<span class="string"><span class="delimiter">`</span><span class="content">idLanguage</span><span class="delimiter">`</span></span>) <span class="keyword">REFERENCES</span> <span class="string"><span class="delimiter">`</span><span class="content">Language</span><span class="delimiter">`</span></span> (<span class="string"><span class="delimiter">`</span><span class="content">id</span><span class="delimiter">`</span></span>)
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Autre exemple (<a href="http://doctrine-orm.readthedocs.org/en/latest/reference/annotations-reference.html" class="bare">http://doctrine-orm.readthedocs.org/en/latest/reference/annotations-reference.html</a>)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="comment">/**
+ * Vote : when a user vote for a question
+ *
+ * @ORM\Table(name=&quot;vote&quot;,
+  uniqueConstraints={@UniqueConstraint(name=&quot;only_one_vote&quot;,
+  columns={&quot;id_user&quot;, &quot;id_question&quot;})}),
+   indexes={@Index(name=&quot;question_idx&quot;, columns={&quot;id_question&quot;})})
+ * @ORM\Entity(repositoryClass=&quot;AppBundle\Entity\VoteRepository&quot;)
+ * @UniqueEntity(fields={&quot;user&quot;, &quot;question&quot;},message=&quot;vote.userquestion&quot;)
+ */</span>
+<span class="keyword">class</span> <span class="class">Vote</span> {
+
+  <span class="comment">/**
+   * @var integer
+   *
+   * @ORM\Column(name=&quot;id&quot;, type=&quot;integer&quot;)
+   * @ORM\Id
+   * @ORM\GeneratedValue(strategy=&quot;AUTO&quot;)
+   */</span>
+  <span class="keyword">private</span> <span class="local-variable">$id</span>;
+
+  <span class="comment">/**
+   * question
+   * @ORM\ManyToOne(targetEntity=&quot;Question&quot;)
+   * @ORM\JoinColumn(name=&quot;id_question&quot;, referencedColumnName=&quot;id&quot;)
+   */</span>
+  <span class="keyword">private</span> <span class="local-variable">$question</span>;
+
+  <span class="comment">/**
+   * user
+   * @ORM\ManyToOne(targetEntity=&quot;User&quot;)
+   * @ORM\JoinColumn(name=&quot;id_user&quot;, referencedColumnName=&quot;id&quot;)
+   */</span>
+  <span class="keyword">private</span> <span class="local-variable">$user</span>;
+
+  <span class="comment">/**
+   * @var int
+   *
+   * @ORM\Column(name=&quot;value&quot;, type=&quot;integer&quot;)
+   */</span>
+  <span class="keyword">private</span> <span class="local-variable">$value</span>;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Voici le schéma créé :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="sql"><span class="class">CREATE</span> <span class="type">TABLE</span> <span class="string"><span class="delimiter">`</span><span class="content">vote</span><span class="delimiter">`</span></span> (
+  <span class="string"><span class="delimiter">`</span><span class="content">id</span><span class="delimiter">`</span></span> <span class="predefined-type">int</span>(<span class="integer">11</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span> <span class="directive">AUTO_INCREMENT</span>,
+  <span class="string"><span class="delimiter">`</span><span class="content">id_question</span><span class="delimiter">`</span></span> <span class="predefined-type">int</span>(<span class="integer">11</span>) <span class="directive">DEFAULT</span> <span class="predefined-constant">NULL</span>,
+  <span class="string"><span class="delimiter">`</span><span class="content">id_user</span><span class="delimiter">`</span></span> <span class="predefined-type">int</span>(<span class="integer">11</span>) <span class="directive">DEFAULT</span> <span class="predefined-constant">NULL</span>,
+  <span class="string"><span class="delimiter">`</span><span class="content">value</span><span class="delimiter">`</span></span> <span class="predefined-type">int</span>(<span class="integer">11</span>) <span class="keyword">NOT</span> <span class="predefined-constant">NULL</span>,
+  <span class="directive">PRIMARY</span> <span class="type">KEY</span> (<span class="string"><span class="delimiter">`</span><span class="content">id</span><span class="delimiter">`</span></span>),
+  <span class="directive">UNIQUE</span> <span class="type">KEY</span> <span class="string"><span class="delimiter">`</span><span class="content">only_one_vote</span><span class="delimiter">`</span></span> (<span class="string"><span class="delimiter">`</span><span class="content">id_user</span><span class="delimiter">`</span></span>,<span class="string"><span class="delimiter">`</span><span class="content">id_question</span><span class="delimiter">`</span></span>),
+  <span class="type">KEY</span> <span class="string"><span class="delimiter">`</span><span class="content">IDX_5A108564E62CA5DB</span><span class="delimiter">`</span></span> (<span class="string"><span class="delimiter">`</span><span class="content">id_question</span><span class="delimiter">`</span></span>),
+
+  <span class="type">KEY</span> <span class="string"><span class="delimiter">`</span><span class="content">IDX_5A1085646B3CA4B</span><span class="delimiter">`</span></span> (<span class="string"><span class="delimiter">`</span><span class="content">id_user</span><span class="delimiter">`</span></span>),
+  <span class="type">CONSTRAINT</span> <span class="string"><span class="delimiter">`</span><span class="content">FK_5A1085646B3CA4B</span><span class="delimiter">`</span></span> <span class="directive">FOREIGN</span> <span class="type">KEY</span> (<span class="string"><span class="delimiter">`</span><span class="content">id_user</span><span class="delimiter">`</span></span>) <span class="keyword">REFERENCES</span> <span class="string"><span class="delimiter">`</span><span class="content">fos_user</span><span class="delimiter">`</span></span> (<span class="string"><span class="delimiter">`</span><span class="content">id</span><span class="delimiter">`</span></span>),
+  <span class="type">CONSTRAINT</span> <span class="string"><span class="delimiter">`</span><span class="content">FK_5A108564E62CA5DB</span><span class="delimiter">`</span></span> <span class="directive">FOREIGN</span> <span class="type">KEY</span> (<span class="string"><span class="delimiter">`</span><span class="content">id_question</span><span class="delimiter">`</span></span>) <span class="keyword">REFERENCES</span> <span class="string"><span class="delimiter">`</span><span class="content">question</span><span class="delimiter">`</span></span> (<span class="string"><span class="delimiter">`</span><span class="content">id</span><span class="delimiter">`</span></span>)
+)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="méthodes-find-requêtes-assistées"><a class="anchor" href="#méthodes-find-requêtes-assistées"></a>Méthodes find* – Requêtes assistées</h3>
+<div class="paragraph">
+<p>Nous avons utilisé la méthode <strong>find</strong>, et quelques unes de ses variantes.
+Cette méthode est définie dans la classe mère des repository : <code>EntityRepository</code>.
+En effet, nos classes <code>Repository</code> <strong>héritent</strong> de cette classe technique. Exemple :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="keyword">class</span> <span class="class">PaysRepository</span> <span class="keyword">extends</span> <span class="constant">EntityRepository</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Voici une vue partielle sur l&#8217;API de <code>EntityRepository</code> : <a href="https://github.com/doctrine/doctrine2/blob/master/lib/Doctrine/ORM/EntityRepository.php">extrait API</a>
+<span class="image"><img src="images/api-repository.png" alt="api-repository" width="600"></span></p>
+</div>
+<div class="paragraph">
+<p>Voici des exemple de ces méthodes :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="local-variable">$repository</span>=<span class="local-variable">$this</span>-&gt;getDoctrine()-&gt;getRepository(<span class="string"><span class="delimiter">'</span><span class="content">AcmeDemoBundle:Pays</span><span class="delimiter">'</span></span>);
+
+<span class="comment">// récupère tous les pays</span>
+<span class="local-variable">$lesPays</span> = <span class="local-variable">$repository</span>-&gt;findAll();
+
+<span class="comment">// récupère tous les pays ayant obtenu l'indépendance en 1960</span>
+<span class="local-variable">$lesPays</span> = <span class="local-variable">$repository</span>-&gt;findBy(<span class="predefined">array</span>(<span class="string"><span class="delimiter">'</span><span class="content">indepYear</span><span class="delimiter">'</span></span>=&gt; <span class="integer">1960</span>));
+
+<span class="comment">// récupère tous les pays (premier critère vide = prendre tout)</span>
+<span class="comment">// trié sur l'attribut continent (attention, pas la colonne!)</span>
+<span class="local-variable">$lesPays</span> = <span class="local-variable">$repository</span>-&gt;findBy(<span class="predefined">array</span>(), <span class="predefined">array</span>(<span class="string"><span class="delimiter">'</span><span class="content">continent</span><span class="delimiter">'</span></span> =&gt; <span class="string"><span class="delimiter">'</span><span class="content">ASC</span><span class="delimiter">'</span></span> ));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Pour des requêtes simples, basées sur des valeurs d&#8217;attributs (point de vue objet) – en référence à des valeurs de colonnes (du point de vue de la table)  –  le développeur a la  possibilité d&#8217;utiliser des méthodes dites <strong>magiques</strong> (<em>magic finders</em>).</p>
+</div>
+<div class="paragraph">
+<p>Ce mécanisme <strong>s&#8217;appuie sur des conventions de nommage</strong> de méthodes
+(sous la responsabilité du développeur) et sur la méthode <strong>__call</strong> de la
+classe mère <code>Repository</code> qui transforme des appels de « méthodes magiques » en un
+appel classique (nommant la bonne colonne). Les méthodes doivent commencer par <strong>findBy</strong> ou <strong>findOneBy</strong>,
+on voit ici le traitement de cette convention :</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/method_magic.png" alt="method_magic mecanisme"></span></p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<strong>findBy</strong>  retourne un tableau (éventuellement vide)
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<strong>findOneBy</strong>  retourne une référence à un objet (éventuellement null)
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Ainsi, pour retrouver tous les pays ayant obtenu l&#8217;indépendance en 1960,
+nous pouvons simplifier l&#8217;appel comme ceci :</p>
+</div>
+<div class="paragraph">
+<p>Exemple d&#8217;une méthode magique :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="comment">// récupère tous les pays ayant obtenu l'indépendance en 1960</span>
+<span class="local-variable">$lesPays</span> = <span class="local-variable">$paysRepository</span>-&gt;findByIndepYear(<span class="integer">1960</span>);</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>par du principe que la classe <code>Pays</code> a un attribut privé nommé <code>indepYear</code>, ou plus exactement une méthode nommée <code>getIndepYear</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Exemple d&#8217;une erreur de nommage :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="comment">// récupère tous les pays ayant obtenu l'indépendance en 1960</span>
+<span class="local-variable">$lesPays</span> = <span class="local-variable">$paysRepository</span>-&gt;findByAnneeIndep(<span class="integer">1960</span>);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>qui déclenche une erreur !</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/method_magic-error.png" alt="method_magic-error" width="600"></span></p>
+</div>
+<div class="paragraph">
+<p>Ce qui est parfaitement normal, si l&#8217;attribut <code>anneeIndep</code> n&#8217;est pas un attribut de l&#8217;entité <code>Pays</code>.</p>
+</div>
+<div class="paragraph">
+<p>Exemple d&#8217;utilisation de <em>findOneBy</em> :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="comment">// récupère un pays par son nom</span>
+ <span class="local-variable">$pays</span> = <span class="local-variable">$paysRepository</span>-&gt;findOneByName(<span class="string"><span class="delimiter">'</span><span class="content">Utopie</span><span class="delimiter">'</span></span>);
+ <span class="keyword">if</span> (<span class="local-variable">$pays</span>)
+  <span class="comment">// on peut toujours rêver...</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="méthodes-createnativequery-requêtes-natives"><a class="anchor" href="#méthodes-createnativequery-requêtes-natives"></a>Méthodes createNativeQuery – Requêtes natives</h3>
+<div class="paragraph">
+<p>Il peut arriver, et c&#8217;est souvent le cas lorsque l&#8217;on reprend un existant, de vouloir réutiliser des requêtes SQL présentes dans l&#8217;existant (cas de requêtes optimisées,  de requêtes complexes).</p>
+</div>
+<div class="paragraph">
+<p>Pour cela nous utilisons la méthode <em>createNativeQuery</em> qui prend en argument la requête SQL classique et une référence à un objet de type <code>ResultSetMapping</code>. Cette dernière classe aide Doctrine à mapper les colonnes sur les bons attributs d&#8217;une classe result.</p>
+</div>
+<div class="paragraph">
+<p>Exemple : Nous disposons d&#8217;une requête SQL qui nous retourne l&#8217;id et le nom de la langue officiel du pays d&#8217;id=73 :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="sql">mysql&gt; <span class="class">SELECT</span> Language.id, Language.name <span class="keyword">FROM</span> Language,CountryLanguage,Country <span class="keyword">WHERE</span> Country.id = CountryLanguage.idCountry <span class="keyword">AND</span> Language.id = CountryLanguage.idLanguage <span class="keyword">AND</span> idCountry =<span class="integer">73</span> <span class="keyword">AND</span> CountryLanguage.Isofficial =<span class="string"><span class="delimiter">'</span><span class="content">T</span><span class="delimiter">'</span></span>;
++<span class="comment">----+--------+</span>
+| id | name   |
++<span class="comment">----+--------+</span>
+| <span class="integer">23</span> | French |
++<span class="comment">----+--------+</span>
+<span class="integer">1</span> <span class="type">row</span> <span class="keyword">in</span> <span class="class">set</span> (<span class="float">0.00</span> sec)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Nous souhaitons réutiliser telle quelle cette requête
+(celle que nous présentons pourrait être réalisée simplement en DQL – TODO à prouver !)</p>
+</div>
+<div class="paragraph">
+<p>Voici une version possible (paramétrée sur l&#8217;id du pays) :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="keyword">class</span> <span class="class">PaysLangueRepository</span> <span class="keyword">extends</span> <span class="constant">EntityRepository</span>{
+
+  <span class="keyword">public</span> <span class="keyword">function</span> <span class="function">findLangueOfficielle</span>(<span class="local-variable">$idPays</span>) {
+        <span class="local-variable">$rsm</span> = <span class="keyword">new</span> <span class="constant">ResultSetMapping</span>;
+        <span class="local-variable">$rsm</span>-&gt;addScalarResult(<span class="string"><span class="delimiter">'</span><span class="content">id</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">id</span><span class="delimiter">'</span></span>);
+        <span class="local-variable">$rsm</span>-&gt;addScalarResult(<span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span>);
+        <span class="local-variable">$query</span> = <span class="local-variable">$this</span>-&gt;getEntityManager()-&gt;createNativeQuery(
+              <span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT Language.id,Language.name
+          FROM Language,CountryLanguage,Country
+          WHERE Country.id = CountryLanguage.idCountry
+          AND Language.id = CountryLanguage.idLanguage
+          AND idCountry = ?
+          AND CountryLanguage.Isofficial ='T'
+            ORDER BY CountryLanguage.Percentage DESC</span><span class="delimiter">&quot;</span></span>
+            ,<span class="local-variable">$rsm</span>);
+        <span class="local-variable">$query</span>-&gt;setParameter(<span class="integer">1</span>, <span class="local-variable">$idPays</span>);
+        <span class="local-variable">$langues</span> = <span class="local-variable">$query</span>-&gt;getResult();
+        <span class="keyword">return</span> <span class="local-variable">$langues</span>[<span class="integer">0</span>]; <span class="comment">// prend la première langue...</span>
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Cette façon de faire s&#8217;appuie sur la méthode <em>addScalarResult</em> de l&#8217;objet <code>ResultSetMapping</code>.
+La classe instanciée sera de type php objet : <code>stdclass</code></p>
+</div>
+<div class="paragraph">
+<p>API :  addScalarResult</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="constant">Doctrine</span>\<span class="constant">ORM</span>\<span class="constant">Query</span>\<span class="constant">ResultSetMapping</span>::addScalarResult(<span class="predefined-type">string</span> <span class="local-variable">$columnName</span>, <span class="predefined-type">string</span> <span class="local-variable">$alias</span>, <span class="predefined-type">string</span> <span class="local-variable">$type</span>)
+        <span class="constant">Adds</span> a scalar result mapping.
+<span class="constant">Parameters</span>:
+ * <span class="predefined-type">string</span> <span class="local-variable">$columnName</span> <span class="constant">The</span> name of the column in the <span class="constant">SQL</span> result set.
+ * <span class="predefined-type">string</span> <span class="local-variable">$alias</span> <span class="constant">The</span> result alias with which the scalar result should
+        be placed in the result structure.
+ * <span class="predefined-type">string</span> <span class="local-variable">$type</span> <span class="constant">The</span> column type</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Une autre façon de faire est de mapper directement sur une entité métier de l&#8217;application :
+Voici une version possible qui retournera une instance de <code>Langue</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="keyword">class</span> <span class="class">PaysLangueRepository</span> <span class="keyword">extends</span> <span class="constant">EntityRepository</span>{
+
+  <span class="keyword">public</span> <span class="keyword">function</span> <span class="function">findLangueOfficielle</span>(<span class="local-variable">$idPays</span>) {
+        <span class="local-variable">$rsm</span> = <span class="keyword">new</span> <span class="constant">ResultSetMapping</span>;
+        <span class="local-variable">$rsm</span>-&gt;addEntityResult(<span class="string"><span class="delimiter">'</span><span class="content">AcmeDemoBundle:Langue</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">lg</span><span class="delimiter">'</span></span>);
+        <span class="local-variable">$rsm</span>-&gt;addFieldResult(<span class="string"><span class="delimiter">'</span><span class="content">lg</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">id</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">id</span><span class="delimiter">'</span></span>);
+         <span class="local-variable">$rsm</span>-&gt;addFieldResult(<span class="string"><span class="delimiter">'</span><span class="content">lg</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">name</span><span class="delimiter">'</span></span>);
+        <span class="local-variable">$query</span> = <span class="local-variable">$this</span>-&gt;getEntityManager()-&gt;createNativeQuery(
+              <span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT Language.id,Language.name
+          FROM Language,CountryLanguage,Country
+          WHERE Country.id = CountryLanguage.idCountry
+          AND Language.id = CountryLanguage.idLanguage
+          AND idCountry = ?
+          AND CountryLanguage.Isofficial ='T'
+            ORDER BY CountryLanguage.Percentage DESC</span><span class="delimiter">&quot;</span></span>
+            ,<span class="local-variable">$rsm</span>);
+        <span class="local-variable">$query</span>-&gt;setParameter(<span class="integer">1</span>, <span class="local-variable">$idPays</span>);
+        <span class="local-variable">$langues</span> = <span class="local-variable">$query</span>-&gt;getResult();
+        <span class="keyword">return</span> <span class="local-variable">$langues</span>[<span class="integer">0</span>]; <span class="comment">// prend la première langue...</span>
+   }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>API :  addFieldResult</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="constant">Doctrine</span>\<span class="constant">ORM</span>\<span class="constant">Query</span>\<span class="constant">ResultSetMapping</span>::addFieldResult(<span class="predefined-type">string</span> <span class="local-variable">$alias</span>, <span class="predefined-type">string</span> <span class="local-variable">$columnName</span>, <span class="predefined-type">string</span> <span class="local-variable">$fieldName</span>, <span class="predefined-type">string</span> <span class="local-variable">$declaringClass</span>)
+<span class="constant">Adds</span> a field to the result that belongs to an entity <span class="keyword">or</span> joined entity.
+<span class="constant">Parameters</span>:
+* <span class="predefined-type">string</span> <span class="local-variable">$alias</span> <span class="constant">The</span> alias of the root entity <span class="keyword">or</span> joined entity to which the field belongs.
+* <span class="predefined-type">string</span> <span class="local-variable">$columnName</span> <span class="constant">The</span> name of the column in the <span class="constant">SQL</span> result set.
+* <span class="predefined-type">string</span> <span class="local-variable">$fieldName</span> <span class="constant">The</span> name of the field on the declaring <span class="keyword">class</span>.</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2018-09-21 09:53:13 CEST
+Last updated 2018-09-23 20:54:46 CEST
 </div>
 </div>
 </body>

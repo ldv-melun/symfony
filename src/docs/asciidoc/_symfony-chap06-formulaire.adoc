@@ -242,3 +242,21 @@ Exemple de code HTML généré par twig :
 On remarquera le `token` de prévention CRSF (_Cross site request forgery_) en fin
 de formulaire dans le but d'éviter qu'un site mal intentionné ne vous entraine à déclencher des actions à votre insue.
 
+
+== Travaux pratiques
+
+Durée moyenne : 8H
+
+====
+[start=1]
+. À partir de l'exemple étudié dans le tutoriel de Symfony sur la notion de `Model` (classe `Product`), réalisez les opérations permettant à un utilisateur lambda de :
+.. Lister les produits
+.. Création d'un produit
+.. Modifier un produit
+.. Supprimer un produit
+
+
+TIP: Dans les vues twig, vos liens seront basés sur le *nom* des routes et non sur les routes elles-mêmes.
+Ces noms sont consultatbles en ligne de commande : `php bin/console debug:router`. Voir aussi https://symfony.com/doc/current/templating.html#linking-to-pages
+
+====

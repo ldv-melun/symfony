@@ -1,9 +1,34 @@
-= Introduction au Model
+= Liaison entre Entités
 ifndef::backend-pdf[]
 :imagesdir: images
 endif::[]
 
-== Liaison entre Entités - Contexte support
+
+== Tutotiel Doctrine et Associations (Liaison entre objets métier)
+
+Nous venons de voir les concepts d'`Entity` et d'`EntityRepository` associé à `Doctrine`.
+
+L'étape suivante consiste à étudier les liaisons type entre entités.
+
+En effet, tout comme les classes techniques (array, string, ...) un classe métier n'est jamais seule,
+mais liée à d'autres classe métier par des liaisons de type `ManyToOne`- `OneToMany`, `ManyToMany` et OneToOne.
+
+Suivre ce tutoriel qui introduit ces concepts et fait suite au précédent : https://symfony.com/doc/current/doctrine/associations.html
+
+== Travaux pratiques
+
+Durée moyenne 4h
+
+On considère qu'un produit (classe `Product`) appratient forcément
+à une catégorie (classe `Category`).
+
+====
+[start=1]
+. Permettre à l'utilisateur de consulter et gérer les produits d'une catégorie donnée.
+====
+
+
+== Liaison entre Entités avec UML - Contexte support
 
 Nous nous plaçons dans le cas d'une application exploitant des données stockées
 par un système de gestion de bases de données relationnel (SGBDR).
@@ -60,7 +85,7 @@ d'objets (instances de classes métier)
 
 Pour aider le travail de l'ORM Doctrine (_Object Relational Mapping_), la défintion des entités intégre des directives de mapping sous forme d'*annotations*.
 
-== Mappings et annotations
+== Classe métier et table
 
 Dans ce qui suit, afin de bien distinguer ce qui de l'ordre du
 modèle de persistance (tables du schéma relationnel) et
@@ -215,18 +240,18 @@ par le fait qu'il définit la jointure - @JoinTable *ou* s'il ne fait pas usage 
 
 TIP: Les concepts de _propriétaire/inverse_ *ne sont pas* des concepts métier, mais techniques (la relation propriétaire—inverse n'a pas de sens métier).
 
-=== ManyToMany - porteuse de propriétés
+== ManyToMany - porteuse de propriétés
 
 * Pour un pays donné, plusieurs langues sont parlées (dont une est officielle)
 * Une langue est parlée dans plusieurs pays.
 
-==== Côté Schéma Relationnel
+=== Côté Schéma Relationnel
 
 `CountryLanguage` est une _table de liaison_.
 
 image:many-to-many-sr-porteuse.png[many-to-many-sr-porteuse]
 
-==== Côté modèle metier
+=== Côté modèle metier
 
 Nous avons 3 classes. Deux options s'offre à nous, qui dépend de l'approche
 Primauté du Schéma Relationnel sur le modèle objet
@@ -343,7 +368,7 @@ Dans la vue
 
 ----
 
-=== Alternative à la classe association
+== Alternative à la classe association
 
 Une alternative à la classe association est de la considérer comme une classe ordinaire (liée à une table ordinaire), avec un id propre, et relayer la contrainte de clé composite à la couche applicative.
 
@@ -438,9 +463,8 @@ CREATE TABLE `vote` (
 )
 ----
 
-== Exploitation du modèle métier
 
-=== Méthodes find* – Requêtes assistées
+== Méthodes find* – Requêtes assistées
 Nous avons utilisé la méthode *find*, et quelques unes de ses variantes.
 Cette méthode est définie dans la classe mère des repository : `EntityRepository`.
 En effet, nos classes `Repository` *héritent* de cette classe technique. Exemple :
@@ -516,7 +540,7 @@ Exemple d'utilisation de _findOneBy_ :
   // on peut toujours rêver...
 ----
 
-=== Méthodes createNativeQuery – Requêtes natives
+== Méthodes createNativeQuery – Requêtes natives
 Il peut arriver, et c'est souvent le cas lorsque l'on reprend un existant, de vouloir réutiliser des requêtes SQL présentes dans l'existant (cas de requêtes optimisées,  de requêtes complexes).
 
 Pour cela nous utilisons la méthode _createNativeQuery_ qui prend en argument la requête SQL classique et une référence à un objet de type `ResultSetMapping`. Cette dernière classe aide Doctrine à mapper les colonnes sur les bons attributs d'une classe result.
@@ -620,19 +644,3 @@ Parameters:
 * string $fieldName The name of the field on the declaring class.
 ----
 
-
-== Travaux pratiques
-
-Durée moyenne 4h
-
-On considère qu'un produit (classe `Product`) appratient forcément
-à une catégorie (classe `Category`).
-
-====
-[start=1]
-. Ajouter le concept de catégorie à votre application support de TP.
-====
-====
-[start=2]
-. Permettre à l'utilisateur de sélectionner les produits d'une catégorie donnée.
-====
