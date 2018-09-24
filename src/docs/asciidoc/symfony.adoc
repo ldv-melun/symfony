@@ -49,9 +49,7 @@ Pour réaliser les travaux pratiques, vous aurez besoin d'aller plus en profonde
 La documentation Symfony est accessible ici : https://symfony.com/doc/current/index.html
 
 include::_symfony-chap01-installation-test.adoc[leveloffset=+1]
-
 include::_symfony-chap02-premiere-page.adoc[leveloffset=+1]
-
 include::_symfony-chap03-data-input.adoc[leveloffset=+1]
 
 <<<

@@ -22,13 +22,25 @@ Durée moyenne 4h
 On considère qu'un produit (classe `Product`) appratient forcément
 à une catégorie (classe `Category`).
 
+
 ====
 [start=1]
-. Permettre à l'utilisateur de consulter et gérer les produits d'une catégorie donnée.
+
+. Pour les besoins de l'exercice suivant, concevoir un contrôleur (route : `/category/populate`) qui injecte dans la base de données
+ une dizaine de catégories (la gestion CRUD des catégories n'est pas demandée).
+
+TIP: CONTRAINTE : Le contrôleur n'appliqera sa fonction qu si le nombre actuel de catégories est inférieur au nombre qu'il compte injecter !
 ====
 
 
-== Liaison entre Entités avec UML - Contexte support
+====
+[start=2]
+. Permettre à l'utilisateur de consulter et gérer les produits d'une catégorie donnée.
+
+IMPORTANT: Faire évoluer votre gestion précédente CRUD sur Product
+====
+
+== Liaison entre Entités avec UML
 
 Nous nous plaçons dans le cas d'une application exploitant des données stockées
 par un système de gestion de bases de données relationnel (SGBDR).
