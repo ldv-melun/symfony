@@ -1,4 +1,4 @@
-= Première page : notion de Vue/Contrôleur
+= Première interaction : notion de Vue/Contrôleur
 ifndef::backend-pdf[]
 :imagesdir: images
 endif::[]
@@ -15,7 +15,7 @@ Du point du développement logiciel d'une application web, "_créer une page_" c
 Un requête HTTP de type `GET` correspond à une demande de _resssource distante_.
 La ressource demandée peut correspondre à une donnée statique (un fichier placé sur le serveur) ou dynamique (construite pour l'occasion).
 
-Nous nous plaçons dans le cas où l'application répondra par du contenu dynamique `HTML`.
+Nous nous plaçons dans le cas où l'application répondra par du contenu dynamique, la plupart du temps en `HTML`.
 
 IMPORTANT: Une application web n'expose jamais directement ses templates de vue de ses ressources dynamiques (pas de lien direct vers un script de vue)
 
@@ -63,7 +63,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class LuckyController <3>
 {
   /** <4>
-  * @Route("/lucky/number") <5>
+  * @Route("/lucky/number", methods={"GET"}) <5>
   */
   public function number() <6>
   {
@@ -76,13 +76,13 @@ class LuckyController <3>
 } <8>
 ----
 
-<1> un _comment_ à destination du lecteur, afin d'identifier le chemin de sauvegarde
+<1> un commentaire à destination du lecteur du tuto, afin d'identifier la localisation du fichier (une donnée importante lorsque l'on travaille avec un framework)
 <2> les librairies dont dépend le code ci-dessous (Classe et annotation)
 <3> une classe normale PHP Objet
-<4> Attention : démarre avec 2 étoiles (ref. à PHPDOC)
-<5> définition de la logique d'appel (extrait terminal URL de l'application)
-<6> une méthode public; Elle sera automatiquement appelée via le _front controller_.
-<7> retourne un instance de `Response` (avec du contenu _HTML_)
+<4> Attention : démarre avec *2 étoiles* (ref. à PHPDOC)
+<5> l'annotation _@Route_ permet de lier l'appel de la méthode à une requête HTTP GET (extrait terminal d'une URL de l'application)
+<6> une méthode public; Elle sera automatiquement appelée par le _front controller_.
+<7> retourne un instance de `Response` (avec du contenu _HTML_). On remarquera que le contenu HTML n'est pas bien formé (pas de doctype, <head>, ...) - on utilise ce type de réponse généralement pour du contenu textuel plus simple.
 <8> le marqueur de fin de traitement PHP (`?>`) est volontairement absent afin de conserver le sens _librairie_ d'une classe Controller.
 
 Voici un extrait des spécifications de la fonction http://php.net/manual/fr/function.mt-rand.php
@@ -101,7 +101,9 @@ Un entier aléatoire compris entre min (ou 0) et max inclusif, ou FALSE si le pa
 http://localhost:8000/lucky/number
 ....
 
-== Rendu par une logique de vue (archtecture MVC)
+Vous devriez recevoir un nombre dans l'intervalle : [0..100[
+
+== Le rendu (_render_) par une logique de vue (archtecture MVC)
 
 Concevoir la logique de présentation (HTML and Co) dans un contrôleur n'est pas une bonne pratique.
 
@@ -115,7 +117,7 @@ $ cd your-project/
 $ composer require twig
 ....
 
-Il faut ensuite s'assurer `LuckyController` hérite de la classe de base des contrôleurs `AbstractController`:
+Il faut ensuite s'assurer que `LuckyController` hérite de la classe de base des contrôleurs `AbstractController`:
 
 .MVC : Les classes contrôleur héritent de _AbstractController_
 [source, php]
@@ -133,11 +135,11 @@ Il faut ensuite s'assurer `LuckyController` hérite de la classe de base des con
 }
 ----
 <1> déclaration de la dépendance (un import)
-<2> la classe LuckyController hérite de AbstractController
+<2> la classe LuckyController hérite maintenant de AbstractController
 
 Et faire en sorte que la méthode contrôleur *délègue* la vue à une page twig :
 
-.MVC : Une classe contrôleur hérite de Controller
+.MVC : Le contrôleur délègue la forme de la réponse à une vue twig
 [source, php]
 ----
 // src/Controller/LuckyController.php
@@ -146,7 +148,7 @@ Et faire en sorte que la méthode contrôleur *délègue* la vue à une page twi
 class LuckyController extends AbstractController
 {
     /**
-     * @Route("/lucky/number")
+     * @Route("/lucky/number", methods={"GET"})
      */
     public function numberAction()
     {
@@ -159,15 +161,15 @@ class LuckyController extends AbstractController
 }
 ----
 
-<1> appel à la méthode héritée (_render_) en lui passant le nom d'une vue, suivi d'un *tableau associatif*, appelé aussi *dictionnaire*, composé de *couples (nom_variable=>valeur)*.
+<1> appel de la méthode héritée (_render_) en lui passant le nom d'une vue, suivi d'un *tableau associatif*, appelé aussi *dictionnaire*, composé de *couples (nom_variable=>valeur)*.
 Dans notre cas, le tableau n'a qu'un seul élément ('number'=> $number),
 qui sera passé à la vue.
-La vue aura accès à ces valeurs *directement* par le *nom des clés définis dans ce dictionnaire*.
+La vue aura accès à ces valeurs *directement* par le *nom des clés* définis dans ce dictionnaire.
 
 Les fichiers de vue seront cherchés par symfony, par défaut, dans le dossier *_templates_* à partir de la racine du projet (ce dossier est automatiquement crée lors de l'installation de twig).
 
 
-== Template de base de l'application
+== Modèle de Présentation (_template_) de l'application
 
 C'est un fichier qui détermnine la structure HTML/CSS générale de votre application.
 La plupart du temps un tel template se base sur un modèle proposé par des frameworks CSS (_bootstrap_, _semantic-ui_, ...). Il est parfois acheté auprès de sociétés spécialisées.
@@ -181,21 +183,23 @@ Exemple de template simple, _from scratch_, créé par le composant _twig_ lors 
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Welcome!{% endblock %}</title> <1>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %} <1>
+        {% block body %}{% endblock %} <2>
         {% block javascripts %}{% endblock %}
     </body>
 </html>
 ----
-<1> Définition d'un block nommé `body` (ne pas confondre avec `<body>`).
- Les vues héritant pouvent alors redéfinir ces blocks.
+<1> Définition d'un block nommé `title` avec comme valeur par défaut `Welcome!`
+<2> Définition d'un block nommé `body` (ne pas confondre avec `<body>`).
 
 Ce template de base définit 4 blocks : `title`, `stylesheets`, `body` et `javascripts`.
 
-Pour répondre au besoin de notre méthode _numberAction_ de _LuckyController_, nous
+Le fait de nommer ces bloques permet, aux vues héritantes, de personnaliser leur contenus.
+
+Par exemple, pour répondre au besoin de notre méthode _numberAction_ de _LuckyController_, nous
 devons créer une nouvelle vue dans le dossier _templates/lucky_, nommée `number.html.twig` (`lucky` est un dossier qu'il faut créer) :
 
 [source, php]
@@ -210,20 +214,43 @@ devons créer une nouvelle vue dans le dossier _templates/lucky_, nommée `numbe
 {% endblock %}
 ----
 
-<1> un commentaire twig qui vous informe, vous lecteur, de la localisation de ce fichier
-<2> cette vue hérite d'un template qui définit les blocs `title` et `body`
+<1> un commentaire twig qui vous informe, pour le besoin de ce support,
+de la localisation de ce fichier (à ne pas recopier !)
+<2> choix du template de base hérité  (qui définit, entre autres, les blocs `title` et `body`)
 <3> redéfinition du bloc `title`
 <4> redéfinition du bloc `body`
 
 Vous trouverez la syntaxe twig ici : https://twig.symfony.com/
 
-== En résumé
+== Résumé
 
-Nous avons vu les principes d'interaction d'une application web :
+Nous avons vu les principes d'interaction (appel client, controleur et vue) d'une application web :
 
 *  Les requêtes HTTP entrantes sont routées par symfony sur des classes contrôleurs :
-   Comprendre : une requête client déclenche un appel de méthode d'un objet _Controller_.
-   C'est à ce niveau que des décisions algorithmiques métier sont exécutées.
+
+IMPORTANT: une requête client déclenche un appel de méthode d'un objet _Controller_. C'est à ce niveau que des décisions algorithmiques métier sont exécutées.
+
 
 *  La représentation de la réponse est déléguée à une logique de vue (*twig*)
 
+
+Il est temps de tester le code présenter et de faire une pause...
+
+
+== TP tester le code exemple _Lucky_
+
+[TIP]
+====
+Pour ce TP, vous pouvez choisir d'utiliser le serveur HTTP
+intégré à PHP en le lançant en ligne de commande, *à la racine de votre application web* :
+
+`php bin/console server:run`
+
+ou via la commande
+
+`symfony server:start`
+
+Dans ce cas, il vous faudra tester vos routes ainsi :
+
+`http://127.0.0.1:8000/lucky/number`
+====

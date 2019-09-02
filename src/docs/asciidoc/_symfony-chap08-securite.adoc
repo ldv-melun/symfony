@@ -1,0 +1,42 @@
+= Securite
+ifndef::backend-pdf[]
+:imagesdir: images
+endif::[]
+
+== Introduction
+
+Par "sécurité" on entend ici le contrôle d'accès à des ressources web.
+
+Le contrôle d'accès à une ressource protégée est constitué de 3 étapes :
+
+. identification
+. authentification
+. habilitation
+
+L'identification est le plus souvent pris en charge par un formulaire de login (ou gestion d'un jeton)
+
+L'authentification est une opération qui vérifie que l'utilisateur est bien celui revendiqué
+
+L'habilitation consiste ensuite à vérifier si l'utilisateur a les droits d'accéder à la ressource (ou service) demandée.
+
+
+== API de sécurité de symfony
+
+Symfony intégre, via  le composant `symfony/security-bundle`, les mécanismes de sécurité propres au web.
+
+Vous vous reférerez au tutoriel https://symfony.com/doc/current/security.html, en ne traitant que le cas d'une
+authentification d'utilisateurs en mémoire (ce sera suffisant pour démarrer le projet) :
+
+
+== Travaux pratiques
+
+Durée moyenne : 4H (tutoriel et manipulation) 2H (TP)
+
+Sur la base de la gestion de produits (tutoriels précédents)
+
+====
+[start=1]
+. Protéger l'accès à la modification de produits aux utilisateurs ayant comme rôle EDITEUR
+. Seuls les ADMIN peuvent créer, modifier et suprimer des produits
+. Une personne connectée peut à tout moment se déconnecter.
+====

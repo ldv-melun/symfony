@@ -1,6 +1,6 @@
 = Symfony Introduction
-Section BTS SIO SLAM (LDV Melun) O. Capuozzo, G. Chamillard
-v1.0, 2018-07-30: Version asciidoc
+Section BTS SIO SLAM (LDV Melun) O. Capuozzo
+v1.1, 2019-08-30: Version asciidoc
 :description: Presentation de Symfony
 :icons: font
 :listing-caption: Listing
@@ -51,11 +51,9 @@ La documentation Symfony est accessible ici : https://symfony.com/doc/current/in
 include::_symfony-chap01-installation-test.adoc[leveloffset=+1]
 include::_symfony-chap02-premiere-page.adoc[leveloffset=+1]
 include::_symfony-chap03-data-input.adoc[leveloffset=+1]
-
-<<<
-include::_symfony-chap04-tp-1.adoc[leveloffset=+1]
-
-include::_symfony-chap05-model-entite.adoc[leveloffset=+1]
-include::_symfony-chap06-formulaire.adoc[leveloffset=+1]
-include::_symfony-chap07-model-liaison.adoc[leveloffset=+1]
-
+// <<<
+// include::_symfony-chap04-tp-1.adoc[leveloffset=+1]
+// include::_symfony-chap05-model-entite.adoc[leveloffset=+1]
+// include::_symfony-chap06-formulaire.adoc[leveloffset=+1]
+// include::_symfony-chap07-model-liaison.adoc[leveloffset=+1]
+// include::_symfony-chap08-securite.adoc[leveloffset=+1]
