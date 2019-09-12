@@ -476,7 +476,7 @@ aller <code>File&#8594;Settings</code> puis chercher <code>plugin symfony</code>
 <span class="keyword">class</span> <span class="class">LuckyController</span> <i class="conum" data-value="3"></i><b>(3)</b>
 {
   <span class="comment">/** <i class="conum" data-value="4"></i><b>(4)</b>
-  * @Route(&quot;/lucky/number&quot;, methods={&quot;GET&quot;}) <i class="conum" data-value="5"></i><b>(5)</b>
+  * @Route(&quot;/lucky/number&quot;, methods={&quot;GET&quot;}, name=&quot;lucky_step_one&quot;) <i class="conum" data-value="5"></i><b>(5)</b>
   */</span>
   <span class="keyword">public</span> <span class="keyword">function</span> <span class="function">number</span>() <i class="conum" data-value="6"></i><b>(6)</b>
   {
@@ -606,7 +606,7 @@ $ composer require twig</pre>
 <span class="keyword">class</span> <span class="class">LuckyController</span> <span class="keyword">extends</span> <span class="constant">AbstractController</span>
 {
     <span class="comment">/**
-     * @Route(&quot;/lucky/number&quot;, methods={&quot;GET&quot;})
+     * @Route(&quot;/lucky/number&quot;, methods={&quot;GET&quot;}, name=&quot;lucky_step_one&quot;)
      */</span>
     <span class="keyword">public</span> <span class="keyword">function</span> <span class="function">numberAction</span>()
     {
@@ -1037,10 +1037,10 @@ est l&#8217;argument reçu)</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="php">  <span class="comment">/**
-  * @Route(&quot;/hello/{nom}&quot;, methods={&quot;GET&quot;}, name=&quot;app_hello&quot;)
+  * @Route(&quot;/hello/{nom}&quot;, methods={&quot;GET&quot;}, name=&quot;sio_hello&quot;)
   */</span>
   <span class="keyword">public</span> <span class="keyword">function</span> <span class="function">helloAction</span>(<span class="local-variable">$nom</span>) {
-    <span class="keyword">return</span> <span class="local-variable">$this­</span>&gt;render(<span class="string"><span class="delimiter">'</span><span class="content">sio/hello.html.twig</span><span class="delimiter">'</span></span>, <span class="predefined">array</span>(<span class="string"><span class="delimiter">'</span><span class="content">nom</span><span class="delimiter">'</span></span> =&gt; <span class="local-variable">$nom</span>));
+    <span class="keyword">return</span> <span class="local-variable">$this</span>-­&gt;render(<span class="string"><span class="delimiter">'</span><span class="content">sio/hello.html.twig</span><span class="delimiter">'</span></span>, <span class="predefined">array</span>(<span class="string"><span class="delimiter">'</span><span class="content">nom</span><span class="delimiter">'</span></span> =&gt; <span class="local-variable">$nom</span>));
   }</code></pre>
 </div>
 </div>
@@ -1101,8 +1101,8 @@ message 'Hello Inconnu !' est présenté. Voir le concept de <strong>valeur par 
 <div class="olist arabic">
 <ol class="arabic" start="5">
 <li>
-<p>(plus difficile) Ajouter un <strong>message flash</strong> (concept à étudier !), qui affiche un message de bienvenue à
-l&#8217;utilisateur lors d&#8217;une <strong>première connection</strong> à la route <code>/hello</code> (et sa méthode d&#8217;action liée),
+<p>(plus difficile) Ajouter un <strong>message flash</strong> (concept à étudier !), qui retourne  à
+l&#8217;utilisateur un <strong>message de bienvenue avec son IP</strong> lors d&#8217;une <strong>première connection</strong> à la route <code>/hello</code> (et donc à sa méthode d&#8217;action liée),
 pour une même instance de navigateur. Conseil : Afficher dans un premier temps le message, puis mettre sous condition la création du message en gérant une donnée de session utilisateur.</p>
 </li>
 </ol>

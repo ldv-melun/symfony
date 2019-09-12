@@ -63,7 +63,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class LuckyController <3>
 {
   /** <4>
-  * @Route("/lucky/number", methods={"GET"}) <5>
+  * @Route("/lucky/number", methods={"GET"}, name="lucky_step_one") <5>
   */
   public function number() <6>
   {
@@ -148,7 +148,7 @@ Et faire en sorte que la méthode contrôleur *délègue* la vue à une page twi
 class LuckyController extends AbstractController
 {
     /**
-     * @Route("/lucky/number", methods={"GET"})
+     * @Route("/lucky/number", methods={"GET"}, name="lucky_step_one")
      */
     public function numberAction()
     {

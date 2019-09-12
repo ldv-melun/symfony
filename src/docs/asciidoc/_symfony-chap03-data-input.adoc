@@ -144,10 +144,10 @@ WARNING: Attention à bien respecter les conventions de nommage :
 [source,php]
 ----
   /**
-  * @Route("/hello/{nom}", methods={"GET"}, name="app_hello")
+  * @Route("/hello/{nom}", methods={"GET"}, name="sio_hello")
   */
   public function helloAction($nom) {
-    return $this­>render('sio/hello.html.twig', array('nom' => $nom));
+    return $this-­>render('sio/hello.html.twig', array('nom' => $nom));
   }
 ----
 
@@ -195,8 +195,8 @@ la même vue.
 
 ====
 [start=5]
-. (plus difficile) Ajouter un *message flash* (concept à étudier !), qui affiche un message de bienvenue à
-l'utilisateur lors d'une *première connection* à la route `/hello` (et sa méthode d'action liée),
+. (plus difficile) Ajouter un *message flash* (concept à étudier !), qui retourne  à
+l'utilisateur un *message de bienvenue avec son IP* lors d'une *première connection* à la route `/hello` (et donc à sa méthode d'action liée),
 pour une même instance de navigateur. Conseil : Afficher dans un premier temps le message, puis mettre sous condition la création du message en gérant une donnée de session utilisateur.
 
 
