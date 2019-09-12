@@ -52,6 +52,14 @@
 <li><a href="#tp-le-contrôleur-et-la-vue-initiation">TP - Le contrôleur et la vue (initiation)</a></li>
 </ul>
 </li>
+<li><a href="#travaux-dirigés-avancés">Travaux Dirigés Avancés</a>
+<ul class="sectlevel2">
+<li><a href="#prerequis">Prerequis</a></li>
+<li><a href="#création-d-une-application-php-sans-état-supporté-côté-serveur">Création d&#8217;une application PHP - sans état supporté côté serveur -</a></li>
+<li><a href="#ressources-à-prendre-en-compte">Ressources à prendre en compte</a></li>
+<li><a href="#annexe-tp-1-code-legacy-prototype">Annexe TP-1 - code legacy (prototype)</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -443,13 +451,13 @@ application. Le plus souple pour cela est de demander à <code>composer</code> d
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>$ cd your-project/
+<pre>$ cd my_project_name/
 $ composer require annotations</pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Il serait également préférable d&#8217;installer des plugins à votre IDE : avec PhpStorm,
-aller <code>File&#8594;Settings</code> puis chercher <code>plugin symfony</code> et les installer.</p>
+aller <code>File&#8594;Settings</code> puis chercher <code>plugin symfony</code> et les installer (dans le même esprit avec l&#8217;IDE <code>netbeans</code>)</p>
 </div>
 <div class="paragraph">
 <p>Voici un exemple de classe contrôleur, extrait de la documentation : <a href="https://symfony.com/doc/current/page_creation.html">Symfony - page_creation.html</a></p>
@@ -532,7 +540,7 @@ aller <code>File&#8594;Settings</code> puis chercher <code>plugin symfony</code>
 <div class="literalblock">
 <div class="title">Activation de la page (demande de la ressource "number")</div>
 <div class="content">
-<pre>http://localhost:8000/lucky/number</pre>
+<pre>http://127.0.0.1:8000/lucky/number</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -552,7 +560,7 @@ de vue puissant et plaisant à utiliser.</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>$ cd your-project/
+<pre>$ cd my_project_name/
 $ composer require twig</pre>
 </div>
 </div>
@@ -590,7 +598,7 @@ $ composer require twig</pre>
 <p>Et faire en sorte que la méthode contrôleur <strong>délègue</strong> la vue à une page twig :</p>
 </div>
 <div class="listingblock">
-<div class="title">Listing 2. MVC : Le contrôleur délègue la forme de la réponse à une vue twig</div>
+<div class="title">Listing 2. MVC : Le contrôleur délègue la réponse à une logique de vue twig</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="php"><span class="comment">// src/Controller/LuckyController.php</span>
 
@@ -636,7 +644,7 @@ La plupart du temps un tel template se base sur un modèle proposé par des fram
 <p>Exemple de template simple, <em>from scratch</em>, créé par le composant <em>twig</em> lors de son intégration dans ce projet (symfony &gt;= 4)</p>
 </div>
 <div class="listingblock">
-<div class="title">Listing 3. localisation : projet/templates/base.html.twig</div>
+<div class="title">Listing 3. localisation : &lt;racine_du_projet&gt;/templates/base.html.twig</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="html"><span class="doctype">&lt;!DOCTYPE html&gt;</span>
 <span class="tag">&lt;html&gt;</span>
@@ -691,7 +699,7 @@ devons créer une nouvelle vue dans le dossier <em>templates/lucky</em>, nommée
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
 <td>un commentaire twig qui vous informe, pour le besoin de ce support,
-de la localisation de ce fichier (à ne pas recopier !)</td>
+de la localisation de ce fichier (<strong>à ne pas recopier !</strong>)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -1120,11 +1128,232 @@ Voir <a href="https://symfony.com/doc/current/controller.html#managing-the-sessi
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="travaux-dirigés-avancés"><a class="anchor" href="#travaux-dirigés-avancés"></a>Travaux Dirigés Avancés</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="prerequis"><a class="anchor" href="#prerequis"></a>Prerequis</h3>
+<div class="paragraph">
+<p>Avoir installé et configuré votre IDE et atteint la dernière étape de ce premier tutoriel (avec twig) à savoir <code>luckynumber</code> et <code>hello</code>:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="images/lucky-number-42.png" alt="lucky number in action" width="500"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="création-d-une-application-php-sans-état-supporté-côté-serveur"><a class="anchor" href="#création-d-une-application-php-sans-état-supporté-côté-serveur"></a>Création d&#8217;une application PHP - sans état supporté côté serveur -</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Traduction d&#8217;un code PHP mélangant logique de traitement et logique de vue en une structure séparant Vues (Twig) et Contrôleurs (méthodes)</p>
+</li>
+<li>
+<p>Poursuite du développement de la solution en mode interatif et incrémental avec Symfony, à savoir une  application web répondant aux spécifications suivantes</p>
+</li>
+</ol>
+</div>
+<div style="page-break-after: always;"></div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+<strong>SPECIFICATIONS</strong>
+</td>
+</tr>
+</table>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>L&#8217;utilisateur cherche à trouver un nombre retenu par l&#8217;application de façon « aléatoire »,
+sur une plage d&#8217;amplitude donnée, disons [0..30], représentéé par la taille d&#8217;une chaine de caractères.
+La valeur d&#8217;un caractère à l&#8217;indice <code>i</code> de cette chaine permettra de connaître si i est le nombre à trouver ou s&#8217;il y a été soumis précédemment comme solution possible par l&#8217;utilisateur.</p>
+</li>
+<li>
+<p>Chaque nombre sera représenté par une cellule <code>td</code> d&#8217;un tableau <code>html</code> (comme dans le code fourni en annexe).</p>
+</li>
+<li>
+<p>A chaque tentative de réponse, le système présente son analyse (nombre proposé trop petit, trop grand, exact)</p>
+</li>
+<li>
+<p>Durant les tentatives, l&#8217;application montre les cellules déjà sélectionnées par
+l&#8217;utilisateur (prévoir une classe CSS dédiée).</p>
+</li>
+<li>
+<p>La partie s&#8217;arrête lorsque l&#8217;utilisateur a trouvé le bon nombre.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+L&#8217;application ne sauvegardera aucune donnée sur le serveur du jeu (historique utilisateur)  (les « données de sessions » seront transmises au client – et donc portées par celui-ci – un exemple de code est donné en annexe).
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="veuillez-respecter-les-étapes-suivantes"><a class="anchor" href="#veuillez-respecter-les-étapes-suivantes"></a>Veuillez respecter les étapes suivantes</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Tester, dans un dossier à part, le code PHP de l&#8217;annexe</p>
+</li>
+<li>
+<p>Traduire le code PHP de l&#8217;annexe en un projet symfony (avec contrôleur index et vue twig)</p>
+</li>
+<li>
+<p>Faire évoluer l&#8217;application afin qu&#8217;elle réponde aux attentes (exprimées ci-dessus).</p>
+</li>
+<li>
+<p>Présentation des nombres dans une matrice 10 x 10</p>
+</li>
+<li>
+<p>L&#8217;utilisateur pourra relancer autant de parties qu&#8217;il le souhaite. Comme il se doit, l&#8217;application sera capable de gérer plusieurs utilisateurs en même temps.</p>
+</li>
+<li>
+<p>Lorsque que le nombre est trouvé, l&#8217;application affiche un des messages suivants :</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>« Vous avez de la chance !»</strong> si le nombre d’essai du joueur est inférieur au nombre optimal (à déterminer après avoir étudié le principe de la recherche dichotomique - lien wikipédia ci-dessous).</p>
+</li>
+<li>
+<p><strong>« Votre stratégie a été la bonne »</strong> si le nombre d’essai du joueur est égale au nombre optimal.</p>
+</li>
+<li>
+<p><strong>« Vous avez débordé de n tentatives »</strong> où <em>n</em> est le nombre de tentatives au-delà du nombre optimal.</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Pour déterminer le message à présenter, référez-vous aux caractéristiques d&#8217;efficacité de la <strong>recherche dichotomique</strong> : <a href="https://fr.wikipedia.org/wiki/Dichotomie" class="bare">https://fr.wikipedia.org/wiki/Dichotomie</a></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="7">
+<li>
+<p>Optionnel, pour les plus avancés :</p>
+<div class="ulist">
+<ul>
+<li>
+<p>L&#8217;utilisateur peut étendre l&#8217;amplitude de la matrice.</p>
+</li>
+<li>
+<p>Proposer une version qui n’expose pas la valeur à trouver au client (prévoir un  cryptage symétrique du nombre – l’expéditeur est le destinataire).</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ressources-à-prendre-en-compte"><a class="anchor" href="#ressources-à-prendre-en-compte"></a>Ressources à prendre en compte</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Génération pseudo-aléatoire d&#8217;un nombre : <a href="http://php.net/manual/fr/function.mt-rand.php" class="bare">http://php.net/manual/fr/function.mt-rand.php</a></p>
+</li>
+<li>
+<p>Legacy d&#8217;une ébauche de code en annexe pour commencer.</p>
+</li>
+<li>
+<p>Les principes de la recherche dichotomique : <a href="https://fr.wikipedia.org/wiki/Dichotomie" class="bare">https://fr.wikipedia.org/wiki/Dichotomie</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="annexe-tp-1-code-legacy-prototype"><a class="anchor" href="#annexe-tp-1-code-legacy-prototype"></a>Annexe TP-1 - code legacy (prototype)</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="php"><span class="inline-delimiter">&lt;?php</span>
+<span class="comment">// exploitation des données reçues (ou attendues) – on attend un couple i=n</span>
+<span class="keyword">if</span> (<span class="predefined">isset</span>(<span class="predefined">$_GET</span>[<span class="string"><span class="delimiter">'</span><span class="content">i</span><span class="delimiter">'</span></span>])) :
+  <span class="local-variable">$iChoixJoueur</span> = (<span class="predefined-type">int</span>) <span class="predefined">$_GET</span>[<span class="string"><span class="delimiter">'</span><span class="content">i</span><span class="delimiter">'</span></span>];
+  <span class="comment">// force l'interprétation de la valeur en un entier</span>
+  <span class="keyword">else</span> :
+    <span class="local-variable">$iChoixJoueur</span> = -<span class="integer">1</span>;
+  <span class="keyword">endif</span>;
+  <span class="comment">// ou (même traitement que ci-dessus)</span>
+  <span class="comment">// $iChoixJoueur = isset($_GET['i']) ? (int) $_GET['i'] : -1; //opérateur ternaire</span>
+  <span class="comment">// on récupère l'historique des tentatives (une chaîne de caractères en fait)</span>
+  <span class="keyword">if</span> (<span class="predefined">empty</span>(<span class="predefined">$_GET</span>[<span class="string"><span class="delimiter">'</span><span class="content">histo</span><span class="delimiter">'</span></span>])) :
+    <span class="local-variable">$histo</span> = <span class="string"><span class="delimiter">'</span><span class="content">----------w--------------</span><span class="delimiter">'</span></span>;
+    <span class="comment">// TODO : placer le numéro gagnant (w)iner de façon aléatoire</span>
+  <span class="keyword">else</span>:
+    <span class="local-variable">$histo</span> = <span class="predefined">$_GET</span>[<span class="string"><span class="delimiter">'</span><span class="content">histo</span><span class="delimiter">'</span></span>];
+  <span class="keyword">endif</span>;
+  <span class="comment">// mise à jour de l'historique : prise en compte du choix utilisateur</span>
+  <span class="keyword">if</span> (<span class="local-variable">$iChoixJoueur</span> &gt;= <span class="integer">0</span> &amp;&amp; <span class="local-variable">$iChoixJoueur</span> &lt; <span class="predefined">strlen</span>(<span class="local-variable">$histo</span>)) :
+    <span class="local-variable">$histo</span>[<span class="local-variable">$iChoixJoueur</span>] = <span class="string"><span class="delimiter">'</span><span class="content">j</span><span class="delimiter">'</span></span>;
+  <span class="keyword">endif</span>;
+ <span class="inline-delimiter">?&gt;</span>
+<span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attribute-name">lang</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">fr</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attribute-name">charset</span>=<span class="string"><span class="delimiter">'</span><span class="content">utf-8</span><span class="delimiter">'</span></span> <span class="tag">/&gt;</span>
+  <span class="tag">&lt;title&gt;</span>À la recherche du nombre<span class="tag">&lt;/title&gt;</span>
+  <span class="tag">&lt;style</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text/css</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+<span class="inline">  <span class="class">.normal</span> {
+    <span class="key">border</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="value">black</span>;
+  }
+  <span class="class">.dejajoue</span> {
+    <span class="key">border</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="value">black</span>;
+    <span class="key">background-color</span>: <span class="value">lightgreen</span>;
+  }</span>
+  <span class="tag">&lt;/style&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+  <span class="tag">&lt;h2&gt;</span>à la recherche du nombre<span class="tag">&lt;/h2&gt;</span>
+  <span class="tag">&lt;table&gt;</span>
+    <span class="tag">&lt;tbody&gt;</span>
+      <span class="tag">&lt;tr&gt;</span>
+        <span class="inline-delimiter">&lt;?php</span>
+          <span class="comment">// mode debug : var_dump($histo);</span>
+          <span class="comment">// TODO : il faudrait mieux appliquer la classe &quot;dejajoue&quot;</span>
+          <span class="comment">//        a toutes les cellules deja jouees</span>
+          <span class="keyword">for</span> (<span class="local-variable">$i</span>=<span class="integer">0</span>; <span class="local-variable">$i</span> &lt; <span class="predefined">strlen</span>(<span class="local-variable">$histo</span>); <span class="local-variable">$i</span>++) :
+            <span class="keyword">if</span> (<span class="local-variable">$i</span> == <span class="local-variable">$iChoixJoueur</span>) : <span class="inline-delimiter">?&gt;</span>
+              <span class="tag">&lt;td</span> <span class="attribute-name">class</span> = <span class="string"><span class="delimiter">&quot;</span><span class="content">dejajoue</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+            <span class="inline-delimiter">&lt;?php</span> <span class="keyword">else</span> : <span class="inline-delimiter">?&gt;</span>
+              <span class="tag">&lt;td</span> <span class="attribute-name">class</span> = <span class="string"><span class="delimiter">&quot;</span><span class="content">normal</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+            <span class="inline-delimiter">&lt;?php</span> <span class="keyword">endif</span>; <span class="inline-delimiter">?&gt;</span>
+              <span class="tag">&lt;a</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">?i=</span></span><span class="inline-delimiter">&lt;?php</span> <span class="predefined">echo</span> <span class="local-variable">$i</span> <span class="inline-delimiter">?&gt;</span><span class="string"><span class="content">&amp;</span><span class="content">histo=</span></span><span class="inline-delimiter">&lt;?php</span> <span class="predefined">echo</span> <span class="local-variable">$histo</span> <span class="inline-delimiter">?&gt;</span><span class="string"><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+                <span class="inline-delimiter">&lt;?php</span> <span class="predefined">echo</span> <span class="local-variable">$i</span>; <span class="inline-delimiter">?&gt;</span>
+              <span class="tag">&lt;/a&gt;</span>
+            <span class="tag">&lt;/td&gt;</span>
+          <span class="inline-delimiter">&lt;?php</span> <span class="keyword">endfor</span>; <span class="inline-delimiter">?&gt;</span>
+        <span class="tag">&lt;/tr&gt;</span>
+      <span class="tag">&lt;/tbody&gt;</span>
+    <span class="tag">&lt;/table&gt;</span>
+  <span class="tag">&lt;/body&gt;</span>
+  <span class="tag">&lt;/html&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.1<br>
-Last updated 2019-08-31 17:14:15 CEST
+Last updated 2019-09-12 11:37:29 CEST
 </div>
 </div>
 </body>

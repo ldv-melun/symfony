@@ -18,7 +18,8 @@ image:lucky-number-42.png[lucky number in action, 500]
 CAUTION: *SPECIFICATIONS*
 ====
 * L'utilisateur cherche à trouver un nombre retenu par l'application de façon « aléatoire »,
-sur une plage d'amplitude donnée, disons [0..30], qui correspond à la taille d'une chaine de caractères en fait. La valeur d'un caractère à l'indice i de cette chaine permettra de connaître si i est le nombre à trouver ou s'il y a été soumis précédemment comme solution possible par l'utilisateur.
+sur une plage d'amplitude donnée, disons [0..30], représentéé par la taille d'une chaine de caractères.
+La valeur d'un caractère à l'indice `i` de cette chaine permettra de connaître si i est le nombre à trouver ou s'il y a été soumis précédemment comme solution possible par l'utilisateur.
 * Chaque nombre sera représenté par une cellule `td` d'un tableau `html` (comme dans le code fourni en annexe).
 * A chaque tentative de réponse, le système présente son analyse (nombre proposé trop petit, trop grand, exact)
 * Durant les tentatives, l'application montre les cellules déjà sélectionnées par
@@ -53,7 +54,7 @@ Pour déterminer le message à présenter, référez-vous aux caractéristiques 
 
 * Génération pseudo-aléatoire d'un nombre : http://php.net/manual/fr/function.mt-rand.php
 * Legacy d'une ébauche de code en annexe pour commencer.
-* Les principe de la recherche dichotomique : https://fr.wikipedia.org/wiki/Dichotomie
+* Les principes de la recherche dichotomique : https://fr.wikipedia.org/wiki/Dichotomie
 
 == Annexe TP-1 - code legacy (prototype)
 [source, php]

@@ -40,12 +40,12 @@ Nous choisirons cette dernière option, fort pratique. Avant de concevoir une te
 application. Le plus souple pour cela est de demander à `composer` de le faire pour vous :
 
 ....
-$ cd your-project/
+$ cd my_project_name/
 $ composer require annotations
 ....
 
 Il serait également préférable d'installer des plugins à votre IDE : avec PhpStorm,
-aller `File->Settings` puis chercher `plugin symfony` et les installer.
+aller `File->Settings` puis chercher `plugin symfony` et les installer (dans le même esprit avec l'IDE `netbeans`)
 
 Voici un exemple de classe contrôleur, extrait de la documentation : https://symfony.com/doc/current/page_creation.html[Symfony - page_creation.html]
 
@@ -98,7 +98,7 @@ Un entier aléatoire compris entre min (ou 0) et max inclusif, ou FALSE si le pa
 
 .Activation de la page (demande de la ressource "number")
 ....
-http://localhost:8000/lucky/number
+http://127.0.0.1:8000/lucky/number
 ....
 
 Vous devriez recevoir un nombre dans l'intervalle : [0..100[
@@ -113,7 +113,7 @@ de vue puissant et plaisant à utiliser.
 Twig est proposé en tant que composant, qu'il faut installer :
 
 ....
-$ cd your-project/
+$ cd my_project_name/
 $ composer require twig
 ....
 
@@ -139,7 +139,7 @@ Il faut ensuite s'assurer que `LuckyController` hérite de la classe de base des
 
 Et faire en sorte que la méthode contrôleur *délègue* la vue à une page twig :
 
-.MVC : Le contrôleur délègue la forme de la réponse à une vue twig
+.MVC : Le contrôleur délègue la réponse à une logique de vue twig
 [source, php]
 ----
 // src/Controller/LuckyController.php
@@ -176,7 +176,7 @@ La plupart du temps un tel template se base sur un modèle proposé par des fram
 
 Exemple de template simple, _from scratch_, créé par le composant _twig_ lors de son intégration dans ce projet (symfony >= 4)
 
-.localisation : projet/templates/base.html.twig
+.localisation : <racine_du_projet>/templates/base.html.twig
 [source, html]
 ----
 <!DOCTYPE html>
@@ -215,7 +215,7 @@ devons créer une nouvelle vue dans le dossier _templates/lucky_, nommée `numbe
 ----
 
 <1> un commentaire twig qui vous informe, pour le besoin de ce support,
-de la localisation de ce fichier (à ne pas recopier !)
+de la localisation de ce fichier (*à ne pas recopier !*)
 <2> choix du template de base hérité  (qui définit, entre autres, les blocs `title` et `body`)
 <3> redéfinition du bloc `title`
 <4> redéfinition du bloc `body`
