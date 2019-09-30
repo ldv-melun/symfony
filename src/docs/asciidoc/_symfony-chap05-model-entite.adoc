@@ -11,12 +11,12 @@ Nous allons voir comment le contrôleur peut s'appuyer sur des *objets métier* 
 
 TIP: Il est courant de faire porter la responsabilité d'un cas d'utilisation à une classe contrôleur.
 
-Il existe 2 sortes d'objets métier : `Entity` et `EntityRepository`.
+`Entity` représente les objets métier, et sont associés à des objets `EntityRepository`.
 
 * `Entity` : Représente une classe métier pour le domaine étudié (`Client`, `Contrat`, ...).
 * `EntityRepository` : Est responsable de la communication avec le système de persistance, notamment en lien avec l' `ORM`.
 
-Le contrôleur dépend de `Entity` et `EntityRepository`, `Entity` ne dépend pas d'un ORM, `EntityRepository` si.
+Le contrôleur dépend de `Entity`, `Entity` ne dépend pas d'un ORM, `EntityRepository` si.
 
 .Architecture vue en couches
 image:schema-interactions-couches.png[Interactions vue en couches, 600]
@@ -39,11 +39,54 @@ de table d'une base de données. Par défaut, symfony utilise la solution link:h
 Ce tutoriel vous montre comment lier une classe métier à une table d'une base de données, et donc une instance (un objet) à une ligne (occurrence d'une table),
 et les opérations CRUD associées.
 
-Tutoriel à suivre : link:https://symfony.com/doc/current/doctrine.html[Introduction à Doctrine avec Symfony] - Durée estimée : 2H (étude, configuration, codage des exemples et tests)
-
 Au menu :
 
-* Entity et Table liée
+* Entity
 * Liaison Attribut - Colonne (_field_ - _column_)
 * Migration modèle objet <--> schéma de la base de données
 * Opérations CRUD
+
+
+Tutoriel à suivre et *coder* : link:https://symfony.com/doc/current/doctrine.html[Introduction à Doctrine avec Symfony] - Durée estimée : 2H (étude, configuration, codage des exemples et tests)
+
+== Travaux Pratiques
+
+Durée moyenne : 6H
+
+====
+[start=0]
+. Coder les exemples du tutoriel
+
+Concevoir l'entité `Product` et coder/tester les exemples du contrôleurs, jusqu'au paragraphe `Deleting an Object` inclus.
+(Une petite lecture du reste du document ne peut pas faire de mal)
+
+[start=1]
+. Lister et Supprimer
+
+Concevoir, dans `ProductController` une méthode d'action (un contrôleur), liée à la route `product/`
+qui affiche la liste des produits, avec la possibilité de suprimer, individuellement, chacun des produits de la liste.
+
+TIP: Les explications sont dans le tutoriel.
+Utilisez twig pour la vue.
+
+[start=2]
+. Création automatique de produits
+
+Concevoir, dans `ProductController` une méthode d'action (un contrôleur), liée à la route `product/install` qui,
+si la base de données est vide, créera 10 produits, aux caractérisques distincts, dans la base de données.
+Dans tous les cas, un *message flash* indiquera l'action qui aura été réalisée suite au traitement demandé.
+
+[start=3]
+. Réinitialisation
+
+Ajouter le fait de pouvoir réinitialiser la base de données de produits
+(supprimer tous les produits), ssi la base de données respecte les conditions suivantes :
+
+.. ne contient que *10 articles ou moins*,
+.. articles *créés dans un même espace temps*. (cette dernière condition pourra être forcée si présence, dans l'URL,
+d'un paramètre nommé `force`)
+
+Le déclenchement de ce traitement se fera dans le cas d'un `reset` explicite (prévoir une nouvelle route).
+
+====
+
