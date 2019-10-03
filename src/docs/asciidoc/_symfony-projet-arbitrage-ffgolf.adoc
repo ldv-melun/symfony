@@ -1,4 +1,4 @@
-= Projet Play&Rthm-AmateurGolfCompetition
+= PRAGolf-Competition Project
 ifndef::backend-pdf[]
 :imagesdir: images
 endif::[]
@@ -6,6 +6,7 @@ endif::[]
 == Contexte
 
 Le contexte de l'application concerne l'arbitrage de compétitions de golf amateur.
+Play-Rythm-Amateur-Golf-Competition Project
 
 === Le golf
 
