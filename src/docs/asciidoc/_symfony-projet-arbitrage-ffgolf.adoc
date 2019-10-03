@@ -1,0 +1,255 @@
+= Projet Play&Rthm-AmateurGolfCompetition
+ifndef::backend-pdf[]
+:imagesdir: images
+endif::[]
+
+== Contexte
+
+Le contexte de l'application concerne l'arbitrage de compétitions de golf amateur.
+
+=== Le golf
+
+[quote, wikipedia, https://fr.wikipedia.org/wiki/Golf]
+____
+Le golf est un sport de précision se jouant en plein air, qui consiste à envoyer une balle dans un trou à l'aide de clubs. Le but du jeu consiste à effectuer, sur un parcours défini, le moins de coups possible. Précision, endurance, technicité, concentration sont des qualités primordiales pour cette activité ____
+____
+
+Le golf est un jeu simple, il faut jouer le terrain comme on le trouve et la balle comme elle repose, si on ne peut pas le faire il faut alors faire ce qui est juste et pour faire ce qui est juste il faut connaître les règles de golf.
+
+Une compétition se joue à plusieurs joueurs jusqu’à 144 pour une journée
+au mois de juin ou de juillet. Les joueurs sont répartis en *parties*
+(groupe de joueurs qui sont ensemble pour la journée).
+Une partie peut être composée de 2 à 4 joueurs (jamais plus de 4).
+Ici on envisagera seulement la forme de jeu dite _stroke play_, le joueur qui réalise le moins de coups sur 18 trous est le gagnant. En stroke play les parties sont de 2 ou 3 joueurs.
+
+À un instant t, une partie occupe une portion seulement du terrain,
+que l’on appelle « un trou » : depuis la zone de départ jusqu’au _green_ qui contient le trou dans lequel les joueurs doivent rentrer la balle.
+
+Afin de rationaliser l’occupation du terrain de golf, l’arbitre se doit de planifier les départs et les temps maximaux occupés pour chaque trou.
+
+=== Les temps dans le parcours
+
+Le temps pour passer d’un « trou » au « trou » suivant dépend du
+
+* *temps de jeu*  (*pour un trou* ?) : c'est le temps passé à faire avancer la balle de la zone de départ vers le trou
+de destination. Chaque trou doit être idéalement joué en un nombre
+coups limité ou par (3, 4 ou 5 coups), selon le par
+et le nombre de joueurs dans la partie la FFGolf a défini
+des temps de jeu « normaux ». En partie de trois :
+
+** 11 minutes pour un par 3
+** 14 minutes pour un par 4
+** 17 minutes pour un par 5
+
+* *temps de marche* : c'est le temps passé à atteindre la prochaine zone de départ (déplacement à pied vers
+la nouvelle zone de jeu d'indice _i_ à partir du green d'indicie _i-1_)
+
+Les trous sont numérotés de 1 (trou 1) à  9 ou 18 selon la compétition.
+
+=== Limite du périmètre fonctionnel
+
+
+On se restreindra aux compétitions amateur en stroke play, avec, pour une premère release, toutes les parties qui partent du 1, c’est le cas le plus courant.
+
+
+== Problématique
+
+Actuellement, en préparation de compétition, un des arbitres conçoit le document « cadences de jeu »
+à partir d’un document tableur, reçu de la FFGolf, listant les joueurs inscrits.
+
+Cet arbitre imprime alors plusieurs exemplaires de son document,
+pour son usage et l’usage de ses collègues sur le terrain.
+
+Sur ce document, les arbitres prennent connaissance des heures de départ de chaque partie
+(équipe de 3 personnes) et de leur prévisionnel d’occupations du terrain.
+L’arbitre peut, à tout instant t, confronter les données du document « cadences de jeu » avec le réel, et agir en conséquence, selon les règles d’arbitrage.
+
+NOTE: L’heure de départ est très importante, c’est le « starter » qui donne le top de départ pour une partie. Un joueur qui partirait ne serait-ce qu’une seconde en avance par rapport au top du « starter » reçoit deux coups de pénalité, un joueur en retard de 5 minutes ou moins par rapport au top du « starter » reçoit deux coups de pénalité, un joueur en retard de plus de 5 minutes par rapport au top du « starter » est disqualifié (règles valables pour la forme de jeu stroke play individuel qui nous intéresse ici)
+
+En fin de compétition les arbitres reprennent les données notées sur le terrain et les reportent dans le tableau Excel, le seul élément que l’on peut avoir de façon systématique c’est l’heure de départ (prévue et inamovible sauf accident) et l’heure d’arrivée si la personne au « recording » (enregistrement des cartes de score des joueurs) l’a notée.
+
+Questions / Réponses
+
+[qanda]
+Le tableau Excel est partagé par tous les arbitres, comment s’opère la saisie à plusieurs ?::
+
+C’est l’arbitre responsable de la compétition, son titre est « directeur de tournoi », qui gère le fichier Excel. Il distribue une version papier à ses collègues. C’est le directeur de tournoi qui collecte les informations à la fin du tour (journée de compétition, une compétition peut comprendre plusieurs tours, 2 pour un Grand Prix par exemple)
+
+que devient ce tableau ensuite ?::
+
+Encore une fois c’est le directeur de tournoi qui le garde et mesure éventuellement les écarts entre le prévu et le réalisé pour ajuster les temps de jeu par trou pour la prochaine fois. Il n’y a pas de base de données partagée, chaque directeur de tournoi gère ces temps dans son coin.  C’est malheureusement le cas dans la plupart des compétitions amateurs.
+
+Il y a combien d’arbitres par compétition ? Un arbitre à la charge d’un certain nombre de groupes de joueurs/parties ?::
+
+Pour qu’une compétition fédérale puisse avoir lieu il faut au moins un arbitre officiel, selon les compétitions il peut y avoir un arbitre par partie (pour les professionnels de la PGA ou du Tour Européen par exemple) en plus de quelques arbitres qui supervisent. Pour une compétition amateur fédérale comme un Grand Prix il y a entre 2 et 4 arbitres. Les arbitres sont plutôt attachés à une partie du terrain, mais ils se déplacent en fonction des besoins. Un arbitre peut suivre une partie pendant quelques trous s’il estime qu’elle est « hors position » (en retard par rapport à la partie de devant) pour l’aider à avancer plus vite, il la lâche dès qu’elle est revenue à un temps de jeu normal ou en passe d’y revenir. C’est surtout à cette occasion qu’on peut noter les temps des parties.
+
+Qui constitue les équipes ?::
+
+C’est l’arbitre ou le comité qui transmet ensuite à la fédération via RMS (une solution logicielle historique), à partir de ces données RMS génère les listes de départ (triée) au format Excel (voir exemple en annexe)
+
+
+== Services attendus
+
+Deux points motives la décision d’une solution applicative métier :
+
+* La construction du document est fastidieuse (construction des parties par copier/coller), et répétitive (les caractéristiques du terrain golf sont à reporter à chaque fois).
+
+* Pertes des données réelles, non mises en perspectives avec les données prévisionnelles, alors qu'elles pourraient contribuer à les actualiser.
+
+== Analyse des données d’entrée
+
+* A1 : Les caractéristiques du golf (nombre de trous, et leurs caractéristiques). Ce sont des valeurs persistantes, indépendantes des compétitions (exemple en annexe)
+
+* A2 : Nom de la compétition, date, liste des joueurs inscrits (triée par partie). Ces données sont communiquées sous la forme d’un fichier au format xlsx, par la fédération française de golf. (exemple en annexe)
+
+* A3 : Données de jeu
+** intervalle de temps entre parties (par exemple 11mn par équipe de 3 joueurs,
+mais peut être variable selon l’arbitre, le terrain – 11mn est la recommandation de la FFGolf)
+** temps de jeu (dépend du par et du nombre de participants). Le temps de jeu se mesure par partie (*contradiction avec le chapitre "temps de parcours"*), en général entre 4h et 4h30 selon la nature des trous et les temps de marche.
+Un terrain de golf type est un par 72 :
+*** 4 par 5
+*** 10 par 4
+*** 4 par 3
+
+Le nombre de participants permet de déterminer la durée prévue totale
+d’un tour de la compétition (un tour doit tenir dans une journée),
+c’est pourquoi la FFGolf préconise 144 joueurs maximum en parties de 3 pendant les mois
+de juin et juillet où les jours sont les plus longs.
+En commençant à 7h ou 7h30 on est certain de terminer le tour dans la journée même si ça traîne un peu et sauf incident majeur comme un orage avec de la foudre...
+
+** autres...
+
+== Ce qui est attendu (données et services)
+
+=== Front-end
+* Production d’un fichier Excel imprimable permettant de saisir sur le terrain les temps de jeu effectifs de certaines parties, sur certains trous, sous forme d’un décalage (offset)  +/- nombre de minutes. Les arbitres ont les cadences de jeu avec eux et notent les temps des parties en décalage sur le papier, des parties qu’ils suivent pour un temps. Pour une bonne occupation du terrain, les équipes doivent avancées « ensemble ».
+
+* Un formulaire « cadence_de_jeu » anonymisé  (sous forme de tableau) à fin de statistiques, afin de permettre à des arbitres d’inscrire des informations de temps passé par une équipe, pour certains trous.
+
+=== Back-end
+* Gestion de données relatives aux terrains de golf (back-end)
+
+
+=== Responsabilités – Acteurs
+
+2 types d'acteurs : admin et arbitre
+
+* admin : gère le back-end : les données des golfs (nom, localisation, par,
+trou, temps de déplacement zone du trou i à zone de départ du trou i+1)
+
+* arbitre  :
+
+    • Déclenche une demande de "cadences de jeu" en fournissant un fichier Excel contenant
+    la liste des inscrits, + Golf concerné et intitulé de la compétition, date.
+     Il reçoit, in fine, un document PDF dont la sauvegarde est à la charge de l’arbitre (et non du service).
+
+    • Remonte des données anonymisées qu’il juge utile afin d’alimenter la base de données de temps réellement passés, via le formulaire « remontée de cadences de jeu » anonymisé.
+
+Le service attendu ne conserve ni n'exploite les données personnelles des inscrits (gérées par la FFGolf), seules les données de niveau Golf sont sauvegardées (incluant des données de temps pas trou) afin éventuellement d’ajuster des temps de jeu pour la prochaine compétition s’il y a un trop grand écart entre le prévu et le réalisé.
+
+== Vocabulaire métier
+
+[qanda]
+Golf, terrain de golf ?::
+Le golf se joue sur un terrain de golf, le terrain est délimité par des limites de propriété comme des murs, des étendues d’eau des routes, des grillages ou des lignes blanches au sol. Toute balle qui repose en dehors de ces limites est dite hors limites et ne peut pas être jouée. Un terrain de golf est divisé en plusieurs zones : zones de départ (où l’on joue le début d’un trou), zone générale (la majorité du terrain), zones à pénalité (étendues d’eau ou autre dont on peut se dégager avec une pénalité), bunkers (pièges à sable dans lesquels les règles sont particulières), greens (zones tondues aussi raz que de la moquette sur lesquelles sont placés les trous)
+
+Parcours orienté ?::
+On joue en général du trou numéro 1 au trou numéro 18, parfois pour gagner du temps on fait partir de joueurs du 1 et du 10 en même temps et il faut alors gérer les croisements, c’est plus ardu et on peut se laisser ça en évolution future.
+
+Compétition ?::
+Les titres varies (trophée, championnat, ... ). Laisser un intitulé libre
+
+Arbitre ?::
+Un arbitre est un officiel de la FFGolf qui est là pour aider les joueurs à continuer le jeu dans des situations particulières et pour faire respecter les règles, la décision d’un arbitre est définitive et sans appel. Les cadences de jeu sont gérées par les arbitres et les membres du comité.
+
+Grille des cadences, Cadencier ?::
+En fait « cadences de jeu »
+
+== Le projet
+
+=== Données de test
+
+* Fichier Excel d'une compétition, provenant de la FFGolf : link:images/export_liste_des_departs.xlsx[export_liste_des_departs.xlsx]
+
+* Exemple de structure attendue de cadences de jeu : link:images/arbitre_cadences_de_jeu-_20190806.pdf[arbitre_cadences_de_jeu-_20190806.pdf]
+
+=== Première analyse
+
+==== Diagramme des cas d'utilisation (extrait)
+
+// image::use-case-diag.png[UseCaseDiag]
+
+.Scénario nominal "Demande de cadences de jeu"
+[plantuml]
+----
+skinparam defaultFontSize 12
+skinparam handwritten false
+Arbitre -> (Demande \ncadences de jeu)
+----
+
+C'est le scénario principal.
+
+Exemple des interactions attendues, dans un scénario type "meilleurs des cas" :
+////
+.Scénario nominal "Demande de cadences de jeu"
+[#img-usecase]
+[caption="Fig : "]
+image::use-case1.png[UseCase,392,307]
+////
+
+.Scénario nominal "Demande de cadences de jeu"
+[plantuml]
+----
+skinparam {
+shadowing false
+monochrome false
+}
+hide footbox
+title (UseCase : demande de cadences de jeu)
+
+arbitre --> system : demande cadences de jeu
+arbitre <-- system : formulaire
+arbitre --> system : upload fic Excel de FFGolf
+activate system
+system->system : extract to JSON
+arbitre <-- system : formulaire préparatoire + JSON data
+deactivate system
+
+arbitre --> system : valide formulaire + JSON data
+activate system
+system->system : generate PDF
+arbitre <-- system : PDF
+deactivate system
+arbitre --> arbitre: sauvegarde, imprime
+
+----
+
+=== Les 3 phases du projet
+
+Chaque phase fait l'objet de documents à rendre.
+
+==== 1. Analyse et travaux préparatoires
+
+Production attendue :
+
+* Diagramme de classes des entités (classes Entity)
+* Diagramme des cas d’utilisation (acteurs et services attendus)
+
+* Gestion des données d’entrée d'une compétition :
+** Définir la stratégie adoptée pour extraire/structurer les informations du fichier Excel reçu, vers un format JSON. Décrire la structure retenue (format JSON).
+
+* Gestion des données de golfs :
+** Concevoir un jeu de données pour un golf, et constantes de jeu qui seront utilisées par l’application
+
+==== 2. Première itération (18 octobre 2019 - 11H)
+
+    • Rapport technique, incluant des copies écran d’un prototype opérationnel, associées à des explications détaillées sur des parties du travail réalisé. La couverture fonctionnelle sera clairement identifiée.
+
+    • Présence d’une branche de tests
+
+==== 3. Livraison le jeudi 07 novembre 12h
+
+    • Rapport technique complet
+
+    • URL ver un dépôt git distant et public avec un descriptif README
+
