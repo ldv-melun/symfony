@@ -170,9 +170,9 @@ En fait « cadences de jeu »
 
 === Données de test
 
-* Fichier Excel d'une compétition, provenant de la FFGolf : link:images/export_liste_des_departs.xlsx[export_liste_des_departs.xlsx]
+* Fichier Excel d'une compétition, provenant de la FFGolf : link:export_liste_des_departs.xlsx[export_liste_des_departs.xlsx]
 
-* Exemple de structure attendue de cadences de jeu : link:arbitre_cadences_de_jeu-_20190806-new.pdf[arbitre_cadences_de_jeu-_20190806.pdf]
+* Exemple de structure attendue de cadences de jeu : link:arbitre_cadences_de_jeu_20190806-new.pdf[arbitre_cadences_de_jeu_20190806-new.pdf]
 
 === Première analyse
 
