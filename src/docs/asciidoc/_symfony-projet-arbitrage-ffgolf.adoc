@@ -245,13 +245,12 @@ Production attendue :
 
 ==== 2. Première itération (18 octobre 2019 - 11H)
 
-    • Rapport technique, incluant des copies écran d’un prototype opérationnel, associées à des explications détaillées sur des parties du travail réalisé. La couverture fonctionnelle sera clairement identifiée.
-
-    • Présence d’une branche de tests
+• Rapport technique, incluant des copies écran d’un prototype opérationnel, associées à des explications détaillées sur des parties du travail réalisé. La couverture fonctionnelle sera clairement identifiée.
+• Présence d’une branche de tests
+• URL vers un dépôt git distant et public, avec un descriptif README
 
 ==== 3. Livraison le jeudi 07 novembre 12h
 
     • Rapport technique complet
 
-    • URL ver un dépôt git distant et public avec un descriptif README
-
+    • URL vers un dépôt git distant et public avec un descriptif README
