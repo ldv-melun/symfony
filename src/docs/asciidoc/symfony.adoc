@@ -1,5 +1,5 @@
 = Symfony Introduction
-Section BTS SIO SLAM (LDV Melun) O. Capuozzo
+Section BTS SIO SLAM (LDV Melun)
 v1.1, 2019-08-30: Version asciidoc
 :description: Presentation de Symfony
 :icons: font
