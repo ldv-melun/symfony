@@ -6,7 +6,7 @@ endif::[]
 == Contexte
 
 Le contexte de l'application concerne l'arbitrage de compétitions de golf amateur.
-Play-Rythm-Amateur-Golf-Competition Project
+_**P**lay-**R**ythm-**A**mateur-**G**olf-Competition Project_
 
 === Le golf
 

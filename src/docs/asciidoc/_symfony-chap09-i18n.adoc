@@ -1,4 +1,4 @@
-= Internationalisation
+= Internationalisation (i18n)
 ifndef::backend-pdf[]
 :imagesdir: images
 endif::[]
