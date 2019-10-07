@@ -4,7 +4,7 @@ ifndef::backend-pdf[]
 endif::[]
 
 
-== Tutotiel Doctrine et Associations (Liaison entre objets métier)
+== Produits et Catégories (Liaison entre objets métier)
 
 Nous venons de voir les concepts d'`Entity` et d'`EntityRepository` associé à `Doctrine`.
 
@@ -13,15 +13,14 @@ L'étape suivante consiste à étudier les liaisons type entre entités.
 En effet, tout comme les classes techniques (array, string, ...) un classe métier n'est jamais seule,
 mais liée à d'autres classe métier par des liaisons de type `ManyToOne`- `OneToMany`, `ManyToMany` et OneToOne.
 
-Suivre ce tutoriel qui introduit ces concepts et fait suite au précédent : https://symfony.com/doc/current/doctrine/associations.html
+Suivre ce tutoriel qui introduit ces concepts et fait suite au précédent : https://symfony.com/doc/current/doctrine/associations.html (~2h)
 
-== Travaux pratiques
+=== Travaux pratiques
 
 Durée moyenne 4h
 
 On considère qu'un produit (classe `Product`) appratient forcément
 à une catégorie (classe `Category`).
-
 
 ====
 [start=1]
@@ -29,7 +28,7 @@ On considère qu'un produit (classe `Product`) appratient forcément
 . Pour les besoins de l'exercice suivant, concevoir un contrôleur (route : `/category/populate`) qui injecte dans la base de données
  une dizaine de catégories (la gestion CRUD des catégories n'est pas demandée).
 
-TIP: CONTRAINTE : Le contrôleur n'appliqera sa fonction qu si le nombre actuel de catégories est inférieur au nombre qu'il compte injecter !
+TIP: CONTRAINTE : Le contrôleur n'appliquera sa fonction qu si le nombre actuel de catégories est inférieur au nombre qu'il compte injecter !
 ====
 
 ====
@@ -56,11 +55,8 @@ TIP: Bonus de 1 point (sur un des contrôles) si proposition originale, juste et
 
 ////
 
-== Pour aller plus loin
 
-Une ressource de plus à consulter pour vos projets...
-
-== Liaison entre Entités avec UML
+== Liaisons types entre Entités illustrées avec UML
 
 Nous nous plaçons dans le cas d'une application exploitant des données stockées
 par un système de gestion de bases de données relationnel (SGBDR).
