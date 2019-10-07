@@ -38,7 +38,7 @@ De plus, il intégère les propriétés importantes suivantes :
 Dans cette phase d'initiation, nous nous concentrerons principalement sur
 
 * la relation Formulaire ↔ Entité
-* la création/suppression/mise à jour via Doctrine (aperçus au chapitre précédent)
+* les création/suppression/mise à jour via Doctrine (aperçues au chapitre précédent)
 * la mise en forme des champs de formulaire
 
 => Devra être prolongée par l'étude des systèmes de validation des attributs côté client et serveur.
@@ -243,9 +243,21 @@ On remarquera le `token` de prévention CRSF (_Cross site request forgery_) en f
 de formulaire dans le but d'éviter qu'un site mal intentionné ne vous entraine à déclencher des actions à votre insue.
 
 
+== Bonnes pratiques et vidéo exemples
+
+* voir : https://symfony.com/doc/current/best_practices.html#forms
+
+* Excellentes vidéos  (+ de 4h - les premières sont gratuites !) :
+
+- https://symfonycasts.com/screencast/symfony-forms
+
+
+TIP: Ce type de formation est vendue, en moyenne, autour de 800€ la journée.
+
+
 == Travaux pratiques
 
-Durée moyenne : 8H
+Durée moyenne : ~4H
 
 ====
 [start=1]
@@ -255,8 +267,5 @@ Durée moyenne : 8H
 .. Modifier un produit
 .. Supprimer un produit
 
-
-TIP: Dans les vues twig, vos liens seront basés sur le *nom* des routes et non sur les routes elles-mêmes.
-Ces noms sont consultatbles en ligne de commande : `php bin/console debug:router`. Voir aussi https://symfony.com/doc/current/templating.html#linking-to-pages
-
 ====
+

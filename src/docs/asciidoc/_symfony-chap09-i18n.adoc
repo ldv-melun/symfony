@@ -1,0 +1,124 @@
+= Internationalisation
+ifndef::backend-pdf[]
+:imagesdir: images
+endif::[]
+== Présentation
+
+Dans un monde où l'interconnexion ne connait, bien souvent, aucune frontière,
+il est opportun, pour une application web à large public, de pouvoir
+adapter son IHM à la langue de ses utilisateurs.
+
+Les frameworks sont généralement outillés pour cela, est la solution s'intitule `internationalisation`,
+terme un peu long à écrire (18 caratères), c'est pour cela qu'il est
+le plus souvent noté `i18n`.
+
+
+== Identification de la langue de l'utilisateur
+
+Rappelons-le, l'utilisateur sollicite un service d'une application web par le biais d'une requête HTTP.
+Cette dernière embarque dans son entête certaines données (implicitement) telles que des informations
+sur le navigateur du client et sa langue (`Accept-Language`) :
+
+ifdef::backend-pdf[]
+image:http-request-lang.png[http-request-lang, 600]
+endif::[]
+
+ifndef::backend-pdf[]
+image:http-request-lang.png[http-request-lang]
+endif::[]
+
+La valeur de `Accept-Language` du client HTTP peut être exploitée par les applications web
+afin d'adapter le texte de la réponse à la langue
+de l'utilisateur.
+
+
+== Externalisation des messages
+
+
+On entend par message tout texte destiné à être présenté à l'utilisateur.
+
+Exemple de message non internationalisé :
+
+[source, html]
+----
+  <label for="product_name">Nom du produit</label>
+----
+
+Le même exemple i18n (twig) :
+
+[source, html]
+----
+<label for="product_name">
+   {% trans %}product.name{% endtrans %}
+</label>
+----
+
+La différence vient de l'expression twig (d'autres syntaxes sont possibles) ; la valeur
+`product.name` (une chaîne de caractères) sert alors de *clé* qui sera remplacée par sa *valeur*
+tirée d'un fichier de langues.
+
+Pour disposer de ressources de langues, il suffit de créer un fichier `messages.lg._ext_`
+et autant d'autres fichiers qu'il y a de langues couvertes par l'application,
+à partir du dossier `src/translations/`.
+
+== Fichiers de traduction et leur localisation
+
+Par défaut, Symfony recherche les fichiers de messages (i.e. traductions)
+dans des arborescences de dossiers, en partant du plus prioritaire :
+
+* Le dossier `translations/` (à la racine du projet)
+* `src/Resources/<bundle name>/translations/` (par module, rédéfinition);
+* `Resources/translations/` à l'intérieur des bundles.
+
+=== Format des fichiers de traduction
+
+Symfony admet de nombreux formats de fichier (format texte),
+facilement éditables (yaml, PHP, Qt, .po, .mo, JSON, CSV, INI, etc.).
+
+TIP: Les formats `XLIFF` (.xlf) et `gettext` sont les plus outillés et appréciés des traducteurs professionnels. Les formats basés sur XML, comme XLIFF, peuvent faire l'objet de validation.
+
+Exemples de fichiers de langues (format YAML) :
+
+[source, yaml]
+----
+# translations/messages.fr.yaml
+product.name: Nom du produit
+
+
+# translations/messages.en.yaml
+product.name: Product name
+----
+
+== Installation / Configuration
+
+Gestion automatique des fichiers de langues : installation du composant
+
+[source, bash]
+----
+composer require symfony/translation
+----
+
+La langue par défaut se définit dans un fichier de configuration propre au composant :
+
+[source, yaml]
+----
+# config/packages/translation.yaml
+framework:
+    default_locale: 'en'
+    translator:
+        fallbacks: ['en']
+        # ...
+----
+
+== Conclusion
+
+Voilà pour l'essentiel. Vous savez maintenant que Symfony, comme bien autres frameworks, web ou pas, dispose
+de mécanismes de "traduction", via une API qui exploite  des fichiers de traduction.
+
+Si votre future application est d'une portée générale, il est fortement conseillé d'appliquer `i18n` *dès le début du projet*.
+
+Référence :
+
+- installation/ configuration : https://symfony.com/doc/current/translation.html
+- twig : https://symfony.com/doc/current/translation/templates.html
+

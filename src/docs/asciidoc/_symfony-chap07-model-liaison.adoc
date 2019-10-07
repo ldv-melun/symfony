@@ -39,18 +39,22 @@ TIP: CONTRAINTE : Le contrôleur n'appliqera sa fonction qu si le nombre actuel 
 IMPORTANT: Faire évoluer votre gestion précédente CRUD sur Product
 ====
 
+////
 
 ====
 [start=3]
 
 . Tester vos connaissances sur http://quizbe.org/ (créer un compte et lier-le à votre classe SIO22-LDV-2018-19)
 ====
+
 ====
 [start=4]
 . Ajouter, sur la plateforme quizbe, une nouvelle question QCM sur le thème du Model avec Symfony
 
 TIP: Bonus de 1 point (sur un des contrôles) si proposition originale, juste et pertinente.
 ====
+
+////
 
 == Pour aller plus loin
 
@@ -568,7 +572,39 @@ Exemple d'utilisation de _findOneBy_ :
   // on peut toujours rêver...
 ----
 
+== Requête SQL PDO
+
+Exemple :
+
+[source, php]
+----
+
+// src/Repository/ProductRepository.php
+// ...
+public function findAllGreaterThanPrice($price): array
+{
+  $conn = $this->getEntityManager()->getConnection();
+
+  $sql = '
+        SELECT * FROM product p
+        WHERE p.price > :price
+        ORDER BY p.price ASC
+        ';
+  $stmt = $conn->prepare($sql);
+  $stmt->execute(['price' => $price]);
+
+  // returns an array of arrays (i.e. a raw data set)
+  return $stmt->fetchAll();
+}
+----
+
+Avec ce type de requête SQL, nous obtenons en retour des lignes de données (_raw data_),
+et non des objets (à moins d'utiliser la fonctionnilité `NativeQuery`.
+
 == Méthodes createNativeQuery – Requêtes natives
+
+Nous somme dans le cas où l'on souhaiterait appliquer directement des requêtes SQL.
+
 Il peut arriver, et c'est souvent le cas lorsque l'on reprend un existant, de vouloir réutiliser des requêtes SQL présentes dans l'existant (cas de requêtes optimisées,  de requêtes complexes).
 
 Pour cela nous utilisons la méthode _createNativeQuery_ qui prend en argument la requête SQL classique et une référence à un objet de type `ResultSetMapping`. Cette dernière classe aide Doctrine à mapper les colonnes sur les bons attributs d'une classe result.
