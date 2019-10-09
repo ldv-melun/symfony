@@ -160,6 +160,9 @@ On joue en général du trou numéro 1 au trou numéro 18, parfois pour gagner d
 Compétition ?::
 Les titres varies (trophée, championnat, ... ). Laisser un intitulé libre
 
+Par ?::
+C'est le nombre de coups théorique fixé pour un trou (ou un parcours) ; le par d'un trou (3 à 5) dépend de sa longueur ; le par d'un parcours est égal à la somme des pars des trous du parcours ; la plupart des parcours ont un par compris entre 70 et 73
+
 Arbitre ?::
 Un arbitre est un officiel de la FFGolf qui est là pour aider les joueurs à continuer le jeu dans des situations particulières et pour faire respecter les règles, la décision d’un arbitre est définitive et sans appel. Les cadences de jeu sont gérées par les arbitres et les membres du comité.
 
