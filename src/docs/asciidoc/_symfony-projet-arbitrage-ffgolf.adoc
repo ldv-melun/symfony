@@ -236,9 +236,9 @@ arbitre --> arbitre: sauvegarde, imprime
 
 Chaque phase fait l'objet de documents à rendre.
 
-==== 1. Analyse et travaux préparatoires (jeudi 10/10 au vendredi 11/10)
+==== 1. Analyse et travaux préparatoires (deadline vendredi 11/10 23h59)
 
-*Production attendue au plus tard le vendredi 11/10 à 12h* :
+*Production attendue* :
 
 Un premier document d'analyse comprenant (outre les informations classiques comme un titre, auteurs, date, etc.):
 
