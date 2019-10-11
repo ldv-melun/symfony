@@ -84,7 +84,7 @@ Il y a combien d’arbitres par compétition ? Un arbitre à la charge d’un c
 
 Pour qu’une compétition fédérale puisse avoir lieu il faut au moins un arbitre officiel, selon les compétitions il peut y avoir un arbitre par partie (pour les professionnels de la PGA ou du Tour Européen par exemple) en plus de quelques arbitres qui supervisent. Pour une compétition amateur fédérale comme un Grand Prix il y a entre 2 et 4 arbitres. Les arbitres sont plutôt attachés à une partie du terrain, mais ils se déplacent en fonction des besoins. Un arbitre peut suivre une partie pendant quelques trous s’il estime qu’elle est « hors position » (en retard par rapport à la partie de devant) pour l’aider à avancer plus vite, il la lâche dès qu’elle est revenue à un temps de jeu normal ou en passe d’y revenir. C’est surtout à cette occasion qu’on peut noter les temps des parties.
 
-Qui constitue les équipes ?::
+Qui constitue les parties (groupes de joueurs) ?::
 
 C’est l’arbitre ou le comité qui transmet ensuite à la fédération via RMS (une solution logicielle historique), à partir de ces données RMS génère les listes de départ (triée) au format Excel (voir exemple en annexe)
 
@@ -166,6 +166,9 @@ C'est le nombre de coups théorique fixé pour un trou (ou un parcours) ; le par
 Arbitre ?::
 Un arbitre est un officiel de la FFGolf qui est là pour aider les joueurs à continuer le jeu dans des situations particulières et pour faire respecter les règles, la décision d’un arbitre est définitive et sans appel. Les cadences de jeu sont gérées par les arbitres et les membres du comité.
 
+Partie ?::
+Groupe de joueurs en compétition (2 à 4)
+
 Grille des cadences, Cadencier ?::
 En fait « cadences de jeu »
 
@@ -235,7 +238,9 @@ Chaque phase fait l'objet de documents à rendre.
 
 ==== 1. Analyse et travaux préparatoires (jeudi 10/10 au vendredi 11/10)
 
-*Production attendue* :
+*Production attendue au plus tard le vendredi 11/10 à 12h* :
+
+Un premier document d'analyse comprenant (outre les informations classiques comme un titre, auteurs, date, etc.):
 
 * Diagramme de classes des entités (classes Entity)
 * Diagramme des cas d’utilisation (acteurs et services attendus)
@@ -243,7 +248,7 @@ Chaque phase fait l'objet de documents à rendre.
 ** Définir la stratégie adoptée pour extraire/structurer les informations du fichier Excel reçu, vers un format JSON. Décrire la structure retenue (format JSON).
 
 * Gestion des données de golfs :
-** Concevoir un jeu de données pour un golf, et constantes de jeu qui seront utilisées par l’application
+** Preuve de la constitution d'un jeu de données pour un golf, et identification des constantes de jeu qui seront utilisées par l’application
 
 ==== 2. Première itération (deadline 18 octobre 2019 - 11H)
 
