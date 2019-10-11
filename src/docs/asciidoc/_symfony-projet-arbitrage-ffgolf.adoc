@@ -242,6 +242,7 @@ Chaque phase fait l'objet de documents à rendre.
 
 Un premier document d'analyse comprenant (outre les informations classiques comme un titre, auteurs, date, etc.):
 
+* Tableau de répartition des tâches entre collaborateurs
 * Diagramme de classes des entités (classes Entity)
 * Diagramme des cas d’utilisation (acteurs et services attendus)
 * Gestion des données d’entrée d'une compétition :
