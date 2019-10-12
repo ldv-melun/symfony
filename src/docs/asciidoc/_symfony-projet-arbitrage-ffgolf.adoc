@@ -246,10 +246,12 @@ Un premier document d'analyse comprenant (outre les informations classiques comm
 * Diagramme de classes des entités (classes Entity)
 * Diagramme des cas d’utilisation (acteurs et services attendus)
 * Gestion des données d’entrée d'une compétition :
-** Définir la stratégie adoptée pour extraire/structurer les informations du fichier Excel reçu, vers un format JSON. Décrire la structure retenue (format JSON).
+** Définir la stratégie adoptée pour extraire/structurer les informations du fichier Excel reçu, vers un format JSON.
+** Décrire la structure retenue (format JSON).
 
 * Gestion des données de golfs :
-** Preuve de la constitution d'un jeu de données pour un golf, et identification des constantes de jeu qui seront utilisées par l’application
+** Preuve de la constitution d'un jeu de données pour un golf,  données à déduire du document « cadences de jeu » (golf et ses trous)
+** Identification des constantes de jeu qui seront utilisées par l’application.
 
 ==== 2. Première itération (deadline 18 octobre 2019 - 11H)
 
