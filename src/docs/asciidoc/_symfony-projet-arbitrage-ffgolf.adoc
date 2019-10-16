@@ -213,7 +213,7 @@ shadowing false
 monochrome false
 }
 hide footbox
-title (UseCase : demande de cadences de jeu)
+title (Scénario nominal)
 
 arbitre --> system : demande cadences de jeu
 arbitre <-- system : formulaire
@@ -253,7 +253,7 @@ Un premier document d'analyse comprenant (outre les informations classiques comm
 ** Preuve de la constitution d'un jeu de données pour un golf,  données à déduire du document « cadences de jeu » (golf et ses trous)
 ** Identification des constantes de jeu qui seront utilisées par l’application.
 
-==== 2. Première itération (deadline 18 octobre 2019 - 11H)
+==== 2. Première itération (deadline dimanche 20 octobre 2019 - 23H59)
 
 • Rapport technique, incluant des copies écran d’un prototype opérationnel, associées à des explications détaillées sur des parties du travail réalisé. La couverture fonctionnelle sera clairement identifiée.
 • Présence d’une branche de tests
