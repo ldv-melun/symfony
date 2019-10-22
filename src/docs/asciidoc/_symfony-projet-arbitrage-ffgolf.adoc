@@ -123,7 +123,7 @@ En commençant à 7h ou 7h30 on est certain de terminer le tour dans la journée
 == Ce qui est attendu (données et services)
 
 === Front-end
-* Production d’un fichier Excel imprimable permettant de saisir sur le terrain les temps de jeu effectifs de certaines parties, sur certains trous, sous forme d’un décalage (offset)  +/- nombre de minutes. Les arbitres ont les cadences de jeu avec eux et notent les temps des parties en décalage sur le papier, des parties qu’ils suivent pour un temps. Pour une bonne occupation du terrain, les équipes doivent avancées « ensemble ».
+* Production d’un fichier PDF imprimable permettant de saisir sur le terrain les temps de jeu effectifs de certaines parties, sur certains trous, sous forme d’un décalage (offset)  +/- nombre de minutes. Les arbitres ont les cadences de jeu avec eux et notent les temps des parties en décalage sur le papier, des parties qu’ils suivent pour un temps. Pour une bonne occupation du terrain, les équipes doivent avancées « ensemble ».
 
 * Un formulaire « cadence_de_jeu » anonymisé  (sous forme de tableau) à fin de statistiques, afin de permettre à des arbitres d’inscrire des informations de temps passé par une équipe, pour certains trous.
 
