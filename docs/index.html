@@ -3387,7 +3387,7 @@ En commençant à 7h ou 7h30 on est certain de terminer le tour dans la journée
 <div class="ulist">
 <ul>
 <li>
-<p>Gestion de données relatives aux terrains de golf (back-end)</p>
+<p>Gestion de golfs (et données relatives à un golf)</p>
 </li>
 </ul>
 </div>
@@ -3566,6 +3566,38 @@ la liste des inscrits, + Golf concerné et intitulé de la compétition, date.
 <p>URL vers un dépôt git distant et public, avec un descriptif README</p>
 </li>
 </ul>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">petite aide méthodologique</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Controleur :</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Prévoir une méthode contrôleur pour chaque cas d&#8217;utilisation, qui, par défaut renvoie à la vue spécifique du cas en question</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>UI :</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Le template de base devrait offrir des entrées vers les UC attendus initialement</p>
+</li>
+<li>
+<p>Les cas d&#8217;utilisation non encore codés auront une vue spécifique présentant le titre du UC et le message ‘not yet implemented’</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 <div class="sect4">

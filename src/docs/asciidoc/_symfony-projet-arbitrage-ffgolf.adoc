@@ -128,7 +128,8 @@ En commençant à 7h ou 7h30 on est certain de terminer le tour dans la journée
 * Un formulaire « cadence_de_jeu » anonymisé  (sous forme de tableau) à fin de statistiques, afin de permettre à des arbitres d’inscrire des informations de temps passé par une équipe, pour certains trous.
 
 === Back-end
-* Gestion de données relatives aux terrains de golf (back-end)
+* Gestion de golfs (et données relatives à un golf)
+
 
 
 === Responsabilités – Acteurs
@@ -258,6 +259,16 @@ Un premier document d'analyse comprenant (outre les informations classiques comm
 • Rapport technique, incluant des copies écran d’un prototype opérationnel, associées à des explications détaillées sur des parties du travail réalisé. La couverture fonctionnelle sera clairement identifiée.
 • Présence d’une branche de tests
 • URL vers un dépôt git distant et public, avec un descriptif README
+
+.petite aide méthodologique
+[TIP]
+****
+* Controleur :
+** Prévoir une méthode contrôleur pour chaque cas d'utilisation, qui, par défaut renvoie à la vue spécifique du cas en question
+* UI :
+** Le template de base devrait offrir des entrées vers les UC attendus initialement
+** Les cas d'utilisation non encore codés auront une vue spécifique présentant le titre du UC et le message ‘not yet implemented’
+****
 
 ==== 3. Livraison première release le jeudi 07 novembre 12h
 
