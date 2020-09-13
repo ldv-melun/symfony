@@ -66,12 +66,12 @@ Dans ce cas, reférez-vous aux consignes de configurations disponibles sur le si
 Les prérequis système dépendent de la version de symfony que vous comptez utliser.
 On vérifiera en particulier :
 
-* La version minimale attendue de PHP, actuellement >= 7.1.3 (dépend de la version de Symfony)
+* La version minimale attendue de PHP, actuellement >= 7.2.5 (dépend de la version de Symfony)
 
 .Connaître la version de php (passer en mode console)
 ....
 $ php -v
-PHP 7.2.19
+PHP 7.2.24
 ....
 
 * Les projets Symfony utilisent `composer` qui est un outil de gestion des dépendances pour des projets PHP en général. Pour l'installer, suive ce lien https://getcomposer.org/[`Install Composer`]
@@ -88,7 +88,7 @@ Composer version 1.9.0 2019-08-02 20:55:32
 .Vérifier la version de symfony cli
 ....
 $ symfony -V
-Symfony CLI version v4.6.4 (Tue Aug 13 16:14:53 CEST 2019)
+Symfony CLI version v4.18.4 (2020-08-14T07:17:58+0000 - stable)
 
 ....
 
@@ -106,7 +106,7 @@ $ symfony check:requirements
 image:symfony-check1.png[check-configuration]
 
 
-*Avant de poursuivre*, si nécessaire, corriger les annomalies et autres manquements sur votre système.
+*Avant de poursuivre*, si nécessaire, corriger les anomalies et autres manquements sur votre système.
 
 Par la suite nous aurons besoin de sqlite, vérifier si le module php est installé
 
@@ -130,11 +130,11 @@ git --version
 
 
 Pour commencer, placez-vous dans un dossier racine (*à créer pour l'occasion*), qui héberge(ra) vos différents projets web, puis,
-à partir de ce dossier, éxécuter la commande suivante :
+à partir de ce dossier, exécuter la commande suivante :
 
 .Création d'un squelette d'application
 ....
-$ symfony new --full my_project_name
+$ symfony new my_project_name --full
 
 # un raccourci de : composer create-project symfony/website-skeleton my_project_name
 ....
@@ -143,18 +143,17 @@ Explications :
 [source]
 ----
 symfony <1>
-    new --full <2>
-         my_project_name <3>
+    new my_project_name  <2>
+     --full     <3>
 ----
 
 <1> appel de la commande `symfony`
-<2> premier et deuxième arguments pour créer un projet selon un modèle : full == application web
-<3> le troisième est le nom du projet, et donc du *sous-dossier* qui sera *créé*
+<2> le nom du projet, et donc du *sous-dossier* qui sera *créé*
 à partir de la racine courante (il est donc important de se placer dans un dossier de travail avant de lancer une telle commande)
+<3> pour créer un projet selon un modèle : full === application web
 
 Une fois l'application créée, où en premier contact d'une application symfony existante,
 il est judicieux de lancer la commande :
-
 
 .Symfony About
 ....
@@ -169,9 +168,9 @@ Voir l'historique et le prévisionnel des versions ici : https://symfony.com/roa
 Les composants dont dépend l'application sont répertoriés dans le fichier `composer.json`
 placé à la racine de l'application.
 
-Exemple de déclaration : `"require": "php": "^7.1.3"`
+Exemple de déclaration : `"require": "php": "^7.2.5"`
 
-Ce qui signifie que l'application dépend de php en version 7.1.3 ou supérieure (voir doc composer)
+Ce qui signifie que l'application dépend de php en version 7.2.5 ou supérieure (voir doc composer)
 
 
 Voici la commande pour vérifier la présence de vulnérabilités connues des composants dont dépend l'application (à relancer régulièrement)
@@ -242,6 +241,26 @@ Le développeur travaille et teste en mode `dev` (développement). Avant de pass
 ====
 ////
 
+
+== Partir d'un projet existant disponible sur un dépôt git
+
+Se placer dans un dossier racine des projets
+....
+ cd all-projects/
+ git clone ...
+....
+
+ou via votre IDE (`VCS|Get From Version Control`)
+
+Se placer ensuite à la racine du projet cloné, et installé les composants tiers (`vendor`) :
+
+....
+ cd le-project/
+ composer install
+....
+
+et patienter le temps que des téléchargements et installations.
+
 == Résumé
 
 À ce stade, vous avez, sur votre machine de dev, installé, configuré et testé un environnement de développement web avec Symfony.
@@ -249,6 +268,10 @@ Vous avez installé Symfony en mode "boîte noire".
 
 L'étape suivante vous amène progressivement à comprendre l'intérieur de cette boîte, à savoir comment l'utiliser !
 
+////
+
+voir : https://symfony.com/doc/current/the-fast-track/fr
+////
 
 == TP Installation de Symfony Demo application
 
@@ -262,7 +285,7 @@ IMPORTANT: Placez-vous dans le dossier racine des projets symfony avant de lance
 
 .Création d'un nouveau projet basé sur Symfony Demo Application:
 ....
- symfony new --demo demosf
+ symfony new demosf --demo
 ....
 
 Testez ce projet, et, surtout, gardez-le sous la main afin de plonger dans son code,

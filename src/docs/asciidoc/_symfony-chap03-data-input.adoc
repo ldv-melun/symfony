@@ -37,8 +37,7 @@ public function index(Request $request) <2>
 <2> Et oui, en PHP on peut aussi typer les paramètres.
 En déclarant un paramètre de type `Request`, on demande à symfony d'*injecter automatiquement* (on parle d'auto-injection) un argument de ce type, parfaitement bien initialisé.
 
-TIP:  Attention, dans le cadre d'un framework on ne fait pas usage des super-globales PHP comme `GET[]`, `SESSION[]`, ... car cela risquerait d'entrainer des effets de bords indésirables et contraire aux bonnes pratiques.
-
+TIP:  Attention, dans le cadre d'un framework, ne pas faire usage des super-globales PHP comme `GET[]`, `SESSION[]`, ... car cela risquerait d'entrainer des effets de bords indésirables et contraire aux bonnes pratiques.
 
 == Données implicites
 
@@ -65,6 +64,22 @@ voir http://api.symfony.com/4.0/Symfony/Component/HttpFoundation/Request.html[AP
 Typiquement ce sont celles en provenance d'une requête `HTTP` de type `POST` *formulaire HTML ou non*,
 soit comme composantes https://en.wikipedia.org/wiki/Query_string[QueryString] de l'*URL* (arguments d'une requête `HTTP` de type `GET` par exemple).
 
+=== via un `GET`, cas des arguments passés dans l'url (querystring)
+
+[source, php]
+----
+ // obtenir les données transmises par GET
+ $x = $request->query->get('x', 66); <1> <2>
+----
+
+<1> C'est via l'attribut `query` de l'objet référencé par `$request`, que le contrôleur aura
+accès aux données passées par `GET`, via sa méthode `get`.
+
+<2> Exemple d'arguments de l'URL : `?a=b&x=42`.
+La méthode `get` prend en premier argument la *clé* (ici `a` ou `x`),
+le deuxième étant une *valeur par défaut*. Ici `$x` aura comme valeur *42* car il est renseigné en querystring de l'url.
+
+
 === via un `POST` (formulaire HTML côté client par exemple)
 
 [source, php]
@@ -76,25 +91,9 @@ soit comme composantes https://en.wikipedia.org/wiki/Query_string[QueryString] d
     $request->files->get('foo');
 ----
 
-<1> C'est via l'attribut `request`, de l'objet référencé par `$request` (à ne pas confondre) que le contrôleur aura accès aux données passées par `POST` via un appel à sa méthode `get` (attention, ce n'est pas très intuitif...)
-
-=== via un `GET`, cas des arguments passés dans l'url (querystring)
-
-[source, php]
-----
- // retrieves GET variables respectively
- $x = $request->query->get('x', 66); <1> <2>
-----
-
-<1> C'est via l'attribut `query` (et non `request`, attention !),
-  de l'objet référencé par `$request`, que le contrôleur aura
- accès aux données passées par `GET`, via sa méthode `get`.
-
-
-<2> Exemple d'arguments de l'URL : `?a=b&x=42`.
-La méthode `get` prend en premier argument la *clé* (ici `a` ou `x`),
-le deuxième étant une *valeur par défaut*. Avec notre exemple, `$x` aura comme valeur *42*.
-
+<1> C'est via l'attribut `request`, de l'objet référencé par `$request` (à ne pas confondre) que le contrôleur
+aura accès aux données passées par `POST` via un appel à sa méthode `get` (admet également un second paramètre
+comme valeur par défaut).
 
 === Cas de valeurs incluses dans l'url même
 
@@ -110,9 +109,11 @@ le deuxième étant une *valeur par défaut*. Avec notre exemple, `$x` aura comm
 
 <1> La route contient une partie *variable*, représentée par un paramètre
 placé entre `{  }` (ici _textid_). Exemples d'arguments : `/blog/usecase1` ou `/blog/usecase2`.
-<2> Reprise de la partie variable de l'url comme *paramètre* de la méthode (*attention, même nom que le paramètre de route*)
+<2> Reprise de la partie variable de l'url comme *paramètre* de la méthode (attention, la correspondance
+se base sur les *noms* inscrits entre { } dans la route)
 
-Il est dans ce cas très facile de récupérer la valeur en question, car elle est passée automatiquement à la méthode !
+Il est dans ce cas très facile de récupérer les valeurs en question, car elles sont passées automatiquement
+en tant qu'argument de la méthode !
 
 Plus d'infos sur l'exploitation des valeurs d'entrée :
 
@@ -131,7 +132,7 @@ WARNING: Attention à bien respecter les conventions de nommage :
 [start=1]
 . Ajouter un nouveau controller nommé _SioController_ disposant d'une méthode nommée _indexAction_.
    Faire en sorte que l'index présente le message « *Hello world !* » à l'utilisateur
-  (vue twig attendue), ainsi que la *liste des langues préférées* du client.
+  (vue twig attendue), ainsi que la *liste des langues préférées* du client (données implicites).
 ====
 
 [start=2]
@@ -160,12 +161,12 @@ Pour cela vous consulterez la documentation technique à cette adresse https://t
 ====
 [start=3]
 . Modifier la méthode d'action helloAction afin que, si le nom transmis est de
-  la forme _prenom*nom_ (prénom[étoile]nom), le message soit présenté  selon
-  l'exemple ci-dessous : http://localhost:8000/hello/django*reinhardt
+  la forme _prenom_nom_ (prénom[tiret_du_bas]nom), le message soit présenté  selon
+  l'exemple ci-dessous : http://localhost:8000/hello/django_reinhardt
 
 image:hello-django.png[hello-django, caption="http://localhost:8000/hello/django*reinhardt"]
 
-WARNING: si aucune étoile n'est présente dans la dernière partie de l'url,
+WARNING: si aucun _underscore_ n'est présente dans l'argument de l'url,
 le fonctionnement de `helloAction` devra rester conforme à l'attendu de la question précédente (soit "Hello Django" si seule la valeur "Django" est transmise)
 
 => à vous de déterminer le travail qui devra être réalisé côté contrôleur et côté logique de présentaiton (twig)
@@ -195,7 +196,7 @@ la même vue.
 
 ====
 [start=5]
-. (plus difficile) Ajouter un *message flash* (concept à étudier !), qui retourne  à
+. (plus difficile) Ajouter un *_flash message_* (concept à étudier !), qui retourne  à
 l'utilisateur un *message de bienvenue avec son IP* lors d'une *première connection* à la route `/hello` (et donc à sa méthode d'action liée),
 pour une même instance de navigateur. Conseil : Afficher dans un premier temps le message, puis mettre sous condition la création du message en gérant une donnée de session utilisateur.
 

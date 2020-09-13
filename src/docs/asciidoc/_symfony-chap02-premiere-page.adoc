@@ -3,7 +3,7 @@ ifndef::backend-pdf[]
 :imagesdir: images
 endif::[]
 
-(d'après : https://symfony.com/doc/current/page_creation.html)
+(vous pouvez vous référer à : https://symfony.com/doc/current/page_creation.html)
 
 Du point du développement logiciel d'une application web, "_créer une page_" c'est exposer une *ressource web* à un certain public. Pour cela, plusieurs activités sont concernées:
 
@@ -32,8 +32,8 @@ endif::[]
 
 Comme le montre ce schéma, le développeur doit mettre à disposition du framework des méthodes dites _d'actions_.
 
-WARNING: Attention, le schéma ne montre que les méthodes (`blogAction`, `contactAction` et `homepageAction`),
-         mais ne donne pas le nom de la (ou des) classes où elles sont définies (source symfony.com).
+WARNING: Attention, le schéma est simplifié, il ne donne pas le nom des classes des méthodes (`blogAction`,
+`contactAction` et `homepageAction`), -- source symfony.com.
 
 La liaison _méthode <--> URL_ peut se réaliser soit par un _fichier de configuration_, soit via des *_annotations_* dans le code.
 Nous choisirons cette dernière option, fort pratique. Avant de concevoir une telle classe, vous devrez ajouter des composants à votre
@@ -45,7 +45,7 @@ $ composer require annotations
 ....
 
 Il serait également préférable d'installer des plugins à votre IDE : avec PhpStorm,
-aller `File->Settings` puis chercher `plugin symfony` et les installer (dans le même esprit avec l'IDE `netbeans`)
+aller `File->Settings` puis chercher `plugin symfony`.
 
 Voici un exemple de classe contrôleur, extrait de la documentation : https://symfony.com/doc/current/page_creation.html[Symfony - page_creation.html]
 
@@ -76,14 +76,15 @@ class LuckyController <3>
 } <8>
 ----
 
-<1> un commentaire à destination du lecteur du tuto, afin d'identifier la localisation du fichier (une donnée importante lorsque l'on travaille avec un framework)
+<1> un commentaire à destination du lecteur du tuto, afin d'identifier la localisation
+du fichier (à ne pas recopier dans le code source !)
 <2> les librairies dont dépend le code ci-dessous (Classe et annotation)
 <3> une classe normale PHP Objet
 <4> Attention : démarre avec *2 étoiles* (ref. à PHPDOC)
 <5> l'annotation _@Route_ permet de lier l'appel de la méthode à une requête HTTP GET (extrait terminal d'une URL de l'application)
 <6> une méthode public; Elle sera automatiquement appelée par le _front controller_.
 <7> retourne un instance de `Response` (avec du contenu _HTML_). On remarquera que le contenu HTML n'est pas bien formé (pas de doctype, <head>, ...) - on utilise ce type de réponse généralement pour du contenu textuel plus simple.
-<8> le marqueur de fin de traitement PHP (`?>`) est volontairement absent afin de conserver le sens _librairie_ d'une classe Controller.
+<8> le marqueur de fin de traitement PHP (`?>`) est volontairement absent afin de conserver le sens _librairie_ d'une classe Controller (ce n'est pas une page web)
 
 Voici un extrait des spécifications de la fonction http://php.net/manual/fr/function.mt-rand.php
 [source, php]
@@ -148,20 +149,20 @@ Et faire en sorte que la méthode contrôleur *délègue* la vue à une page twi
 class LuckyController extends AbstractController
 {
     /**
-     * @Route("/lucky/number", methods={"GET"}, name="lucky_step_one")
+     * @Route("/lucky/number", methods={"GET"}, name="lucky_step_one") <1>
      */
     public function numberAction()
     {
         $number = mt_rand(0, 100);
 
-        return $this->render('lucky/number.html.twig', array( <1>
+        return $this->render('lucky/number.html.twig', array( <2>
             'number' => $number,
         ));
     }
 }
 ----
-
-<1> appel de la méthode héritée (_render_) en lui passant le nom d'une vue, suivi d'un *tableau associatif*, appelé aussi *dictionnaire*, composé de *couples (nom_variable=>valeur)*.
+<1> la valeur de l'attribut `name` est le nom de la route. C'est ce nom qui est utilisé dans le code source pour faire référence à cette route  (plus stable dans le temps que la route elle-même)
+<2> appel de la méthode héritée (_render_) en lui passant le nom d'une vue, suivi d'un *tableau associatif*, appelé aussi *dictionnaire*, composé de *couples (nom_variable=>valeur)*.
 Dans notre cas, le tableau n'a qu'un seul élément ('number'=> $number),
 qui sera passé à la vue.
 La vue aura accès à ces valeurs *directement* par le *nom des clés* définis dans ce dictionnaire.
