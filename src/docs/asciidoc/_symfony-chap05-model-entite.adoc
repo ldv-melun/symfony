@@ -9,7 +9,7 @@ Nous avons vu comment associer des _routes_ à des _contrôleurs_ (méthodes d'a
 
 Nous allons voir comment le contrôleur peut s'appuyer sur des *objets métier* pour *implémenter une logique de cas d'utilisation*.
 
-TIP: Il est courant de faire porter la responsabilité d'un cas d'utilisation à une classe contrôleur.
+TIP: Il est courant de faire porter la responsabilité d'un cas d'utilisation à une classe dédiée (_manager_, ou simplement contrôleur).
 
 `Entity` représente les objets métier, et sont associés à des objets `EntityRepository`.
 
@@ -18,7 +18,7 @@ TIP: Il est courant de faire porter la responsabilité d'un cas d'utilisation à
 
 Le contrôleur dépend de `Entity`, `Entity` ne dépend pas d'un ORM, `EntityRepository` si.
 
-.Architecture vue en couches
+.Architecture vue en couches (simplifiée)
 image:schema-interactions-couches.png[Interactions vue en couches, 600]
 
 == Premiers pas avec le model
@@ -51,42 +51,56 @@ Tutoriel à suivre et *coder* : link:https://symfony.com/doc/current/doctrine.ht
 
 == Travaux Pratiques
 
-Durée moyenne : 6H
+Durée moyenne : 4H-12h
 
 ====
-[start=0]
-. Coder les exemples du tutoriel
+[start=1]
+. *Coder/tester les exemples du tutoriel*
 
-Concevoir l'entité `Product` et coder/tester les exemples du contrôleurs, jusqu'au paragraphe `Deleting an Object` inclus.
+Concevoir l'entité `Product` et coder/tester les exemples du contrôleur, jusqu'au paragraphe `Deleting an Object` inclus.
 (Une petite lecture du reste du document ne peut pas faire de mal)
 
-[start=1]
-. Lister et Supprimer
+[start=2]
+. *Lister et Supprimer*
 
 Concevoir, dans `ProductController` une méthode d'action (un contrôleur), liée à la route `product/`
 qui affiche la liste des produits, avec la possibilité de suprimer, individuellement, chacun des produits de la liste.
 
-TIP: Les explications sont dans le tutoriel.
-Utilisez twig pour la vue.
+TIP: Les explications sont dans le tutoriel. Utilisez twig pour la vue.
+Exemple de contrôleur `public function index(ProductRepository $productRepository`)
 
-[start=2]
-. Création automatique de produits
+IMPORTANT: Contrairement aux exemples présentés dans le tutoriel, toute action dans un contrôleur
+qui entraine un changement d'état de la base de données doit retourner un ordre de redirection côté client.
+C'est une règle très importante dans le développement web, connue par l'acronyme *PRG* (_Post Redirect Get_).
+Voir wikipedia à ce sujet.
+
+=> La règle *PRG* doit être appliquée *dès maintenant* dans vos développement web. Vous vous référerez à la documentation
+Mozilla pour en savoir plus sur les ordres de redirection HTTP 30x : https://developer.mozilla.org/fr/docs/Web/HTTP/Redirections,
+et consulterez la documentation symfony pour savoir comment réaliser cela à partir
+d'un contrôleur.
+
+
+[start=3]
+. *Création automatique de produits*
 
 Concevoir, dans `ProductController` une méthode d'action (un contrôleur), liée à la route `product/install` qui,
 si la base de données est vide, créera 10 produits, aux caractérisques distincts, dans la base de données.
-Dans tous les cas, un *message flash* indiquera l'action qui aura été réalisée suite au traitement demandé.
+Dans tous les cas, un *message flash* indiquera l'action qui aura été réalisée suite au traitement demandé
+(technique compatible avec la règle PRG))
 
-[start=3]
-. Réinitialisation
+[start=4]
+. *Réinitialisation*
 
 Ajouter le fait de pouvoir réinitialiser la base de données de produits
-(supprimer tous les produits), ssi la base de données respecte les conditions suivantes :
+(supprimer tous les produits), si et seulement si la base de données respecte les conditions suivantes :
 
-.. ne contient que *10 articles ou moins*,
-.. articles *créés dans un même espace temps*. (cette dernière condition pourra être forcée si présence, dans l'URL,
-d'un paramètre nommé `force`)
+.. *Condition 1* : contenir *10 articles ou moins*,
+.. *Condition 2* : contenir des articles *créés dans un même espace temps (à une minute près)*.
+Cette dernière condition entraine une mise à jour de la structure de votre entité, et pourra ne pas être prise en compte si présence, dans l'URL,
+d'un paramètre nommé `force`.
 
-Le déclenchement de ce traitement se fera dans le cas d'un `reset` explicite (prévoir une nouvelle route).
+Le déclenchement de ce traitement se fera dans le cas d'un `reset` explicite (une nouvelle route).
+Prévoir également un message flash.
 
 ====
 
