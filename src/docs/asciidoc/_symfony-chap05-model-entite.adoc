@@ -88,6 +88,8 @@ si la base de données est vide, créera 10 produits, aux caractérisques distin
 Dans tous les cas, un *message flash* indiquera l'action qui aura été réalisée suite au traitement demandé
 (technique compatible avec la règle PRG))
 
+TIP: L'outil `Faker` vous sera fort utile  : https://github.com/fzaninotto/Faker
+
 [start=4]
 . *Réinitialisation*
 
