@@ -39,15 +39,17 @@ La liaison _méthode <--> URL_ peut se réaliser soit par un _fichier de configu
 Nous choisirons cette dernière option, fort pratique. Avant de concevoir une telle classe, vous devrez ajouter des composants à votre
 application. Le plus souple pour cela est de demander à `composer` de le faire pour vous :
 
+A faire : création d'un projet (trouver un nom simple)
 ....
-$ cd my_project_name/
+$ symfony new project_name --full
+$ cd project_name/
 $ composer require annotations
 ....
 
 Il serait également préférable d'installer des plugins à votre IDE : avec PhpStorm,
 aller `File->Settings` puis chercher `plugin symfony`.
 
-Voici un exemple de classe contrôleur, extrait de la documentation : https://symfony.com/doc/current/page_creation.html[Symfony - page_creation.html]
+Voici un exemple de classe contrôleur, extrait de la documentation : https://symfony.com/doc/current/page_creation.html[Symfony - page_creation.html], à recopier dans votre projet (`src/Controller/LuckyController.php`)
 
 [source, php]
 ----
@@ -81,8 +83,8 @@ du fichier (à ne pas recopier dans le code source !)
 <2> les librairies dont dépend le code ci-dessous (Classe et annotation)
 <3> une classe normale PHP Objet
 <4> Attention : démarre avec *2 étoiles* (ref. à PHPDOC)
-<5> l'annotation _@Route_ permet de lier l'appel de la méthode à une requête HTTP GET (extrait terminal d'une URL de l'application)
-<6> une méthode public; Elle sera automatiquement appelée par le _front controller_.
+<5> l'annotation _@Route_ (*dans un PHPDoc*) permet de lier l'appel de la méthode à une requête HTTP GET (extrait terminal d'une URL de l'application)
+<6> une méthode public; Elle sera automatiquement appelée par le _front controller_ si sa _route_ correspond à la ressource demandée par le client (requête HTTP).
 <7> retourne un instance de `Response` (avec du contenu _HTML_). On remarquera que le contenu HTML n'est pas bien formé (pas de doctype, <head>, ...) - on utilise ce type de réponse généralement pour du contenu textuel plus simple.
 <8> le marqueur de fin de traitement PHP (`?>`) est volontairement absent afin de conserver le sens _librairie_ d'une classe Controller (ce n'est pas une page web)
 
@@ -114,7 +116,7 @@ de vue puissant et plaisant à utiliser.
 Twig est proposé en tant que composant, qu'il faut installer :
 
 ....
-$ cd my_project_name/
+$ cd project_name/
 $ composer require twig
 ....
 

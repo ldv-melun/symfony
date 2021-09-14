@@ -71,7 +71,7 @@ On vérifiera en particulier :
 .Connaître la version de php (passer en mode console)
 ....
 $ php -v
-PHP 7.2.24
+PHP 7.4.3 (cli) (built: Jul  5 2021 15:13:35) ( NTS )
 ....
 
 * Les projets Symfony utilisent `composer` qui est un outil de gestion des dépendances pour des projets PHP en général. Pour l'installer, suive ce lien https://getcomposer.org/[`Install Composer`]
@@ -79,16 +79,16 @@ PHP 7.2.24
 .Vérifier la version de composer
 ....
 $ composer -V
-Composer version 1.9.0 2019-08-02 20:55:32
+  Composer version 2.1.7 2021-09-14 14:26:01
 
 ....
 
-* Enfin, et non des moindres, installer le programme `symfony` qui est une sorte d'assistant de création d'applications en ligne de commande. Rendez-vous ici pour plus d'explications : https://symfony.com/doc/current/setup.html#technical-requirements[symfony technical-requirements]
+* Enfin, et non des moindres, installer le programme `symfony CLI` qui est une sorte d'assistant de création d'applications en ligne de commande. Rendez-vous ici pour plus d'explications : https://symfony.com/doc/current/setup.html#technical-requirements[symfony technical-requirements]
 
 .Vérifier la version de symfony cli
 ....
 $ symfony -V
-Symfony CLI version v4.18.4 (2020-08-14T07:17:58+0000 - stable)
+Symfony CLI version v4.26.3 (2021-09-13T12:19:11+0000 - stable)
 
 ....
 
@@ -161,7 +161,7 @@ il est judicieux de lancer la commande :
 $ php bin/console about
 ....
 
-Voir l'historique et le prévisionnel des versions ici : https://symfony.com/roadmap
+TIP: Voir le prévisionnel des versions de Smfony ici : https://symfony.com/roadmap
 
 === Composants de l'application
 
@@ -288,5 +288,5 @@ IMPORTANT: Placez-vous dans le dossier racine des projets symfony avant de lance
  symfony new demosf --demo
 ....
 
-Testez ce projet, et, surtout, gardez-le sous la main afin de plonger dans son code,
+Testez ce projet (consulter son README.md), et, surtout, gardez-le sous la main afin de plonger dans son code,
 chaque fois où serez amenés à utiliser une nouvelle fonctionnalité du framework.

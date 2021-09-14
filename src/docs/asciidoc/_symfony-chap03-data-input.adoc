@@ -42,17 +42,16 @@ TIP:  Attention, dans le cadre d'un framework, ne pas faire usage des super-glob
 == Données implicites
 
 Ce sont les données transmises par le client, et le serveur,
- dans la partie entête HTTP. Ces données sont accessibles *via* l'objet `Request`
- qui dispose de méthodes bient pratiques pour interroger ces données.
+ dans la partie entête HTTP. Ces données sont accessibles *via* l'objet `Request` (voir point 2 de l'exemple ci-dessus) qui dispose de méthodes bien pratiques pour interroger ces données.
 
 
-*  getLanguages()
+*  _getLanguages()_
 Returns the list of accepted languages ordered by descending quality.
 
-*  getCharsets()
+*  _getCharsets()_
 Returns the list of accepted charsets ordered by descending quality.
 
-*  bool isXmlHttpRequest()
+*  _bool isXmlHttpRequest()_
 Returns true if the request is a XMLHttpRequest.
 
 * ...
@@ -86,14 +85,21 @@ le deuxième étant une *valeur par défaut*. Ici `$x` aura comme valeur *42* ca
 ----
     // obtenir une valeur transmises par POST d'après sa clé
     $request->request->get('idproduit'); <1>
-
-    // obtenir une instance de UploadedFile identifiée par foo
-    $request->files->get('foo');
 ----
 
 <1> C'est via l'attribut `request`, de l'objet référencé par `$request` (à ne pas confondre) que le contrôleur
 aura accès aux données passées par `POST` via un appel à sa méthode `get` (admet également un second paramètre
 comme valeur par défaut).
+
+Autre usage via `POST` :
+
+[source, php]
+----
+    // obtenir une instance de UploadedFile identifiée par foo (référez-vous à la documentation)
+    $request->files->get('foo');
+----
+
+
 
 === Cas de valeurs incluses dans l'url même
 
@@ -132,10 +138,10 @@ WARNING: Attention à bien respecter les conventions de nommage :
 [start=1]
 . Ajouter un nouveau controller nommé _SioController_ disposant d'une méthode nommée _indexAction_.
    Faire en sorte que l'index présente le message « *Hello world !* » à l'utilisateur
-  (vue twig attendue), ainsi que la *liste des langues préférées* du client (données implicites).
+  (vue twig attendue), suivi de la *liste des langues préférées* du client (données implicites) ainsi que *son adresse IP*.
 ====
 
-[start=2]
+
 ====
 [start=2]
 . Ajouter la méthode d'action _helloAction_ ci-dessous, qui reçoit en paramètre
@@ -160,8 +166,14 @@ Pour cela vous consulterez la documentation technique à cette adresse https://t
 
 ====
 [start=3]
+. Modifier le controleur de sorte que si aucun nom n'est passé à hello, le
+message 'Hello Inconnu !' est présenté. Voir le concept de *valeur par défaut* pour le paramètre en suivant ce lien :  https://symfony.com/doc/current/routing.html#optional-parameters[route and optional-parameters]
+====
+
+====
+[start=4]
 . Modifier la méthode d'action helloAction afin que, si le nom transmis est de
-  la forme _prenom_nom_ (prénom[tiret_du_bas]nom), le message soit présenté  selon
+  la forme _prenom_nom_ (avec un tiret_du_bas entre le prénom et le nom), le message soit présenté  selon
   l'exemple ci-dessous : http://localhost:8000/hello/django_reinhardt
 
 image:hello-django.png[hello-django, caption="http://localhost:8000/hello/django*reinhardt"]
@@ -170,29 +182,7 @@ WARNING: si aucun _underscore_ n'est présente dans l'argument de l'url,
 le fonctionnement de `helloAction` devra rester conforme à l'attendu de la question précédente (soit "Hello Django" si seule la valeur "Django" est transmise)
 
 => à vous de déterminer le travail qui devra être réalisé côté contrôleur et côté logique de présentaiton (twig)
-
 ====
-
-====
-[start=4]
-. Modifier le controleur de sorte que si aucun nom n'est passé à hello, le
-message 'Hello Inconnu !' est présenté. Voir le concept de *valeur par défaut* pour le paramètre en suivant ce lien :  https://symfony.com/doc/current/routing.html#optional-parameters[route and optional-parameters]
-====
-
-////
-
-====
-[start=5]
-.  Ajouter une nouvelle méthode d'action liée à la route
-_/hello/prenom/nom_
-
-Attention contrainte ! : cette méthode devra réutiliser la vue de la méthode
-d'action de la route `/hello` (conforme modifiée en question 3 de ce TP)
-... et montrera donc le prénom et nom comme précédemment (Ref. à django Reinhardt) car c'est
-la même vue.
-====
-
-////
 
 ====
 [start=5]
