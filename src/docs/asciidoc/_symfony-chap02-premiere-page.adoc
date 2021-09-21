@@ -41,7 +41,7 @@ application. Le plus souple pour cela est de demander à `composer` de le faire 
 
 A faire : création d'un projet (trouver un nom simple)
 ....
-$ symfony new project_name --full
+$ symfony new project_name
 $ cd project_name/
 $ composer require annotations
 ....

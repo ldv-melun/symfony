@@ -144,13 +144,11 @@ Explications :
 ----
 symfony <1>
     new my_project_name  <2>
-     --full     <3>
 ----
 
 <1> appel de la commande `symfony`
 <2> le nom du projet, et donc du *sous-dossier* qui sera *créé*
 à partir de la racine courante (il est donc important de se placer dans un dossier de travail avant de lancer une telle commande)
-<3> pour créer un projet selon un modèle : full === application web
 
 Une fois l'application créée, où en premier contact d'une application symfony existante,
 il est judicieux de lancer la commande :
