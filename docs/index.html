@@ -53,6 +53,13 @@
 <li><a href="#tp-le-contrôleur-et-la-vue-initiation">TP - Le contrôleur et la vue (initiation)</a></li>
 </ul>
 </li>
+<li><a href="#introduction-au-model">Introduction au Model</a>
+<ul class="sectlevel2">
+<li><a href="#Éléments-d-architecture">Éléments d&#8217;architecture</a></li>
+<li><a href="#premiers-pas-avec-le-model">Premiers pas avec le model</a></li>
+<li><a href="#travaux-pratiques">Travaux Pratiques</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -1169,11 +1176,222 @@ Voir <a href="https://symfony.com/doc/current/controller.html#managing-the-sessi
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="introduction-au-model"><a class="anchor" href="#introduction-au-model"></a>Introduction au Model</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="Éléments-d-architecture"><a class="anchor" href="#Éléments-d-architecture"></a>Éléments d&#8217;architecture</h3>
+<div class="paragraph">
+<p>Nous avons vu comment associer des <em>routes</em> à des <em>contrôleurs</em> (méthodes d&#8217;action d&#8217;une classe Controller).</p>
+</div>
+<div class="paragraph">
+<p>Nous allons voir comment le contrôleur peut s&#8217;appuyer sur des <strong>objets métier</strong> pour <strong>implémenter une logique de cas d&#8217;utilisation</strong>.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Il est courant de faire porter la responsabilité d&#8217;un cas d&#8217;utilisation à une classe dédiée (<em>manager</em>, ou simplement contrôleur).
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>Entity</code> représente les objets métier, et sont associés à des objets <code>EntityRepository</code>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Entity</code> : Représente une classe métier pour le domaine étudié (<code>Client</code>, <code>Contrat</code>, &#8230;&#8203;).</p>
+</li>
+<li>
+<p><code>EntityRepository</code> : Est responsable de la communication avec le système de persistance, notamment en lien avec l' <code>ORM</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Le contrôleur dépend de <code>Entity</code>, <code>Entity</code> ne dépend pas d&#8217;un ORM, <code>EntityRepository</code> si.</p>
+</div>
+<div class="paragraph">
+<div class="title">Architecture vue en couches (simplifiée)</div>
+<p><span class="image"><img src="images/schema-interactions-couches.png" alt="Interactions vue en couches" width="600"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="premiers-pas-avec-le-model"><a class="anchor" href="#premiers-pas-avec-le-model"></a>Premiers pas avec le model</h3>
+<div class="sect3">
+<h4 id="guide"><a class="anchor" href="#guide"></a>Guide</h4>
+<div class="paragraph">
+<p>Faire le lien entre un objet (instance d&#8217;une classe Entity) et une ligne d&#8217;une table d&#8217;une base de données
+est une opération complexe (synchronisation, mise en cache, cohérence de type, &#8230;&#8203;).</p>
+</div>
+<div class="paragraph">
+<p>Les <strong>ORMs</strong> (<em>object-relational mapping</em>) sont des logiciels qui effectuent le lien entre <strong>objet métier</strong> et <strong>ligne</strong>
+de table d&#8217;une base de données. Par défaut, symfony utilise la solution <a href="http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/">doctrine</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tutoriel-doctrine-de-symfony"><a class="anchor" href="#tutoriel-doctrine-de-symfony"></a>Tutoriel doctrine de symfony</h4>
+<div class="paragraph">
+<p><code>Doctrine</code> peut être mise en oeuvre sans Symfony, mais nous vous invitons néanmoins à
+étudier le tutoriel Doctrine avec Symfony, car ce dernier en simplifie l&#8217;accès.</p>
+</div>
+<div class="paragraph">
+<p>Ce tutoriel vous montre comment lier une classe métier à une table d&#8217;une base de données, et donc une instance (un objet) à une ligne (occurrence d&#8217;une table),
+et les opérations CRUD associées.</p>
+</div>
+<div class="paragraph">
+<p>Au menu :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Entity</p>
+</li>
+<li>
+<p>Liaison Attribut - Colonne (<em>field</em> - <em>column</em>)</p>
+</li>
+<li>
+<p>Migration modèle objet &#8592;&#8594; schéma de la base de données</p>
+</li>
+<li>
+<p>Opérations CRUD</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="travaux-pratiques"><a class="anchor" href="#travaux-pratiques"></a>Travaux Pratiques</h3>
+<div class="paragraph">
+<p>Durée moyenne : 4H-12h</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="olist arabic">
+<ol class="arabic" start="1">
+<li>
+<p><strong>Coder/tester les exemples du tutoriel</strong></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Concevoir l&#8217;entité <code>Product</code> et coder/tester les exemples du contrôleur, jusqu&#8217;au paragraphe <code>Deleting an Object</code> inclus.
+(Vous aurez l&#8217;occasion plutard de revenir sur ce tutoriel, et d&#8217;aller jusqu&#8217;à <code>Querying with SQL</code>)</p>
+</div>
+<div class="paragraph">
+<p><a href="https://symfony.com/doc/current/doctrine.html">Introduction à Doctrine avec Symfony</a> - Durée estimée : 2H (étude, configuration, codage des exemples et tests)</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p><strong>Lister et Supprimer</strong></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Concevoir, dans <code>ProductController</code> une méthode d&#8217;action (un contrôleur), liée à la route <code>product/</code>
+qui affiche la liste des produits, avec la possibilité de suprimer, individuellement, chacun des produits de la liste.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Les explications sont dans le tutoriel. Utilisez twig pour la vue.
+Exemple de contrôleur <code>public function index(ProductRepository $productRepository</code>)
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Contrairement aux exemples présentés dans le tutoriel, toute action dans un contrôleur
+qui entraine un changement d&#8217;état de la base de données doit retourner un ordre de redirection côté client.
+C&#8217;est une règle très importante dans le développement web, connue par l&#8217;acronyme <strong>PRG</strong> (<em>Post Redirect Get</em>).
+Voir wikipedia à ce sujet.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>&#8658; La règle <strong>PRG</strong> doit être appliquée <strong>dès maintenant</strong> dans vos développement web. Vous vous référerez à la documentation
+Mozilla pour en savoir plus sur les ordres de redirection HTTP 30x : <a href="https://developer.mozilla.org/fr/docs/Web/HTTP/Redirections" class="bare">https://developer.mozilla.org/fr/docs/Web/HTTP/Redirections</a>,
+et consulterez la documentation symfony pour savoir comment réaliser cela à partir
+d&#8217;un contrôleur.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="3">
+<li>
+<p><strong>Création automatique de produits</strong></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Concevoir, dans <code>ProductController</code> une méthode d&#8217;action (un contrôleur), liée à la route <code>product/install</code> qui,
+si la base de données est vide, créera 10 produits, aux caractérisques distincts, dans la base de données.
+Dans tous les cas, un <strong>message flash</strong> indiquera l&#8217;action qui aura été réalisée suite au traitement demandé
+(technique compatible avec la règle PRG))</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+L&#8217;outil <code>Faker</code> vous sera fort utile  : <a href="https://github.com/fzaninotto/Faker" class="bare">https://github.com/fzaninotto/Faker</a>
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="4">
+<li>
+<p><strong>Réinitialisation</strong></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Ajouter le fait de pouvoir réinitialiser la base de données de produits
+(supprimer tous les produits), si et seulement si la base de données respecte les conditions suivantes :</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><strong>Condition 1</strong> : contenir <strong>10 articles ou moins</strong>,</p>
+</li>
+<li>
+<p><strong>Condition 2</strong> : contenir des articles <strong>créés dans un même espace temps (à une minute près)</strong>.
+Cette dernière condition entraine une mise à jour de la structure de votre entité, et pourra ne pas être prise en compte si présence, dans l&#8217;URL,
+d&#8217;un paramètre nommé <code>force</code>.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Le déclenchement de ce traitement se fera dans le cas d&#8217;un <code>reset</code> explicite (une nouvelle route).
+Prévoir également un message flash.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 1.1<br>
-Last updated 2021-09-14 18:27:53 CEST
+Last updated 2021-09-26 10:21:01 CEST
 </div>
 </div>
 </body>

@@ -47,8 +47,6 @@ Au menu :
 * Opérations CRUD
 
 
-Tutoriel à suivre et *coder* : link:https://symfony.com/doc/current/doctrine.html[Introduction à Doctrine avec Symfony] - Durée estimée : 2H (étude, configuration, codage des exemples et tests)
-
 == Travaux Pratiques
 
 Durée moyenne : 4H-12h
@@ -58,7 +56,9 @@ Durée moyenne : 4H-12h
 . *Coder/tester les exemples du tutoriel*
 
 Concevoir l'entité `Product` et coder/tester les exemples du contrôleur, jusqu'au paragraphe `Deleting an Object` inclus.
-(Une petite lecture du reste du document ne peut pas faire de mal)
+(Vous aurez l'occasion plutard de revenir sur ce tutoriel, et d'aller jusqu'à `Querying with SQL`)
+
+link:https://symfony.com/doc/current/doctrine.html[Introduction à Doctrine avec Symfony] - Durée estimée : 2H (étude, configuration, codage des exemples et tests)
 
 [start=2]
 . *Lister et Supprimer*
