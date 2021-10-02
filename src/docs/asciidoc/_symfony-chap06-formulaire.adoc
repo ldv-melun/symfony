@@ -1,17 +1,17 @@
-= Cas du formulaire
+= I/O : formulaire HTML
 ifndef::backend-pdf[]
 :imagesdir: images
 endif::[]
 
 == Introduction
 
-La gestion de formulaires est un des points sensibles en développement web, comme l'est toute Entrée/Sortie d'une application.
+La gestion de formulaires HTML est un des points sensibles en développement web, comme l'est toute Entrée/Sortie d'une application.
 
-De plus, l'utilisateur s'attend à la fois à une certaine ergonomie
-(présentation de valeurs en base de données ou précédemment saisies
- par ce dernier) ainsi qu'au respect de la cohérence (prise en compte de la validité des données côté client et serveur).
+De plus, l'utilisateur s'attend à la fois à une certaine ergonomie (présentation de valeurs en base de données ou précédemment saisies par ce dernier) ainsi qu'au respect de la cohérence (prise en compte de la validité des données côté client et serveur).
 
-Symfony intègre un composant nommé `form` qui prend en charge la gestion de formulaire.
+TIP: Le formulaire HTML est un composant web de type UI (_User Inteface_) exploité côté client par, à la fois, l'utilisateur (qui le renseigne) et par le composant technique HTTP qui communique avec le serveur HTTP distant.
+
+Symfony intègre un composant nommé `form` qui prend en charge la gestion des formulaires.
 
 [source, bash, number]
 ----

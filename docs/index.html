@@ -60,7 +60,7 @@
 <li><a href="#travaux-pratiques">Travaux Pratiques</a></li>
 </ul>
 </li>
-<li><a href="#cas-du-formulaire">Cas du formulaire</a>
+<li><a href="#i-o-formulaire-html">I/O : formulaire HTML</a>
 <ul class="sectlevel2">
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#logique-de-traitement-du-formulaire">Logique de traitement du formulaire</a></li>
@@ -1398,20 +1398,30 @@ Prévoir également un message flash.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="cas-du-formulaire"><a class="anchor" href="#cas-du-formulaire"></a>Cas du formulaire</h2>
+<h2 id="i-o-formulaire-html"><a class="anchor" href="#i-o-formulaire-html"></a>I/O : formulaire HTML</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="introduction"><a class="anchor" href="#introduction"></a>Introduction</h3>
 <div class="paragraph">
-<p>La gestion de formulaires est un des points sensibles en développement web, comme l&#8217;est toute Entrée/Sortie d&#8217;une application.</p>
+<p>La gestion de formulaires HTML est un des points sensibles en développement web, comme l&#8217;est toute Entrée/Sortie d&#8217;une application.</p>
 </div>
 <div class="paragraph">
-<p>De plus, l&#8217;utilisateur s&#8217;attend à la fois à une certaine ergonomie
-(présentation de valeurs en base de données ou précédemment saisies
- par ce dernier) ainsi qu&#8217;au respect de la cohérence (prise en compte de la validité des données côté client et serveur).</p>
+<p>De plus, l&#8217;utilisateur s&#8217;attend à la fois à une certaine ergonomie (présentation de valeurs en base de données ou précédemment saisies par ce dernier) ainsi qu&#8217;au respect de la cohérence (prise en compte de la validité des données côté client et serveur).</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Le formulaire HTML est un composant web de type UI (<em>User Inteface</em>) exploité côté client par, à la fois, l&#8217;utilisateur (qui le renseigne) et par le composant technique HTTP qui communique avec le serveur HTTP distant.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>Symfony intègre un composant nommé <code>form</code> qui prend en charge la gestion de formulaire.</p>
+<p>Symfony intègre un composant nommé <code>form</code> qui prend en charge la gestion des formulaires.</p>
 </div>
 <div class="listingblock">
 <div class="content">
