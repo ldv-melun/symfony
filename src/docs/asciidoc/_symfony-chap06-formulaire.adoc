@@ -28,7 +28,7 @@ Dans sa version courante, un formulaire est lié à un objet métier (une classe
 De plus, il intégère les propriétés importantes suivantes :
 
 * Gestion des requêtes HTTP : prise en charge du traitement des demandes et des téléchargements de fichiers;
-* Protection CSRF: Prise en charge de la protection contre les attaques CSRF (Cross-Site-Request-Forgery);
+* Protection CSRF (_Cross-Site-Request-Forgery_ : falsification de requête HTTP) : Prise en charge de la protection contre les attaques CSRF ;
 * Templating: Intégration d'une couche de présentation qui permet de réutiliser des fragments HTML lors du rendu d'un formulaire;
 * Traduction: Prise en charge de la traduction des messages d'erreur, des étiquettes de champs et d'autres chaînes;
 * Validation: Intégration d'une bibliothèque de validation pour générer des messages d'erreur pour les données soumises.
@@ -48,18 +48,18 @@ Dans cette phase d'initiation, nous nous concentrerons principalement sur
 Nous prendrons le cas de la création d'une instance d'une entité.
 
 Dans ce cas, l'algorithme retenu par les concepteurs de Symfony et
-celui d'une seule méthode d'action (une route) pour, à la fois,
+celui d'une seule méthode contrôleur (une seule route) pour, à la fois,
 
 .  Présenter le formulaire de création et, dans un second temps,
 .  Effectuer le traitement de création  (impacter le système d'information).
 
-Le pattern PRG (https://fr.wikipedia.org/wiki/Post-Redirect-Get) impose au développeur de fournir un ordre de redirection côté client comme réponse à toute action impactant le système (voir le lien si vous ne savez pas pourquoi).
+Le pattern PRG (https://fr.wikipedia.org/wiki/Post-Redirect-Get) impose au développeur de fournir un ordre de redirection côté client comme réponse à toute action impactant le système (voir le lien si vous ne comprenez pas pourquoi).
 De ce fait, la logique du formulaire sera basée sur l'algorithme représenté ci-après.
 
 [plantuml, algo-form, png]
 ----
 start
-:          (1)\nobtenir instance\n    de Request;
+:                 (1)\nTraitement requête HTTP\n    méthode contrôleur;
 :           (2)\ncréation instance\n      de Entity;
 :            (3)\ncréation instance\n      de Form\nbasée sur Entity;
 :                   (4)\nplacer les valeurs soumises\n (si elles existent) dans les\n       attributs de l'entité;
@@ -67,8 +67,8 @@ if (           (5)\ndonnées valides ?) then (yes)
   :           (6)\nAction sur la base\n     de données;
   :        (7)\nRéponse PRG;
 else (no)
-  :             (8)\nPasser des données\n         à la vue;
-  :        (9)\nRéponse par\nune vue twig;
+  :             (8)\nPasser des données à la\nvue pour un rendu (twig);
+  :        (9)\nRéponse HTML;
 endif
 
 stop
@@ -187,8 +187,8 @@ class TaskController extends AbstractController
 
         $form = $this->createForm(TaskType::class, $task); <1>
 
-        return $this->render('task/new.html.twig', [
-            'form' => $form->createView(),
+        return $this->renderForm('task/new.html.twig', [ <2>
+            'form' => $form,
         ]);
         // ...
     }
@@ -197,7 +197,7 @@ class TaskController extends AbstractController
 <1> On remarquera l'usage de la méthode `createForm` qui prend comme argument une référence à une classe
 qui hérite de `Symfony\Component\Form\AbstractType` (ici `TaskType`) et une référence à une
 instance d'une entité (ici `$task`, un objet nouvellement créé pour l'occasion).
-
+<2> La méthode `rendForm` a été introduite à partir de la version 5.3 de Symfony.
 
 // Voici un autre exemple :
 // image:form-quizbe.png[form-quizbe]
@@ -229,7 +229,7 @@ ses méthodes d'accès (`getter/setter`) à moins que ces attributs soient publi
 valeur booléenne, leur accès se fait par `isser` ou `hasser` (par exemple : isPublished() or hasReminder()) au lieu de
 getPublished() or getReminder()).
 
-Bien entendu, Symfony vous permet de prendre la main finement sur la présentation du formulaire.
+Bien entendu, Symfony vous permet de prendre la main finement sur la présentation du formulaire. Pour cela vous pouvez utiliser des fonctions _helper_ de twig, fonction qui commence par le préfixe  _form__ et qui ont comme objectifs d'étendre les fonctionnalités de twig (souvent pour permettre de la génération automatique de code) : https://symfony.com/doc/current/form/form_customization.html#reference-form-twig-functions.
 
 Par exemple, en suivant les instructions d'usage de Bootstrap Twitter (http://getbootstrap.com/css/#forms), nous appliquons de nouvelles classes CSS à nos éléments de formulaire (label, zone de message d'erreur, input) :
 
@@ -319,7 +319,7 @@ de formulaire dans le but d'éviter qu'un site mal intentionné ne vous entraine
 - https://symfonycasts.com/screencast/symfony-forms
 
 
-TIP: Ce type de formation est vendue, en moyenne, autour de 800€ la journée.
+TIP: Ce type de formation est vendu, en moyenne, autour de 800€ la journée.
 
 
 == Travaux pratiques
@@ -334,5 +334,6 @@ Durée moyenne : ~4H à 8H
 .. Modifier un produit
 .. Supprimer un produit
 
+Soignez votre UI, en prenant appui sur un template HTML, sur la base d'un framework CSS ou non, selon votre choix.
 ====
 
