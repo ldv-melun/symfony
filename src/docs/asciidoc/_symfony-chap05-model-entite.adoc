@@ -55,8 +55,9 @@ Durée moyenne : 4H-12h
 [start=1]
 . *Coder/tester les exemples du tutoriel*
 
-Concevoir l'entité `Product` et coder/tester les exemples du contrôleur, jusqu'au paragraphe `Deleting an Object` inclus.
-(Vous aurez l'occasion plutard de revenir sur ce tutoriel, et d'aller jusqu'à `Querying with SQL`)
+Concevoir l'entité `Product` et coder/tester les exemples du contrôleur, jusqu'au paragraphe `Deleting an Object` inclus (ne pas traiter le paragraphe `Validating Objects` qui vous amènerait trop loin).
+
+Vous aurez l'occasion plus tard de revenir sur ce tutoriel, et d'aller jusqu'à `Querying with SQL`.
 
 link:https://symfony.com/doc/current/doctrine.html[Introduction à Doctrine avec Symfony] - Durée estimée : 2H (étude, configuration, codage des exemples et tests)
 
